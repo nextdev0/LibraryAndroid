@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DataBindingRecyclerView">
+        <attr name="android:orientation" />
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="spanCount" />
+        <attr name="reverseLayout" />
+        <attr name="onBottomScrollReached" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="DataBindingRecyclerViewHolder">
+        <attr name="bindItems" format="reference" />
+        <attr name="onViewHolderCallback" format="reference" />
+        <attr name="layout" />
+    </declare-styleable>
+
+    <declare-styleable name="DataBindingRecyclerView_Layout">
+        <attr name="spanCount" />
+    </declare-styleable>
+
+</resources>
