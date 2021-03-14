@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -19,7 +20,7 @@ import io.reactivex.rxjava3.core.Single;
  * 액티비티 결과 처리 유틸 class
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -52,10 +53,11 @@ public final class RxActivityResult {
 
     public Single<RxActivityResult> asSingle() {
         return Single.create(e -> {
+            CountDownLatch lock = new CountDownLatch(1);
             listener = (resultCode, data) -> {
                 this.resultCode = resultCode;
                 this.data = data;
-                e.onSuccess(this);
+                lock.countDown();
             };
             MAIN_THREAD_HANDLER.post(() -> {
                 if (activity.get() != null) {
@@ -69,6 +71,8 @@ public final class RxActivityResult {
                             .commitNowAllowingStateLoss();
                 }
             });
+            lock.await();
+            e.onSuccess(this);
         });
     }
 
