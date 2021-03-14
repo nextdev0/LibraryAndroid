@@ -12,13 +12,14 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * {@link Gson} JSON 서비스
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -56,7 +57,8 @@ public final class GsonJsonService implements JsonService {
                                 public Number read(JsonReader in) {
                                     try {
                                         String value = in.nextString();
-                                        return numberFunctions.get(rawType).apply(value);
+                                        return Objects.requireNonNull(numberFunctions.get(rawType))
+                                                .apply(value);
                                     } catch (Throwable ignore) {
                                         return 0;
                                     }

@@ -24,7 +24,7 @@ import java.util.Objects;
  * 권한 관련 도우미 클래스
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -153,7 +153,7 @@ public final class PermissionHelpers {
                                    @Nullable PermissionListener permissionResult) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.permissionResult = permissionResult;
-            if (activity == null) {
+            if (activity != null) {
                 activity.requestPermissions(permissions, REQUEST_PERMISSIONS);
             } else {
                 fragment.requestPermissions(permissions, REQUEST_PERMISSIONS);
