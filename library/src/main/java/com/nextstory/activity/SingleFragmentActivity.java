@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  * 단일 프래그먼트 액티비티
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings({"unchecked", "UnusedDeclaration"})
@@ -42,7 +42,7 @@ public final class SingleFragmentActivity extends BaseActivity<ActivitySingleFra
     public static <T extends Fragment> Intent unspecified(@NonNull Context context,
                                                           @NonNull Class<T> klass,
                                                           @Nullable Consumer<T> listener) {
-        return newIntent(context, klass, null, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        return newIntent(context, klass, listener, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     public static <T extends Fragment> Intent portrait(@NonNull Context context,
@@ -53,7 +53,7 @@ public final class SingleFragmentActivity extends BaseActivity<ActivitySingleFra
     public static <T extends Fragment> Intent portrait(@NonNull Context context,
                                                        @NonNull Class<T> klass,
                                                        @Nullable Consumer<T> listener) {
-        return newIntent(context, klass, null, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        return newIntent(context, klass, listener, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     public static <T extends Fragment> Intent landscape(@NonNull Context context,
@@ -64,7 +64,7 @@ public final class SingleFragmentActivity extends BaseActivity<ActivitySingleFra
     public static <T extends Fragment> Intent landscape(@NonNull Context context,
                                                         @NonNull Class<T> klass,
                                                         @Nullable Consumer<T> listener) {
-        return newIntent(context, klass, null, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        return newIntent(context, klass, listener, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @SuppressWarnings("SameParameterValue")
