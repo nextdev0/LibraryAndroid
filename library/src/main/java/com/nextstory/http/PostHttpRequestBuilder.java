@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
@@ -27,7 +26,7 @@ import io.reactivex.rxjava3.core.Single;
  * POST 요청 빌더
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")
@@ -49,7 +48,7 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
 
     @Override
     public HttpRequestBuilder addField(String key, Object value) {
-        this.fields.append(this.fields.length() == 0 ? '?' : '&');
+        this.fields.append('&');
         this.fields.append(key);
         this.fields.append('=');
         if (value instanceof String) {
@@ -101,23 +100,20 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
 
             // 연결
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
-            httpConnection.setRequestMethod("POST");
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
-            httpConnection.setUseCaches(false);
+            httpConnection.setDefaultUseCaches(true);
             httpConnection.setReadTimeout(httpClient.getReadTimeout());
             httpConnection.setConnectTimeout(httpClient.getConnectionTimeout());
             httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Connection", "Keep-Alive");
             httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             // 필드 전송
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
                     httpConnection.getOutputStream(), StandardCharsets.UTF_8);
-            PrintWriter printWriter = new PrintWriter(outputStreamWriter);
-            printWriter.write(fields.toString());
-            printWriter.flush();
-            printWriter.close();
+            outputStreamWriter.write(fields.toString());
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
 
             // 응답
             InputStreamReader inputStreamReader = new InputStreamReader(

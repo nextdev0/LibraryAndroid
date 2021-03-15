@@ -22,7 +22,7 @@ import io.reactivex.rxjava3.core.Single;
  * GET 요청 빌더
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")
@@ -92,14 +92,12 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
 
             // 연결
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
-            httpConnection.setRequestMethod("POST");
             httpConnection.setDoInput(true);
             httpConnection.setDoOutput(true);
-            httpConnection.setUseCaches(false);
+            httpConnection.setDefaultUseCaches(true);
             httpConnection.setReadTimeout(httpClient.getReadTimeout());
             httpConnection.setConnectTimeout(httpClient.getConnectionTimeout());
-            httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Connection", "Keep-Alive");
+            httpConnection.setRequestMethod("GET");
             httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             // 필드 전송
