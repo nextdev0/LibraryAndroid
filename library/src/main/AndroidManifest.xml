@@ -19,6 +19,9 @@
             <meta-data
                 android:name="com.nextstory.di.DependencyInjector"
                 android:value="androidx.startup" />
+            <meta-data
+                android:name="com.nextstory.util.LifecycleCallbacks"
+                android:value="androidx.startup" />
         </provider>
 
         <activity
