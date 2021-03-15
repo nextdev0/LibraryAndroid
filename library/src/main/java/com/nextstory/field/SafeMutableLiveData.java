@@ -10,41 +10,28 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * {@code null}을 가질 수 없는 LiveData
+ * {@link MutableLiveData}에서 상태 유지가 가능한 버전
  *
  * @author troy
- * @version 1.0.1
- * @since 1.0
+ * @version 1.0
+ * @since 1.1
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})
-public final class NonNullLiveData<T> extends MutableLiveData<T> implements SaveInstanceStateField {
-    private final boolean isSaveInstanceStateEnabled;
+public class SafeMutableLiveData<T> extends MutableLiveData<T> implements SaveInstanceStateField {
     private String key = "";
 
-    public NonNullLiveData(@NonNull T defaultValue) {
-        this(Objects.requireNonNull(defaultValue), false);
-    }
-
-    public NonNullLiveData(@NonNull T defaultValue, boolean isSaveInstanceStateEnabled) {
+    public SafeMutableLiveData() {
         super();
-        this.isSaveInstanceStateEnabled = isSaveInstanceStateEnabled;
-        setValue(Objects.requireNonNull(defaultValue));
     }
 
-    @NonNull
-    @Override
-    public T getValue() {
-        return Objects.requireNonNull(super.getValue());
-    }
-
-    @Override
-    public void setValue(@NonNull T value) {
-        super.setValue(Objects.requireNonNull(value));
-    }
-
-    @Override
-    public void postValue(@NonNull T value) {
-        super.postValue(Objects.requireNonNull(value));
+    /**
+     * @param defaultValue 초기값
+     * @deprecated {@link NonNullLiveData}로 대신 사용할 것
+     */
+    @Deprecated
+    public SafeMutableLiveData(T defaultValue) {
+        super();
+        setValue(defaultValue);
     }
 
     @Override
@@ -68,12 +55,17 @@ public final class NonNullLiveData<T> extends MutableLiveData<T> implements Save
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         T value = super.getValue();
-        if (value != null && isSaveInstanceStateEnabled) {
+        if (value != null) {
             if (value instanceof Parcelable) {
                 outState.putParcelable(getKey(), (Parcelable) value);
             } else {
                 outState.putSerializable(getKey(), (Serializable) value);
             }
         }
+    }
+
+    @NonNull
+    public T requireValue() {
+        return Objects.requireNonNull(getValue());
     }
 }

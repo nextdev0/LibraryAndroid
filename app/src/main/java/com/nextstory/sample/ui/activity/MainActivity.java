@@ -15,8 +15,8 @@ import com.nextstory.sample.ui.dialog.TestDialog;
  * @since 1.0
  */
 public final class MainActivity extends BaseActivity<ActivityMainBinding> {
-    public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first");
-    public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first", true);
+    public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
+    public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
 
     @Inject
     TestDialog testDialog;
