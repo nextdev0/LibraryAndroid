@@ -13,7 +13,7 @@ import java.util.Objects;
  * 애플리케이션 객체를 가지는 의존성 모듈
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -86,6 +86,9 @@ public abstract class AbstractModule implements Module {
         if (activity != null) {
             return Objects.requireNonNull(activity);
         }
-        return Objects.requireNonNull(fragment).requireContext();
+        if (fragment != null) {
+            return Objects.requireNonNull(fragment).requireContext();
+        }
+        return Objects.requireNonNull(application);
     }
 }
