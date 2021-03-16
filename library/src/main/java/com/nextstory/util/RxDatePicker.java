@@ -24,7 +24,7 @@ import io.reactivex.rxjava3.core.Single;
  * Rx 기반 날짜 선택
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -99,11 +99,11 @@ public final class RxDatePicker {
                 dialog = DatePickerDialog.newInstance(
                         (view, year, monthOfYear, dayOfMonth) -> {
                             currentDateTime =
-                                    currentDateTime.withDate(year, monthOfYear, dayOfMonth);
+                                    currentDateTime.withDate(year, monthOfYear + 1, dayOfMonth);
                             lock.countDown();
                         },
                         currentDateTime.getYear(),
-                        currentDateTime.getMonthOfYear(),
+                        currentDateTime.getMonthOfYear() - 1,
                         currentDateTime.getDayOfMonth());
             } else {
                 dialog = TimePickerDialog.newInstance(
