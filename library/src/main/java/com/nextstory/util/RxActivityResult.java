@@ -20,7 +20,7 @@ import io.reactivex.rxjava3.core.Single;
  * 액티비티 결과 처리 유틸 class
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -53,11 +53,16 @@ public final class RxActivityResult {
 
     public Single<RxActivityResult> asSingle() {
         return Single.create(e -> {
+            boolean isMainThread = Looper.myLooper() == Looper.getMainLooper();
             CountDownLatch lock = new CountDownLatch(1);
             listener = (resultCode, data) -> {
                 this.resultCode = resultCode;
                 this.data = data;
-                lock.countDown();
+                if (!isMainThread) {
+                    lock.countDown();
+                } else {
+                    e.onSuccess(this);
+                }
             };
             MAIN_THREAD_HANDLER.post(() -> {
                 if (activity.get() != null) {
@@ -71,8 +76,10 @@ public final class RxActivityResult {
                             .commitNowAllowingStateLoss();
                 }
             });
-            lock.await();
-            e.onSuccess(this);
+            if (!isMainThread) {
+                lock.await();
+                e.onSuccess(this);
+            }
         });
     }
 

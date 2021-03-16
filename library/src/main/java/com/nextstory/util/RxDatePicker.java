@@ -3,7 +3,6 @@ package com.nextstory.util;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.annotation.WorkerThread;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -17,6 +16,7 @@ import org.joda.time.format.DateTimeFormat;
 
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -24,7 +24,7 @@ import io.reactivex.rxjava3.core.Single;
  * Rx 기반 날짜 선택
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -90,8 +90,8 @@ public final class RxDatePicker {
         return this;
     }
 
-    @WorkerThread
-    private void startPicker() throws InterruptedException {
+    private void startPicker(Consumer<DateTime> dateTimeSupplier) throws InterruptedException {
+        boolean isMainThread = Looper.myLooper() == Looper.getMainLooper();
         CountDownLatch lock = new CountDownLatch(1);
         mainThreadHandler.post(() -> {
             DialogFragment dialog;
@@ -100,7 +100,11 @@ public final class RxDatePicker {
                         (view, year, monthOfYear, dayOfMonth) -> {
                             currentDateTime =
                                     currentDateTime.withDate(year, monthOfYear + 1, dayOfMonth);
-                            lock.countDown();
+                            if (isMainThread) {
+                                dateTimeSupplier.accept(currentDateTime);
+                            } else {
+                                lock.countDown();
+                            }
                         },
                         currentDateTime.getYear(),
                         currentDateTime.getMonthOfYear() - 1,
@@ -110,7 +114,11 @@ public final class RxDatePicker {
                         (view, hourOfDay, minute, second) -> {
                             currentDateTime =
                                     currentDateTime.withTime(hourOfDay, minute, second, 0);
-                            lock.countDown();
+                            if (isMainThread) {
+                                dateTimeSupplier.accept(currentDateTime);
+                            } else {
+                                lock.countDown();
+                            }
                         },
                         currentDateTime.getHourOfDay(),
                         currentDateTime.getMinuteOfHour(),
@@ -118,27 +126,21 @@ public final class RxDatePicker {
             }
             dialog.show(fragmentManager, "rx_date_picker_dialog");
         });
-        lock.await();
+        if (!isMainThread) {
+            lock.await();
+            dateTimeSupplier.accept(currentDateTime);
+        }
     }
 
     public Single<DateTime> asDateTime() {
-        return Single.create(e -> {
-            startPicker();
-            e.onSuccess(currentDateTime);
-        });
+        return Single.create(e -> startPicker(e::onSuccess));
     }
 
     public Single<String> asString() {
-        return Single.create(e -> {
-            startPicker();
-            e.onSuccess(currentDateTime.toString(format));
-        });
+        return Single.create(e -> startPicker(dateTime -> e.onSuccess(dateTime.toString(format))));
     }
 
     public Single<Date> asDate() {
-        return Single.create(e -> {
-            startPicker();
-            e.onSuccess(currentDateTime.toDate());
-        });
+        return Single.create(e -> startPicker(dateTime -> e.onSuccess(dateTime.toDate())));
     }
 }
