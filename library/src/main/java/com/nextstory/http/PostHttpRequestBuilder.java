@@ -1,6 +1,7 @@
 package com.nextstory.http;
 
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -20,13 +21,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 /**
  * POST 요청 빌더
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")
@@ -94,6 +96,51 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
         });
     }
 
+    @Override
+    public Observable<StreamingState> requestStreaming(int bufferSize) {
+        return Observable.create(e -> {
+            String url = this.httpClient.getBaseUrl() + this.url;
+
+            // 초기 상태 알림
+            StreamingState state = new StreamingState(0, 1, bufferSize);
+            e.onNext(state);
+
+            // 연결
+            HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
+            httpConnection.setRequestMethod("POST");
+            httpConnection.setRequestProperty("Accept", "*/*");
+            httpConnection.setRequestProperty("Accept-Encoding", "");
+            httpConnection.connect();
+
+            // 필드 전송
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+                    httpConnection.getOutputStream(), StandardCharsets.UTF_8);
+            outputStreamWriter.write(fields.toString());
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+
+            // 다운로드 길이 반환
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                state.setLength(httpConnection.getContentLengthLong());
+            } else {
+                String contentLength = httpConnection.getHeaderField("Content-Length");
+                state.setLength(Long.parseLong(contentLength));
+            }
+
+            // 다운로드
+            InputStream inputStream = httpConnection.getInputStream();
+            int read;
+            while ((read = inputStream.read(state.getCurrentBuffer())) != -1) {
+                state.addCurrentIndex(read);
+                e.onNext(state);
+            }
+            inputStream.close();
+            httpConnection.disconnect();
+
+            e.onComplete();
+        });
+    }
+
     private String internalUrlEncodedRequest() {
         try {
             String url = this.httpClient.getBaseUrl() + this.url;
@@ -106,7 +153,6 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
             httpConnection.setReadTimeout(httpClient.getReadTimeout());
             httpConnection.setConnectTimeout(httpClient.getConnectionTimeout());
             httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             // 필드 전송
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(

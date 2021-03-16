@@ -1,11 +1,13 @@
 package com.nextstory.http;
 
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -16,13 +18,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 /**
  * GET 요청 빌더
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")
@@ -66,7 +69,7 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
     @Override
     public <T> Single<T> request(Type type) {
         return Single.create(e -> {
-            String response = internalUrlEncodedRequest();
+            String response = internalRequest();
             if (!(type instanceof Class<?>)) {
                 e.onError(new IllegalStateException());
                 return;
@@ -86,9 +89,47 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
         });
     }
 
-    private String internalUrlEncodedRequest() {
+    @Override
+    public Observable<StreamingState> requestStreaming(int bufferSize) {
+        return Observable.create(e -> {
+            String url = this.httpClient.getBaseUrl() + this.url + this.fields.toString();
+
+            // 초기 상태 알림
+            StreamingState state = new StreamingState(0, 1, bufferSize);
+            e.onNext(state);
+
+            // 연결
+            HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
+            httpConnection.setRequestMethod("GET");
+            httpConnection.setRequestProperty("Accept", "*/*");
+            httpConnection.setRequestProperty("Accept-Encoding", "");
+            httpConnection.connect();
+
+            // 다운로드 길이 반환
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                state.setLength(httpConnection.getContentLengthLong());
+            } else {
+                String contentLength = httpConnection.getHeaderField("Content-Length");
+                state.setLength(Long.parseLong(contentLength));
+            }
+
+            // 다운로드
+            InputStream inputStream = httpConnection.getInputStream();
+            int read;
+            while ((read = inputStream.read(state.getCurrentBuffer())) != -1) {
+                state.addCurrentIndex(read);
+                e.onNext(state);
+            }
+            inputStream.close();
+            httpConnection.disconnect();
+
+            e.onComplete();
+        });
+    }
+
+    private String internalRequest() {
         try {
-            String url = this.httpClient.getBaseUrl() + this.url;
+            String url = this.httpClient.getBaseUrl() + this.url + this.fields.toString();
 
             // 연결
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
@@ -98,7 +139,6 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
             httpConnection.setReadTimeout(httpClient.getReadTimeout());
             httpConnection.setConnectTimeout(httpClient.getConnectionTimeout());
             httpConnection.setRequestMethod("GET");
-            httpConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
             // 필드 전송
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(

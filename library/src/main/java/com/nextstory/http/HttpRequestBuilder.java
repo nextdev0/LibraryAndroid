@@ -6,13 +6,14 @@ import androidx.annotation.NonNull;
 
 import java.lang.reflect.Type;
 
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 /**
  * HTTP 요청 빌더
  *
  * @author troy
- * @version 1.0
+ * @version 1.1
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -47,4 +48,12 @@ public interface HttpRequestBuilder {
      * @return 작업 인스턴스
      */
     <T> Single<T> request(Type type);
+
+    /**
+     * 스트리밍 요청
+     *
+     * @param bufferSize 스트리밍 버퍼 크기
+     * @return 작업 인스턴스
+     */
+    Observable<StreamingState> requestStreaming(int bufferSize);
 }
