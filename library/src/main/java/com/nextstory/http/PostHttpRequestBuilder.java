@@ -2,6 +2,7 @@ package com.nextstory.http;
 
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -28,11 +29,12 @@ import io.reactivex.rxjava3.core.Single;
  * POST 요청 빌더
  *
  * @author troy
- * @version 1.1
+ * @version 1.1.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")
 final class PostHttpRequestBuilder implements HttpRequestBuilder {
+    private static final String TAG = "HttpRequest";
     private final StringBuilder fields = new StringBuilder();
     private final Map<String, Uri> multipart = new HashMap<>();
     private final HttpClient httpClient;
@@ -100,6 +102,7 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
     public Observable<StreamingState> requestStreaming(int bufferSize) {
         return Observable.create(e -> {
             String url = this.httpClient.getBaseUrl() + this.url;
+            Log.d(TAG, "Request Post " + url);
 
             // 초기 상태 알림
             StreamingState state = new StreamingState(0, 1, bufferSize);
@@ -144,6 +147,7 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
     private String internalUrlEncodedRequest() {
         try {
             String url = this.httpClient.getBaseUrl() + this.url;
+            Log.d(TAG, "Request Post " + url);
 
             // 연결
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
@@ -155,6 +159,7 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
             httpConnection.setRequestMethod("POST");
 
             // 필드 전송
+            Log.d(TAG, "Body " + fields.toString());
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
                     httpConnection.getOutputStream(), StandardCharsets.UTF_8);
             outputStreamWriter.write(fields.toString());
@@ -182,6 +187,7 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
     private String internalMultipartRequest() {
         try {
             String url = this.httpClient.getBaseUrl() + this.url;
+            Log.d(TAG, "Request multipart " + url);
 
             // 연결
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();

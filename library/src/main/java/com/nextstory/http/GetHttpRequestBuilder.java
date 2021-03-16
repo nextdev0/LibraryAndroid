@@ -2,6 +2,7 @@ package com.nextstory.http;
 
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -25,11 +26,12 @@ import io.reactivex.rxjava3.core.Single;
  * GET 요청 빌더
  *
  * @author troy
- * @version 1.1
+ * @version 1.1.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")
 final class GetHttpRequestBuilder implements HttpRequestBuilder {
+    private static final String TAG = "HttpRequest";
     private final StringBuilder fields = new StringBuilder();
     private final HttpClient httpClient;
     private String url = "";
@@ -93,6 +95,7 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
     public Observable<StreamingState> requestStreaming(int bufferSize) {
         return Observable.create(e -> {
             String url = this.httpClient.getBaseUrl() + this.url + this.fields.toString();
+            Log.d(TAG, "Request Get " + url);
 
             // 초기 상태 알림
             StreamingState state = new StreamingState(0, 1, bufferSize);
@@ -130,6 +133,7 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
     private String internalRequest() {
         try {
             String url = this.httpClient.getBaseUrl() + this.url + this.fields.toString();
+            Log.d(TAG, "Request Get " + url);
 
             // 연결
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(url).openConnection();
