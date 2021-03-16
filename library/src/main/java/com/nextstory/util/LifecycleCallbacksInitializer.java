@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 import androidx.startup.Initializer;
 
 import java.util.Collections;
@@ -13,9 +14,11 @@ import java.util.List;
  * {@link LifecycleCallbacks} 초기화 클래스
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.1
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+@SuppressWarnings("UnusedDeclaration")
 public final class LifecycleCallbacksInitializer implements Initializer<Object> {
     private final LifecycleCallbacks lifecycleCallbacks = new LifecycleCallbacks();
 
