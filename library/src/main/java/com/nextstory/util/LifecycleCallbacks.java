@@ -8,26 +8,26 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.startup.Initializer;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * 수명주기 관련 유틸 클래스
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class LifecycleCallbacks implements SimpleActivityLifecycleCallbacks {
-    private static Application sApplication = null;
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    static Application sApplication = null;
     private static final Set<FragmentManager.FragmentLifecycleCallbacks> fragmentCallbacks =
             Collections.synchronizedSet(new HashSet<>());
     private static final Set<SimpleFragmentLifecycleCallbacks> simpleFragmentCallbacks =
@@ -283,22 +283,6 @@ public final class LifecycleCallbacks implements SimpleActivityLifecycleCallback
             FragmentActivity fragmentActivity = (FragmentActivity) activity;
             fragmentActivity.getSupportFragmentManager()
                     .unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks);
-        }
-    }
-
-    private class InternalInitializer implements Initializer<Object> {
-        @NonNull
-        @Override
-        public Object create(@NonNull Context context) {
-            sApplication = (Application) context.getApplicationContext();
-            sApplication.registerActivityLifecycleCallbacks(LifecycleCallbacks.this);
-            return new Object();
-        }
-
-        @NonNull
-        @Override
-        public List<Class<? extends Initializer<?>>> dependencies() {
-            return Collections.emptyList();
         }
     }
 }

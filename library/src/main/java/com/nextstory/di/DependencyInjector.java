@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * 의존성 주입기
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.2
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -44,9 +44,9 @@ public final class DependencyInjector
     private final FragmentManager.FragmentLifecycleCallbacks fragmentLifecycleCallbacks
             = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
-        public void onFragmentPreAttached(@NonNull FragmentManager fragmentManager,
-                                          @NonNull Fragment fragment,
-                                          @NonNull Context context) {
+        public void onFragmentAttached(@NonNull FragmentManager fragmentManager,
+                                       @NonNull Fragment fragment,
+                                       @NonNull Context context) {
             for (Module klass : modules) {
                 if (klass instanceof AbstractModule) {
                     ((AbstractModule) klass).performFragmentBind(fragment);
@@ -102,8 +102,7 @@ public final class DependencyInjector
     }
 
     @Override
-    public void onActivityPreCreated(@NonNull Activity activity,
-                                     @Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         for (Module klass : modules) {
             if (klass instanceof AbstractModule) {
                 ((AbstractModule) klass).performActivityBind(activity);
