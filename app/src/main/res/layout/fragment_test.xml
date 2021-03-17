@@ -5,27 +5,35 @@
     <data>
 
         <variable
-            name="activity"
-            type="com.nextstory.sample.ui.activity.MainActivity" />
+            name="fragment"
+            type="com.nextstory.sample.ui.fragment.TestFragment" />
 
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#3f00f0f0"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="14dp"
+            android:text="프래그먼트 영역"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> activity.onInjectTestClick()}"
+            android:onClick="@{v -> fragment.onInjectTestClick()}"
             android:text="다이얼로그 주입 테스트"
             tools:ignore="HardcodedText" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> activity.onInjectTest2Click()}"
+            android:onClick="@{v -> fragment.onInjectTest2Click()}"
             android:text="다이얼로그 주입 테스트 2"
             tools:ignore="HardcodedText" />
 
@@ -39,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@{activity.safeValue}"
+                android:text="@{fragment.safeValue}"
                 tools:text="value" />
 
             <TextView
@@ -47,24 +55,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@{activity.unsafeValue}"
+                android:text="@{fragment.unsafeValue}"
                 tools:text="value" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> activity.onSafeFieldTestClick()}"
+                android:onClick="@{v -> fragment.onSafeFieldTestClick()}"
                 android:text="변경 (회전시 값 유지 테스트)"
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>
-
-        <fragment
-            android:id="@+id/fragment_test"
-            android:name="com.nextstory.sample.ui.fragment.TestFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/fragment_test" />
 
     </LinearLayout>
 
