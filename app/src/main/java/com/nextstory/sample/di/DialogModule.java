@@ -1,9 +1,16 @@
 package com.nextstory.sample.di;
 
-import com.nextstory.di.AbstractModule;
-import com.nextstory.di.Provide;
+import android.content.Context;
+
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
+
+import dagger.Module;
+import dagger.Provides;
+import dagger.hilt.InstallIn;
+import dagger.hilt.android.components.ActivityComponent;
+import dagger.hilt.android.components.FragmentComponent;
+import dagger.hilt.android.qualifiers.ActivityContext;
 
 /**
  * 다이얼로그 의존성 모듈
@@ -12,14 +19,16 @@ import com.nextstory.sample.ui.dialog.TestDialog;
  * @version 1.0
  * @since 1.0
  */
-public final class DialogModule extends AbstractModule {
-    @Provide
-    public TestDialog provideTestDialog() {
-        return new TestDialog(getContext());
+@Module
+@InstallIn({ActivityComponent.class, FragmentComponent.class})
+public final class DialogModule {
+    @Provides
+    public static TestDialog provideTestDialog(@ActivityContext Context context) {
+        return new TestDialog(context);
     }
 
-    @Provide
-    public Test2Dialog provideTest2Dialog() {
-        return new Test2Dialog(getContext());
+    @Provides
+    public static Test2Dialog provideTest2Dialog(@ActivityContext Context context) {
+        return new Test2Dialog(context);
     }
 }

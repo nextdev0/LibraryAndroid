@@ -2,12 +2,7 @@ package com.nextstory.sample;
 
 import android.app.Application;
 
-import com.nextstory.di.Module;
-import com.nextstory.di.ModuleContainer;
-import com.nextstory.sample.di.DialogModule;
-
-import java.util.Collections;
-import java.util.List;
+import dagger.hilt.android.HiltAndroidApp;
 
 /**
  * 애플리케이션
@@ -16,12 +11,6 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-public final class SampleApplication extends Application implements ModuleContainer {
-    @Override
-    public List<Module> getModules() {
-        // Arrays.asList();
-        return Collections.singletonList(
-                new DialogModule()
-        );
-    }
+@HiltAndroidApp
+public final class SampleApplication extends Application {
 }
