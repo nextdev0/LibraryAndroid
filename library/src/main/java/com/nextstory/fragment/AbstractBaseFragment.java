@@ -32,7 +32,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * 기본 프래그먼트
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -124,8 +124,7 @@ public abstract class AbstractBaseFragment extends Fragment {
             flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             window.getDecorView().setSystemUiVisibility(flags);
             contentView.post(() -> {
-                if (contentView.findViewById(R.id.translucent_status_bar) == null
-                        && contentView.findViewById(R.id.light_status_bar_support) == null) {
+                if (contentView.findViewById(R.id.translucent_status_bar) == null) {
                     View statusBarView = new View(contentView.getContext());
                     statusBarView.setId(R.id.translucent_status_bar);
                     statusBarView.setBackgroundColor(0x3f000000);
@@ -134,8 +133,6 @@ public abstract class AbstractBaseFragment extends Fragment {
                 }
             });
         }
-
-        applyLightStatusBar(false);
     }
 
     /**
@@ -176,26 +173,6 @@ public abstract class AbstractBaseFragment extends Fragment {
                         flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     } else {
                         flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                    }
-                } else {
-                    if (enabled) {
-                        View translucentStatusBar =
-                                contentView.findViewById(R.id.translucent_status_bar);
-                        View lightStatusBarSupport =
-                                contentView.findViewById(R.id.light_status_bar_support);
-                        if (translucentStatusBar == null && lightStatusBarSupport == null) {
-                            View statusBarView = new View(contentView.getContext());
-                            statusBarView.setId(R.id.light_status_bar_support);
-                            statusBarView.setBackgroundColor(0x3f000000);
-                            contentView.addView(statusBarView,
-                                    new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
-                        }
-                    } else {
-                        View statusBarView =
-                                contentView.findViewById(R.id.light_status_bar_support);
-                        if (statusBarView != null) {
-                            contentView.removeView(statusBarView);
-                        }
                     }
                 }
                 decorView.setSystemUiVisibility(flags);
