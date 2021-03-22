@@ -33,7 +33,7 @@ import java.util.Objects;
  * 기본 다이얼로그
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -160,11 +160,13 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
             flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             window.getDecorView().setSystemUiVisibility(flags);
             contentView.post(() -> {
-                View statusBarView = new View(contentView.getContext());
-                statusBarView.setId(R.id.translucent_status_bar);
-                statusBarView.setBackgroundColor(0x3f000000);
-                contentView.addView(statusBarView,
-                        new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
+                if (contentView.findViewById(R.id.translucent_status_bar) == null) {
+                    View statusBarView = new View(contentView.getContext());
+                    statusBarView.setId(R.id.translucent_status_bar);
+                    statusBarView.setBackgroundColor(0x3f000000);
+                    contentView.addView(statusBarView,
+                            new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
+                }
             });
         }
         applyLightStatusBar(false);
@@ -177,6 +179,10 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
         Window window = getWindow();
         ViewGroup contentView = findViewById(android.R.id.content);
         if (window != null && contentView != null) {
+            View statusBar = contentView.findViewById(R.id.translucent_status_bar);
+            if (statusBar != null) {
+                contentView.removeView(statusBar);
+            }
             window.setStatusBarColor(Color.TRANSPARENT);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -187,13 +193,15 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
             flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             window.getDecorView().setSystemUiVisibility(flags);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                contentView.post(() -> {
-                    View statusBarView = new View(contentView.getContext());
-                    statusBarView.setId(R.id.translucent_status_bar);
-                    statusBarView.setBackgroundColor(0x3f000000);
-                    contentView.addView(statusBarView,
-                            new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
-                });
+                if (contentView.findViewById(R.id.translucent_status_bar) == null) {
+                    contentView.post(() -> {
+                        View statusBarView = new View(contentView.getContext());
+                        statusBarView.setId(R.id.translucent_status_bar);
+                        statusBarView.setBackgroundColor(0x3f000000);
+                        contentView.addView(statusBarView,
+                                new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
+                    });
+                }
             }
         }
     }
@@ -216,21 +224,6 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
                         flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     } else {
                         flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                    }
-                } else {
-                    if (enabled) {
-                        if (contentView.findViewById(R.id.translucent_status_bar) == null) {
-                            View statusBarView = new View(contentView.getContext());
-                            statusBarView.setId(R.id.translucent_status_bar);
-                            statusBarView.setBackgroundColor(0x3f000000);
-                            contentView.addView(statusBarView,
-                                    new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
-                        }
-                    } else {
-                        View statusBarView = contentView.findViewById(R.id.translucent_status_bar);
-                        if (statusBarView != null) {
-                            contentView.removeView(statusBarView);
-                        }
                     }
                 }
                 decorView.setSystemUiVisibility(flags);

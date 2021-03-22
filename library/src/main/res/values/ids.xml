@@ -2,6 +2,5 @@
 <resources>
 
     <item name="translucent_status_bar" type="id" />
-    <item name="light_status_bar_support" type="id" />
 
 </resources>
