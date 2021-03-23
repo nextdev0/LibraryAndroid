@@ -21,9 +21,11 @@ import java.util.function.Consumer;
  * 단일 프래그먼트 액티비티
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
+ * @deprecated 미사용 (사용금지)
  */
+@Deprecated
 @SuppressWarnings({"unchecked", "UnusedDeclaration"})
 public final class SingleFragmentActivity extends BaseActivity<ActivitySingleFragmentBinding> {
     private static final Map<Integer, Consumer<Fragment>> listeners = new LinkedHashMap<>();
@@ -34,33 +36,39 @@ public final class SingleFragmentActivity extends BaseActivity<ActivitySingleFra
     private Fragment fragment = null;
     private int currentIndex = -1;
 
+    @Deprecated
     public static <T extends Fragment> Intent unspecified(@NonNull Context context,
                                                           @NonNull Class<T> klass) {
         return newIntent(context, klass, null, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
+    @Deprecated
     public static <T extends Fragment> Intent unspecified(@NonNull Context context,
                                                           @NonNull Class<T> klass,
                                                           @Nullable Consumer<T> listener) {
         return newIntent(context, klass, listener, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
+    @Deprecated
     public static <T extends Fragment> Intent portrait(@NonNull Context context,
                                                        @NonNull Class<T> klass) {
         return newIntent(context, klass, null, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
+    @Deprecated
     public static <T extends Fragment> Intent portrait(@NonNull Context context,
                                                        @NonNull Class<T> klass,
                                                        @Nullable Consumer<T> listener) {
         return newIntent(context, klass, listener, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
+    @Deprecated
     public static <T extends Fragment> Intent landscape(@NonNull Context context,
                                                         @NonNull Class<T> klass) {
         return newIntent(context, klass, null, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
+    @Deprecated
     public static <T extends Fragment> Intent landscape(@NonNull Context context,
                                                         @NonNull Class<T> klass,
                                                         @Nullable Consumer<T> listener) {
