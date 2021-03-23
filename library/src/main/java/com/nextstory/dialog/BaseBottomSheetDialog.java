@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.databinding.ViewDataBinding;
@@ -28,10 +29,10 @@ import java.lang.reflect.ParameterizedType;
  * 기본 바텀시트 다이얼로그
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends BottomSheetDialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
     private B binding = null;
@@ -82,21 +83,34 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
         super.onStart();
     }
 
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override
-    public void setContentView(int layoutResId) {
+    public final void setContentView(int layoutResId) {
         View view = View.inflate(getContext(), layoutResId, null);
         setContentView(view);
     }
 
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override
-    public void setContentView(View view) {
+    public final void setContentView(View view) {
         setContentView(view, null);
     }
 
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
+    public final void setContentView(View view, ViewGroup.LayoutParams params) {
         viewContainer.removeAllViews();
         viewContainer.addView(view, new FrameLayout.LayoutParams(-1, -2));
+    }
+
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    @Override
+    public final void addContentView(View view, ViewGroup.LayoutParams params) {
+        super.addContentView(view, params);
     }
 
     @Override
@@ -161,6 +175,7 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     /**
      * @return 뷰 바인딩 인스턴스
      */
+    @CallSuper
     protected B getBinding() {
         return binding;
     }

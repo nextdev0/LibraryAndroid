@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
 import androidx.core.view.ViewCompat;
@@ -33,7 +35,7 @@ import java.util.Objects;
  * 기본 다이얼로그
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -71,7 +73,7 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
         }
         applyTransparentTheme();
         applyLightStatusBar(false);
-        setContentView(binding.getRoot());
+        super.setContentView(binding.getRoot());
         Window window = getWindow();
         if (window != null) {
             window.setLayout(
@@ -99,6 +101,34 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
             window.setDimAmount(getDimAmount());
         }
         super.onStart();
+    }
+
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    @Override
+    public final void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+    }
+
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    @Override
+    public final void setContentView(@NonNull View view) {
+        super.setContentView(view);
+    }
+
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    @Override
+    public final void setContentView(@NonNull View view, @Nullable ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+    }
+
+    @Deprecated
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    @Override
+    public final void addContentView(@NonNull View view, @Nullable ViewGroup.LayoutParams params) {
+        super.addContentView(view, params);
     }
 
     @CallSuper
@@ -267,6 +297,7 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     /**
      * @return 바인딩 인스턴스
      */
+    @CallSuper
     protected B getBinding() {
         return binding;
     }
