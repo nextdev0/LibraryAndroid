@@ -3,10 +3,6 @@
 
     <declare-styleable name="DataBindingRecyclerView">
         <attr name="android:orientation" />
-        <attr name="orientation" format="enum">
-            <enum name="horizontal" value="0" />
-            <enum name="vertical" value="1" />
-        </attr>
         <attr name="spanCount" />
         <attr name="reverseLayout" />
         <attr name="onBottomScrollReached" format="reference" />

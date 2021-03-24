@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0
+ * @version 1.0.1
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -40,24 +40,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
     private final List<OnViewHolderCallback> onViewHolderCallbacks = new ArrayList<>();
     private int orientation;
     private DataBindingAdapter adapter;
-
-    public DataBindingRecyclerView(@NonNull Context context) {
-        super(context);
-        initialize(context, null);
-    }
-
-    public DataBindingRecyclerView(@NonNull Context context,
-                                   @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        initialize(context, attrs);
-    }
-
-    public DataBindingRecyclerView(@NonNull Context context,
-                                   @Nullable AttributeSet attrs,
-                                   int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initialize(context, attrs);
-    }
 
     @BindingAdapter("bindItems")
     public static void bindItems(
@@ -78,8 +60,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
         Objects.requireNonNull(items);
         viewHolderItem.setItems(items);
     }
-
-    // region LayoutParams 관련 메서드
 
     @BindingAdapter("onViewHolderCallback")
     public static void addOnViewHolderCallback(
@@ -108,6 +88,24 @@ public final class DataBindingRecyclerView extends RecyclerView {
         });
     }
 
+    public DataBindingRecyclerView(@NonNull Context context) {
+        super(context);
+        initialize(context, null);
+    }
+
+    public DataBindingRecyclerView(@NonNull Context context,
+                                   @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initialize(context, attrs);
+    }
+
+    public DataBindingRecyclerView(@NonNull Context context,
+                                   @Nullable AttributeSet attrs,
+                                   int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialize(context, attrs);
+    }
+
     /**
      * 초기화
      *
@@ -128,9 +126,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
                     R.styleable.DataBindingRecyclerView_android_orientation,
                     -1);
             if (orientation == -1) {
-                orientation = a.getInt(
-                        R.styleable.DataBindingRecyclerView_orientation,
-                        VERTICAL);
+                orientation = VERTICAL;
             }
             spanCount = a.getInt(
                     R.styleable.DataBindingRecyclerView_spanCount,
@@ -163,10 +159,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
             super.setAdapter(adapter);
         }
     }
-
-    // endregion
-
-    // region 재지정 불가 메서드
 
     @Override
     protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
@@ -203,10 +195,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
         // no-op
     }
 
-    // endregion
-
-    // region 바인딩 메서드
-
     @Nullable
     @Override
     public final LayoutManager getLayoutManager() {
@@ -219,8 +207,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
     }
 
     // endregion
-
-    // region 콜백 메서드
 
     @Override
     public final void setHasFixedSize(boolean hasFixedSize) {
@@ -245,10 +231,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
             }
         });
     }
-
-    // endregion
-
-    // region 바인딩 어댑터
 
     /**
      * 데이터 바인딩
@@ -277,8 +259,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
     public void clearOnViewHolderCallback() {
         onViewHolderCallbacks.clear();
     }
-
-    // endregion
 
     /**
      * 하단 스크롤 리스너
@@ -377,7 +357,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
                             null,
                             false);
                     binding.getRoot().setVisibility(View.GONE);
-                    return new DataBindingViewHolder(binding);
+                    return new DataBindingViewHolder(binding, type.originalView);
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                     throw new IllegalStateException("inflate error.");
@@ -390,17 +370,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
                         viewGroup.removeView(type.originalView);
                     }
                 }
-                ViewGroup.MarginLayoutParams params =
-                        (ViewGroup.MarginLayoutParams) type.originalView.getLayoutParams();
-                FrameLayout.LayoutParams newParams =
-                        new FrameLayout.LayoutParams(params.width, params.height);
-                newParams.topMargin = params.topMargin;
-                newParams.bottomMargin = params.bottomMargin;
-                newParams.leftMargin = params.leftMargin;
-                newParams.rightMargin = params.rightMargin;
-                FrameLayout newParent = new FrameLayout(parent.getContext());
-                newParent.addView(type.originalView, newParams);
-                return new DataBindingViewHolder(newParent);
+                return new DataBindingViewHolder(type.originalView);
             }
         }
 
@@ -588,20 +558,38 @@ public final class DataBindingRecyclerView extends RecyclerView {
         private static class DataBindingViewHolder extends ViewHolder {
             private final ViewDataBinding binding;
 
-            public DataBindingViewHolder(@NonNull ViewDataBinding binding) {
-                super(binding.getRoot());
+            public DataBindingViewHolder(@NonNull ViewDataBinding binding,
+                                         @NonNull View originalView) {
+                super(createView(binding.getRoot(),
+                        (MarginLayoutParams) originalView.getLayoutParams()));
                 this.binding = binding;
             }
 
             public DataBindingViewHolder(@NonNull View itemView) {
-                super(itemView);
+                super(createView(itemView, null));
                 this.binding = null;
+            }
+
+            private static View createView(View v, ViewGroup.MarginLayoutParams originalParams) {
+                Context context = v.getContext();
+                ViewGroup.MarginLayoutParams params = originalParams == null
+                        ? (ViewGroup.MarginLayoutParams) v.getLayoutParams()
+                        : originalParams;
+                FrameLayout.LayoutParams newParams =
+                        new FrameLayout.LayoutParams(params.width, params.height);
+                newParams.topMargin = params.topMargin;
+                newParams.bottomMargin = params.bottomMargin;
+                newParams.leftMargin = params.leftMargin;
+                newParams.rightMargin = params.rightMargin;
+                FrameLayout newParent = new FrameLayout(context);
+                newParent.addView(v, newParams);
+                return newParent;
             }
         }
     }
 
     /**
-     * 데이터 변경 시 발생하는 예외를 방지하는 {@link GridLayoutManager}
+     * 예외 방지용 {@link GridLayoutManager}
      */
     private static class PreventExceptionGridLayoutManager extends GridLayoutManager {
         private final AtomicBoolean canScroll = new AtomicBoolean(false);
@@ -681,7 +669,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
     }
 
     /**
-     * 커스텀 애트리뷰트를 지원하기 위한 클래스
+     * 하위 레이아웃 속성 클래스
      */
     public static class LayoutParams extends GridLayoutManager.LayoutParams {
         private int spanCount;
