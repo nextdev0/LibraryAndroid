@@ -35,13 +35,15 @@ import java.util.Objects;
  * 기본 다이얼로그
  *
  * @author troy
- * @version 1.0.2
+ * @version 1.0.3
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
-    private B binding = null;
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    B binding = null;
 
     public BaseDialog(@NonNull Context context) {
         this(context, R.style.Theme_Dialog_Base);
@@ -56,7 +58,7 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (binding == null) {
+        if (binding == null && savedInstanceState == null) {
             ParameterizedType parameterizedType =
                     (ParameterizedType) getClass().getGenericSuperclass();
             if (parameterizedType != null) {
@@ -73,7 +75,9 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
         }
         applyTransparentTheme();
         applyLightStatusBar(false);
-        super.setContentView(binding.getRoot());
+        if (binding != null) {
+            super.setContentView(binding.getRoot());
+        }
         Window window = getWindow();
         if (window != null) {
             window.setLayout(

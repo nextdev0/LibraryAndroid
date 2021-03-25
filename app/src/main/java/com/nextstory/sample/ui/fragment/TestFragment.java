@@ -12,7 +12,6 @@ import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
 
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -26,11 +25,6 @@ public final class TestFragment extends BaseFragment<FragmentTestBinding> {
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
     public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
 
-    @Inject
-    TestDialog testDialog;
-    @Inject
-    Test2Dialog test2Dialog;
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -39,12 +33,14 @@ public final class TestFragment extends BaseFragment<FragmentTestBinding> {
         getBinding().setLifecycleOwner(this);
     }
 
-    public void onInjectTestClick() {
-        testDialog.show();
+    public void onDialogTestClick() {
+        new TestDialog().show(this);
     }
 
-    public void onInjectTest2Click() {
-        test2Dialog.show();
+    public void onDialogTest2Click() {
+        new Test2Dialog().show(this);
+    }
+
     }
 
     public void onSafeFieldTestClick() {

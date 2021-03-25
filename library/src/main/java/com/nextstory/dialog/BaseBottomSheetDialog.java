@@ -29,14 +29,16 @@ import java.lang.reflect.ParameterizedType;
  * 기본 바텀시트 다이얼로그
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends BottomSheetDialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
-    private B binding = null;
     private FrameLayout viewContainer;
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    B binding = null;
 
     public BaseBottomSheetDialog(@NonNull Context context) {
         this(context, R.style.Theme_Dialog_Base_BottomDialog);
@@ -52,7 +54,7 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.dialog_bottom_sheet_base);
         viewContainer = findViewById(R.id.view_container);
-        if (binding == null) {
+        if (binding == null && savedInstanceState == null) {
             ParameterizedType parameterizedType =
                     (ParameterizedType) getClass().getGenericSuperclass();
             if (parameterizedType != null) {
@@ -70,7 +72,9 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
                 }
             }
         }
-        setContentView(binding.getRoot());
+        if (binding != null) {
+            setContentView(binding.getRoot());
+        }
     }
 
     @CallSuper

@@ -1,11 +1,11 @@
 package com.nextstory.sample.ui.dialog;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.nextstory.dialog.BaseBottomSheetDialog;
+import com.nextstory.dialog.BaseBottomSheetDialogFragment;
 import com.nextstory.sample.databinding.DialogTest2Binding;
 
 /**
@@ -13,14 +13,11 @@ import com.nextstory.sample.databinding.DialogTest2Binding;
  * @version 1.0
  * @since 1.0
  */
-public final class Test2Dialog extends BaseBottomSheetDialog<DialogTest2Binding> {
-    public Test2Dialog(@NonNull Context context) {
-        super(context);
-    }
-
+public final class Test2Dialog extends BaseBottomSheetDialogFragment<DialogTest2Binding> {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onDialogCreated(BaseBottomSheetDialog<DialogTest2Binding> dialog,
+                                @Nullable Bundle savedInstanceState) {
+        super.onDialogCreated(dialog, savedInstanceState);
         getBinding().setDialog(this);
     }
 }
