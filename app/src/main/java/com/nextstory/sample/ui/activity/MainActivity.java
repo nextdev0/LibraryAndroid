@@ -8,7 +8,6 @@ import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
 
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
@@ -25,6 +24,9 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        applyTransparentTheme();
+        applyLightStatusBar(true);
+
         getBinding().setActivity(this);
         getBinding().setLifecycleOwner(this);
     }
@@ -35,8 +37,6 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     public void onDialogTest2Click() {
         new Test2Dialog().show(this);
-    }
-
     }
 
     public void onSafeFieldTestClick() {
