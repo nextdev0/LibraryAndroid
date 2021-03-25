@@ -32,10 +32,10 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * 기본 프래그먼트
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class AbstractBaseFragment extends Fragment {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
@@ -47,8 +47,12 @@ public abstract class AbstractBaseFragment extends Fragment {
     };
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
     private final PermissionHelpers permissionHelpers = new PermissionHelpers(this);
+
+    @Deprecated
     private final CompositeDisposable onPauseDisposables = new CompositeDisposable();
+    @Deprecated
     private final CompositeDisposable onStopDisposables = new CompositeDisposable();
+    @Deprecated
     private final CompositeDisposable onDestroyDisposables = new CompositeDisposable();
 
     @Override
@@ -291,7 +295,9 @@ public abstract class AbstractBaseFragment extends Fragment {
      * 작업 추가, 기본으로 수명주기가 {@link Lifecycle.Event#ON_DESTROY} 해제됨.
      *
      * @param disposable 작업
+     * @deprecated {@link CompositeDisposable} 직접 생성해서 사용할것
      */
+    @Deprecated
     public void addDisposable(@NonNull Disposable disposable) {
         addDisposable(Lifecycle.Event.ON_DESTROY, disposable);
     }
@@ -301,7 +307,9 @@ public abstract class AbstractBaseFragment extends Fragment {
      *
      * @param lifecycleEvent 작업 해제될 수명주기 이벤트
      * @param disposable     작업
+     * @deprecated {@link CompositeDisposable} 직접 생성해서 사용할것
      */
+    @Deprecated
     @SuppressWarnings("SameParameterValue")
     public void addDisposable(@NonNull Lifecycle.Event lifecycleEvent,
                               @NonNull Disposable disposable) {
