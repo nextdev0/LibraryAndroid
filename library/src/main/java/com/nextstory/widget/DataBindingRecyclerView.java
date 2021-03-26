@@ -17,7 +17,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextstory.R;
@@ -33,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.5
+ * @version 1.0.6
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -247,7 +246,10 @@ public final class DataBindingRecyclerView extends RecyclerView {
 
     /**
      * 내부 항목 비교 콜백
+     *
+     * @deprecated DiffUtil 기능 임시 미사용
      */
+    @Deprecated
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     static class InternalDiffUtilCallback extends DiffUtil.Callback {
         private final List<?> oldList;
@@ -478,32 +480,34 @@ public final class DataBindingRecyclerView extends RecyclerView {
             for (ViewHolderType type : types) {
                 if (type.originalView == v) {
                     List<?> oldList = type.getOldItems();
-                    DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
-                            new InternalDiffUtilCallback(oldList, newList));
-                    int finalStartPosition = startPosition;
-                    diffResult.dispatchUpdatesTo(new ListUpdateCallback() {
-                        @Override
-                        public void onInserted(int position, int count) {
-                            notifyItemRangeInserted(finalStartPosition + position, count);
-                        }
-
-                        @Override
-                        public void onRemoved(int position, int count) {
-                            notifyItemRangeRemoved(finalStartPosition + position, count);
-                        }
-
-                        @Override
-                        public void onMoved(int fromPosition, int toPosition) {
-                            notifyItemMoved(
-                                    finalStartPosition + fromPosition,
-                                    finalStartPosition + toPosition);
-                        }
-
-                        @Override
-                        public void onChanged(int position, int count, Object payload) {
-                            notifyItemRangeChanged(finalStartPosition + position, count, payload);
-                        }
-                    });
+                    notifyDataSetChanged();
+                    // DiffUtil 임시 미사용
+                    // DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                    //         new InternalDiffUtilCallback(oldList, newList));
+                    // int finalStartPosition = startPosition;
+                    // diffResult.dispatchUpdatesTo(new ListUpdateCallback() {
+                    //     @Override
+                    //     public void onInserted(int position, int count) {
+                    //         notifyItemRangeInserted(finalStartPosition + position, count);
+                    //     }
+                    //
+                    //     @Override
+                    //     public void onRemoved(int position, int count) {
+                    //         notifyItemRangeRemoved(finalStartPosition + position, count);
+                    //     }
+                    //
+                    //     @Override
+                    //     public void onMoved(int fromPosition, int toPosition) {
+                    //         notifyItemMoved(
+                    //                 finalStartPosition + fromPosition,
+                    //                 finalStartPosition + toPosition);
+                    //     }
+                    //
+                    //     @Override
+                    //     public void onChanged(int position, int count, Object payload) {
+                    //         notifyItemRangeChanged(finalStartPosition + position, count, payload);
+                    //     }
+                    // });
                     break;
                 } else {
                     startPosition += type.getItems().size();
