@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.3
+ * @version 1.0.4
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -253,19 +253,11 @@ public final class DataBindingRecyclerView extends RecyclerView {
     }
 
     /**
-     * 항목 변경 사항 체크용 (ID)
+     * 항목 변경 사항 체크용 어노테이션
      */
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface DiffId {
-    }
-
-    /**
-     * 항목 변경 사항 체크용 (내용)
-     */
-    @Target(ElementType.FIELD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface DiffContents {
+    public @interface DiffKey {
     }
 
     /**
@@ -295,8 +287,8 @@ public final class DataBindingRecyclerView extends RecyclerView {
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
             Object oldItem = oldList.get(oldItemPosition);
             Object newItem = newList.get(newItemPosition);
-            Map<String, Object> olds = getAnnotatedFields(oldItem, DiffId.class);
-            Map<String, Object> news = getAnnotatedFields(newItem, DiffId.class);
+            Map<String, Object> olds = getAnnotatedFields(oldItem, DiffKey.class);
+            Map<String, Object> news = getAnnotatedFields(newItem, DiffKey.class);
             if (olds.keySet().size() > 0 && news.keySet().size() > 0) {
                 boolean isEqual = true;
                 for (String key : olds.keySet()) {
@@ -312,21 +304,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            Object oldItem = oldList.get(oldItemPosition);
-            Object newItem = newList.get(newItemPosition);
-            Map<String, Object> olds = getAnnotatedFields(oldItem, DiffContents.class);
-            Map<String, Object> news = getAnnotatedFields(newItem, DiffContents.class);
-            if (olds.keySet().size() > 0 && news.keySet().size() > 0) {
-                boolean isEqual = true;
-                for (String key : olds.keySet()) {
-                    Object oldField = olds.get(key);
-                    Object newField = news.get(key);
-                    isEqual &= oldField.equals(newField);
-                }
-                return isEqual;
-            } else {
-                return oldItem.equals(newItem);
-            }
+            return true;
         }
 
         private Map<String, Object> getAnnotatedFields(Object item,
@@ -335,7 +313,10 @@ public final class DataBindingRecyclerView extends RecyclerView {
             for (Field field : item.getClass().getDeclaredFields()) {
                 if (field.getAnnotation(annotation) != null) {
                     try {
+                        boolean isAccessible = field.isAccessible();
+                        field.setAccessible(true);
                         result.put(field.getName(), field.get(item));
+                        field.setAccessible(isAccessible);
                     } catch (IllegalAccessException ignore) {
                         // no-op
                     }
