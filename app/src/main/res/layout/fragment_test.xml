@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -10,7 +11,8 @@
 
     </data>
 
-    <LinearLayout
+    <com.nextstory.widget.DataBindingRecyclerView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#3f00f0f0"
@@ -74,6 +76,13 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <com.nextstory.widget.DataBindingRecyclerViewHolder
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:bindItems="@{fragment.testList}"
+            app:itemBindingName="string"
+            app:layout="@layout/adapter_test" />
+
+    </com.nextstory.widget.DataBindingRecyclerView>
 
 </layout>

@@ -9,6 +9,9 @@
     </declare-styleable>
 
     <declare-styleable name="DataBindingRecyclerViewHolder">
+        <attr name="itemBindingName" format="string" />
+        <attr name="positionBindingName" format="string" />
+        <attr name="callbackBindingName" format="string" />
         <attr name="bindItems" format="reference" />
         <attr name="onViewHolderCallback" format="reference" />
         <attr name="layout" />

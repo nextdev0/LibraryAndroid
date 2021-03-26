@@ -9,20 +9,21 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ListUpdateCallback;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextstory.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0.2
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -40,16 +41,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
     private final List<OnViewHolderCallback> onViewHolderCallbacks = new ArrayList<>();
     private int orientation;
     private DataBindingAdapter adapter;
-
-    @BindingAdapter("bindItems")
-    public static void bindItems(
-            @NonNull final DataBindingRecyclerViewHolder viewHolderItem,
-            @Nullable final Object[] items
-    ) {
-        Objects.requireNonNull(viewHolderItem);
-        Objects.requireNonNull(items);
-        viewHolderItem.setItems(Arrays.asList(items));
-    }
 
     @BindingAdapter("bindItems")
     public static void bindItems(
@@ -218,36 +209,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
         return false;
     }
 
-    /**
-     * 데이터 바인딩
-     *
-     * @param idRes 뷰 홀더의 위젯 ID
-     * @param items 바인딩할 목록 모델
-     */
-    public void bind(@IdRes final int idRes, @Nullable final List<?> items) {
-        post(() -> {
-            if (items != null) {
-                adapter.bind(idRes, items);
-            }
-        });
-    }
-
-    /**
-     * 데이터 바인딩
-     *
-     * @param viewHolderItem 뷰 홀더 항목
-     * @param items          바인딩할 목록 모델
-     */
-    public void bind(@NonNull final DataBindingRecyclerViewHolder viewHolderItem,
-                     @Nullable final List<?> items) {
-        Objects.requireNonNull(viewHolderItem);
-        post(() -> {
-            if (items != null) {
-                adapter.bind(viewHolderItem, items);
-            }
-        });
-    }
-
     public void addOnViewHolderCallback(@Nullable OnViewHolderCallback callback) {
         onViewHolderCallbacks.add(callback);
     }
@@ -285,15 +246,46 @@ public final class DataBindingRecyclerView extends RecyclerView {
     }
 
     /**
+     * 내부 항목 비교 콜백
+     */
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    static class InternalDiffUtilCallback extends DiffUtil.Callback {
+        private final List<?> oldList;
+        private final List<?> newList;
+
+        private InternalDiffUtilCallback(List<?> oldList, List<?> newList) {
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+        }
+    }
+
+    /**
      * 어댑터
      */
-    private static class DataBindingAdapter
-            extends Adapter<DataBindingAdapter.DataBindingViewHolder> {
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    static class DataBindingAdapter extends Adapter<DataBindingAdapter.DataBindingViewHolder> {
         private final List<ViewHolderType> types = new ArrayList<>();
         private final List<OnViewHolderCallback> onViewHolderCallbacks;
-        private int itemVarId;
-        private int positionVarId;
-        private int callbackVarId;
 
         private DataBindingAdapter(List<OnViewHolderCallback> onViewHolderCallbacks) {
             this.onViewHolderCallbacks = onViewHolderCallbacks;
@@ -304,7 +296,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
          * 바인딩 id를 반환
          *
          * @param id 아이디
-         * @return id
+         * @return id, 찾을 수 없으면 {@code -1}을 반환함
          */
         private static int getBindingId(String id) {
             String className = id.substring(0, id.lastIndexOf("."));
@@ -313,19 +305,13 @@ public final class DataBindingRecyclerView extends RecyclerView {
                 Class<?> brClass = Class.forName(className);
                 Field varField = brClass.getField(fieldName);
                 return (int) Objects.requireNonNull(varField.get(null));
-            } catch (Exception e) {
-                e.printStackTrace();
-                return 0;
+            } catch (Throwable ignore) {
+                return -1;
             }
         }
 
         @Override
         public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-            Context context = recyclerView.getContext();
-            String packageName = context.getPackageName();
-            itemVarId = getBindingId(packageName.concat(".BR.item"));
-            positionVarId = getBindingId(packageName.concat(".BR.position"));
-            callbackVarId = getBindingId(packageName.concat(".BR.callback"));
             GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
             if (layoutManager != null) {
                 layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -357,7 +343,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
                             null,
                             false);
                     binding.getRoot().setVisibility(View.GONE);
-                    return new DataBindingViewHolder(binding, type.originalView);
+                    return new DataBindingViewHolder(binding, v);
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                     throw new IllegalStateException("inflate error.");
@@ -392,22 +378,27 @@ public final class DataBindingRecyclerView extends RecyclerView {
             }
             holder.binding.getRoot().post(() ->
                     holder.binding.getRoot().setVisibility(View.VISIBLE));
-            if (types.get(viewType).isItemBound()) {
-                holder.binding.setVariable(itemVarId,
+            if (holder.getItemVarId() != -1) {
+                holder.binding.setVariable(holder.getItemVarId(),
                         types.get(viewType).getItems().get(realPosition));
-                holder.binding.setVariable(positionVarId, realPosition);
-                holder.binding.setVariable(callbackVarId, (OnViewHolderCallback) (v, o, i) -> {
-                    OnViewHolderCallback callback = types.get(viewType).getCallback();
-                    if (callback != null) {
-                        callback.onViewHolderCallback(v, o, i);
-                        return;
-                    }
-                    for (OnViewHolderCallback c : onViewHolderCallbacks) {
-                        if (c != null) {
-                            c.onViewHolderCallback(v, o, i);
-                        }
-                    }
-                });
+            }
+            if (holder.getPositionVarId() != -1) {
+                holder.binding.setVariable(holder.getPositionVarId(), realPosition);
+            }
+            if (holder.getCallbackVarId() != -1) {
+                holder.binding.setVariable(holder.getCallbackVarId(),
+                        (OnViewHolderCallback) (v, o, i) -> {
+                            OnViewHolderCallback callback = types.get(viewType).getCallback();
+                            if (callback != null) {
+                                callback.onViewHolderCallback(v, o, i);
+                                return;
+                            }
+                            for (OnViewHolderCallback c : onViewHolderCallbacks) {
+                                if (c != null) {
+                                    c.onViewHolderCallback(v, o, i);
+                                }
+                            }
+                        });
             }
         }
 
@@ -463,7 +454,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
          *
          * @param view 뷰
          */
-        public void add(View view) {
+        private void add(View view) {
             ViewHolderType newType = new ViewHolderType(view);
             types.add(newType);
             if (!view.isInEditMode() && view instanceof DataBindingRecyclerViewHolder) {
@@ -473,20 +464,47 @@ public final class DataBindingRecyclerView extends RecyclerView {
             }
         }
 
-        public void bind(@IdRes int idRes, List<?> items) {
-            for (ViewHolderType type : types) {
-                if (type.originalView.getId() == idRes) {
-                    type.setItems(items);
-                    notifyDataSetChanged();
-                }
-            }
-        }
-
-        public void bind(View v, List<?> items) {
+        /**
+         * 데이터 바인딩
+         *
+         * @param v       바인딩할 뷰
+         * @param newList 모델 (목록)
+         */
+        @RestrictTo(RestrictTo.Scope.LIBRARY)
+        void bind(View v, List<?> newList) {
+            int startPosition = 0;
             for (ViewHolderType type : types) {
                 if (type.originalView == v) {
-                    type.setItems(items);
-                    notifyDataSetChanged();
+                    List<?> oldList = type.getOldItems();
+                    DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                            new InternalDiffUtilCallback(oldList, newList));
+                    int finalStartPosition = startPosition;
+                    diffResult.dispatchUpdatesTo(new ListUpdateCallback() {
+                        @Override
+                        public void onInserted(int position, int count) {
+                            notifyItemRangeInserted(finalStartPosition + position, count);
+                        }
+
+                        @Override
+                        public void onRemoved(int position, int count) {
+                            notifyItemRangeRemoved(finalStartPosition + position, count);
+                        }
+
+                        @Override
+                        public void onMoved(int fromPosition, int toPosition) {
+                            notifyItemMoved(
+                                    finalStartPosition + fromPosition,
+                                    finalStartPosition + toPosition);
+                        }
+
+                        @Override
+                        public void onChanged(int position, int count, Object payload) {
+                            notifyItemRangeChanged(finalStartPosition + position, count, payload);
+                        }
+                    });
+                    break;
+                } else {
+                    startPosition += type.getItems().size();
                 }
             }
         }
@@ -498,8 +516,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
             private final View originalView;
             private final int spanCount;
             @NonNull
-            private List<?> items = Collections.singletonList(new Object());
-            private boolean isItemBound = false;
+            private final List<?> items = Collections.singletonList(new Object());
 
             public ViewHolderType(View originalView) {
                 this.originalView = originalView;
@@ -514,7 +531,8 @@ public final class DataBindingRecyclerView extends RecyclerView {
             @NonNull
             public List<?> getItems() {
                 if (originalView instanceof DataBindingRecyclerViewHolder) {
-                    DataBindingRecyclerViewHolder h = (DataBindingRecyclerViewHolder) originalView;
+                    DataBindingRecyclerViewHolder h =
+                            (DataBindingRecyclerViewHolder) originalView;
                     if (h.isInEditMode()) {
                         return Collections.singletonList(new Object());
                     }
@@ -523,21 +541,24 @@ public final class DataBindingRecyclerView extends RecyclerView {
                 return items;
             }
 
-            public void setItems(@NonNull List<?> items) {
+            @NonNull
+            public List<?> getOldItems() {
                 if (originalView instanceof DataBindingRecyclerViewHolder) {
-                    DataBindingRecyclerViewHolder h = (DataBindingRecyclerViewHolder) originalView;
-                    h.setItems(items);
-                    this.isItemBound = true;
-                    return;
+                    DataBindingRecyclerViewHolder h =
+                            (DataBindingRecyclerViewHolder) originalView;
+                    if (h.isInEditMode()) {
+                        return Collections.singletonList(new Object());
+                    }
+                    return h.getOldItems();
                 }
-                this.items = items;
-                this.isItemBound = true;
+                return items;
             }
 
             @Nullable
             public OnViewHolderCallback getCallback() {
                 if (originalView instanceof DataBindingRecyclerViewHolder) {
-                    DataBindingRecyclerViewHolder h = (DataBindingRecyclerViewHolder) originalView;
+                    DataBindingRecyclerViewHolder h =
+                            (DataBindingRecyclerViewHolder) originalView;
                     return h.getCallback();
                 }
                 return null;
@@ -546,10 +567,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
             public int getSpanCount() {
                 return spanCount;
             }
-
-            public boolean isItemBound() {
-                return isItemBound;
-            }
         }
 
         /**
@@ -557,12 +574,22 @@ public final class DataBindingRecyclerView extends RecyclerView {
          */
         private static class DataBindingViewHolder extends ViewHolder {
             private final ViewDataBinding binding;
+            private int itemVarId = -1;
+            private int positionVarId = -1;
+            private int callbackVarId = -1;
 
             public DataBindingViewHolder(@NonNull ViewDataBinding binding,
-                                         @NonNull View originalView) {
+                                         @NonNull DataBindingRecyclerViewHolder vh) {
                 super(createView(binding.getRoot(),
-                        (MarginLayoutParams) originalView.getLayoutParams()));
+                        (MarginLayoutParams) vh.getLayoutParams()));
                 this.binding = binding;
+                String packageName = vh.getContext().getPackageName();
+                itemVarId = getBindingId(
+                        packageName.concat(".BR.").concat(vh.getItemBindingName()));
+                positionVarId = getBindingId(
+                        packageName.concat(".BR.").concat(vh.getPositionBindingName()));
+                callbackVarId = getBindingId(
+                        packageName.concat(".BR.").concat(vh.getCallbackBindingName()));
             }
 
             public DataBindingViewHolder(@NonNull View itemView) {
@@ -585,13 +612,26 @@ public final class DataBindingRecyclerView extends RecyclerView {
                 newParent.addView(v, newParams);
                 return newParent;
             }
+
+            public int getItemVarId() {
+                return itemVarId;
+            }
+
+            public int getPositionVarId() {
+                return positionVarId;
+            }
+
+            public int getCallbackVarId() {
+                return callbackVarId;
+            }
         }
     }
 
     /**
      * 예외 방지용 {@link GridLayoutManager}
      */
-    private static class PreventExceptionGridLayoutManager extends GridLayoutManager {
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    static class PreventExceptionGridLayoutManager extends GridLayoutManager {
         private final AtomicBoolean canScroll = new AtomicBoolean(false);
 
         public PreventExceptionGridLayoutManager(Context context,
@@ -610,8 +650,8 @@ public final class DataBindingRecyclerView extends RecyclerView {
         public void onLayoutChildren(Recycler recycler, State state) {
             try {
                 super.onLayoutChildren(recycler, state);
-            } catch (IndexOutOfBoundsException e) {
-                e.printStackTrace();
+            } catch (IndexOutOfBoundsException ignore) {
+                // no-op
             }
         }
 
