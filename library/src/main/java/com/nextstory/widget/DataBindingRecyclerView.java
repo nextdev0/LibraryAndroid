@@ -22,17 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextstory.R;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.4
+ * @version 1.0.5
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -253,14 +246,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
     }
 
     /**
-     * 항목 변경 사항 체크용 어노테이션
-     */
-    @Target(ElementType.FIELD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface DiffKey {
-    }
-
-    /**
      * 내부 항목 비교 콜백
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
@@ -287,42 +272,12 @@ public final class DataBindingRecyclerView extends RecyclerView {
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
             Object oldItem = oldList.get(oldItemPosition);
             Object newItem = newList.get(newItemPosition);
-            Map<String, Object> olds = getAnnotatedFields(oldItem, DiffKey.class);
-            Map<String, Object> news = getAnnotatedFields(newItem, DiffKey.class);
-            if (olds.keySet().size() > 0 && news.keySet().size() > 0) {
-                boolean isEqual = true;
-                for (String key : olds.keySet()) {
-                    Object oldField = olds.get(key);
-                    Object newField = news.get(key);
-                    isEqual &= oldField.equals(newField);
-                }
-                return isEqual;
-            } else {
-                return oldItem.equals(newItem);
-            }
+            return oldItem.equals(newItem);
         }
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            return true;
-        }
-
-        private Map<String, Object> getAnnotatedFields(Object item,
-                                                       Class<? extends Annotation> annotation) {
-            Map<String, Object> result = new LinkedHashMap<>();
-            for (Field field : item.getClass().getDeclaredFields()) {
-                if (field.getAnnotation(annotation) != null) {
-                    try {
-                        boolean isAccessible = field.isAccessible();
-                        field.setAccessible(true);
-                        result.put(field.getName(), field.get(item));
-                        field.setAccessible(isAccessible);
-                    } catch (IllegalAccessException ignore) {
-                        // no-op
-                    }
-                }
-            }
-            return result;
+            return false;
         }
     }
 
