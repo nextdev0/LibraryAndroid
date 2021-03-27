@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextstory.R;
 
@@ -27,8 +28,7 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public final class DataBindingRecyclerViewHolder extends FrameLayout {
     private final int layoutRes;
-    private List<Object> items = new ArrayList<>();
-    private List<Object> oldItems = new ArrayList<>();
+    private List<?> items = new ArrayList<>();
     private WeakReference<DataBindingRecyclerView> parent;
     private DataBindingRecyclerView.OnViewHolderCallback callback = null;
     private final String itemBindingName, positionBindingName, callbackBindingName;
@@ -115,29 +115,19 @@ public final class DataBindingRecyclerViewHolder extends FrameLayout {
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    List<?> getOldItems() {
-        return oldItems;
-    }
-
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
     void setItems(@NonNull List<?> items) {
-        this.oldItems.clear();
-        this.oldItems.addAll(this.items);
-        this.items = new ArrayList<>();
-        this.items.addAll(items);
+        this.items = items;
         if (parent != null && parent.get() != null) {
-            DataBindingRecyclerView.DataBindingAdapter adapter =
-                    (DataBindingRecyclerView.DataBindingAdapter) parent.get().getAdapter();
+            RecyclerView.Adapter<?> adapter = parent.get().getAdapter();
             if (adapter != null) {
-                adapter.bind(this, items);
+                adapter.notifyDataSetChanged();
             }
         } else {
             postDelayed(() -> {
                 if (parent != null && parent.get() != null) {
-                    DataBindingRecyclerView.DataBindingAdapter adapter =
-                            (DataBindingRecyclerView.DataBindingAdapter) parent.get().getAdapter();
+                    RecyclerView.Adapter<?> adapter = parent.get().getAdapter();
                     if (adapter != null) {
-                        adapter.bind(this, items);
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }, 50L);

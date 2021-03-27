@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.6
+ * @version 1.0.7
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -464,7 +464,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
             if (!view.isInEditMode() && view instanceof DataBindingRecyclerViewHolder) {
                 DataBindingRecyclerViewHolder holder = (DataBindingRecyclerViewHolder) view;
                 onViewHolderCallbacks.add(holder.getCallback());
-                bind(view, holder.getItems());
             }
         }
 
@@ -475,39 +474,11 @@ public final class DataBindingRecyclerView extends RecyclerView {
          * @param newList 모델 (목록)
          */
         @RestrictTo(RestrictTo.Scope.LIBRARY)
-        void bind(View v, List<?> newList) {
+        void  bind(View v, List<?> newList) {
             int startPosition = 0;
             for (ViewHolderType type : types) {
                 if (type.originalView == v) {
-                    List<?> oldList = type.getOldItems();
                     notifyDataSetChanged();
-                    // DiffUtil 임시 미사용
-                    // DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
-                    //         new InternalDiffUtilCallback(oldList, newList));
-                    // int finalStartPosition = startPosition;
-                    // diffResult.dispatchUpdatesTo(new ListUpdateCallback() {
-                    //     @Override
-                    //     public void onInserted(int position, int count) {
-                    //         notifyItemRangeInserted(finalStartPosition + position, count);
-                    //     }
-                    //
-                    //     @Override
-                    //     public void onRemoved(int position, int count) {
-                    //         notifyItemRangeRemoved(finalStartPosition + position, count);
-                    //     }
-                    //
-                    //     @Override
-                    //     public void onMoved(int fromPosition, int toPosition) {
-                    //         notifyItemMoved(
-                    //                 finalStartPosition + fromPosition,
-                    //                 finalStartPosition + toPosition);
-                    //     }
-                    //
-                    //     @Override
-                    //     public void onChanged(int position, int count, Object payload) {
-                    //         notifyItemRangeChanged(finalStartPosition + position, count, payload);
-                    //     }
-                    // });
                     break;
                 } else {
                     startPosition += type.getItems().size();
@@ -519,10 +490,10 @@ public final class DataBindingRecyclerView extends RecyclerView {
          * 뷰 홀더 타입
          */
         private static class ViewHolderType {
-            private final View originalView;
-            private final int spanCount;
             @NonNull
             private final List<?> items = Collections.singletonList(new Object());
+            private final View originalView;
+            private final int spanCount;
 
             public ViewHolderType(View originalView) {
                 this.originalView = originalView;
@@ -543,19 +514,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
                         return Collections.singletonList(new Object());
                     }
                     return h.getItems();
-                }
-                return items;
-            }
-
-            @NonNull
-            public List<?> getOldItems() {
-                if (originalView instanceof DataBindingRecyclerViewHolder) {
-                    DataBindingRecyclerViewHolder h =
-                            (DataBindingRecyclerViewHolder) originalView;
-                    if (h.isInEditMode()) {
-                        return Collections.singletonList(new Object());
-                    }
-                    return h.getOldItems();
                 }
                 return items;
             }
