@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -39,6 +40,23 @@ public final class DataBindingGridLayout extends RecyclerView {
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     private InternalAdapter adapter;
+
+    @BindingAdapter("onBottomScrollReached")
+    public static void addOnBottomScrollReachedListener(
+            @NonNull final DataBindingGridLayout view,
+            @Nullable final OnBottomScrollReachedListener l
+    ) {
+        view.addOnScrollListener(new OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView view, int newState) {
+                if (!view.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (l != null) {
+                        l.onBottomScrollReached();
+                    }
+                }
+            }
+        });
+    }
 
     public DataBindingGridLayout(@NonNull Context context) {
         super(context);
@@ -494,5 +512,15 @@ public final class DataBindingGridLayout extends RecyclerView {
         public int getSpanCount() {
             return spanCount;
         }
+    }
+
+    /**
+     * 하단 스크롤 리스너
+     */
+    public interface OnBottomScrollReachedListener {
+        /**
+         * 하단 스크롤 도달 시 호출
+         */
+        void onBottomScrollReached();
     }
 }
