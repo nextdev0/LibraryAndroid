@@ -236,19 +236,14 @@ public final class DataBindingGridLayout extends RecyclerView {
                 if (parent.isInEditMode()) {
                     return new InternalViewHolder(view);
                 }
-                try {
-                    DataBindingGridLayoutItem v = (DataBindingGridLayoutItem) view;
-                    ViewDataBinding binding = DataBindingUtil.inflate(
-                            LayoutInflater.from(parent.getContext()),
-                            v.getLayoutRes(),
-                            null,
-                            false);
-                    binding.getRoot().setVisibility(View.GONE);
-                    return new InternalViewHolder(binding, v);
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                    throw new IllegalStateException("inflate error.");
-                }
+                DataBindingGridLayoutItem v = (DataBindingGridLayoutItem) view;
+                ViewDataBinding binding = DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        v.getLayoutRes(),
+                        null,
+                        false);
+                binding.getRoot().setVisibility(View.GONE);
+                return new InternalViewHolder(binding, v);
             } else {
                 ViewParent viewParent = view.getParent();
                 if (viewParent != null) {
@@ -409,8 +404,7 @@ public final class DataBindingGridLayout extends RecyclerView {
 
         public InternalViewHolder(@NonNull ViewDataBinding binding,
                                   @NonNull DataBindingGridLayoutItem vh) {
-            super(createView(binding.getRoot(),
-                    (MarginLayoutParams) vh.getLayoutParams()));
+            super(binding.getRoot());
             this.binding = binding;
             String packageName = vh.getContext().getPackageName();
             itemVarId = getBindingId(
@@ -422,7 +416,7 @@ public final class DataBindingGridLayout extends RecyclerView {
         }
 
         public InternalViewHolder(@NonNull View itemView) {
-            super(createView(itemView, null));
+            super(createView(itemView));
             this.binding = null;
         }
 
@@ -438,11 +432,9 @@ public final class DataBindingGridLayout extends RecyclerView {
             }
         }
 
-        private static View createView(View v, ViewGroup.MarginLayoutParams originalParams) {
+        private static View createView(View v) {
             Context context = v.getContext();
-            ViewGroup.MarginLayoutParams params = originalParams == null
-                    ? (ViewGroup.MarginLayoutParams) v.getLayoutParams()
-                    : originalParams;
+            ViewGroup.MarginLayoutParams params = (MarginLayoutParams) v.getLayoutParams();
             FrameLayout.LayoutParams newParams =
                     new FrameLayout.LayoutParams(params.width, params.height);
             newParams.topMargin = params.topMargin;
