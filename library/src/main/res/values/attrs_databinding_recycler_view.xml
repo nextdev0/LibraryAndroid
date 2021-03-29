@@ -35,6 +35,8 @@
         <attr name="bindItems" />
         <attr name="onViewHolderCallback" />
         <attr name="layout" />
+        <attr name="items" format="reference" />
+        <attr name="onItemCallback" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="DataBindingGridLayout_Layout">
