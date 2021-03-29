@@ -21,4 +21,24 @@
         <attr name="spanCount" />
     </declare-styleable>
 
+    <declare-styleable name="DataBindingGridLayout">
+        <attr name="android:orientation" />
+        <attr name="spanCount" />
+        <attr name="reverseLayout" />
+        <attr name="onBottomScrollReached" />
+    </declare-styleable>
+
+    <declare-styleable name="DataBindingGridLayoutItem">
+        <attr name="itemBindingName" />
+        <attr name="positionBindingName" />
+        <attr name="callbackBindingName" />
+        <attr name="bindItems" />
+        <attr name="onViewHolderCallback" />
+        <attr name="layout" />
+    </declare-styleable>
+
+    <declare-styleable name="DataBindingGridLayout_Layout">
+        <attr name="spanCount" />
+    </declare-styleable>
+
 </resources>

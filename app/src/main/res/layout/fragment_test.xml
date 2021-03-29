@@ -11,7 +11,7 @@
 
     </data>
 
-    <com.nextstory.widget.DataBindingRecyclerView
+    <com.nextstory.widget.DataBindingGridLayout
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,13 +76,13 @@
 
         </LinearLayout>
 
-        <com.nextstory.widget.DataBindingRecyclerViewHolder
+        <com.nextstory.widget.DataBindingGridLayoutItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:bindItems="@{fragment.testList}"
             app:itemBindingName="string"
+            app:items="@{fragment.testList}"
             app:layout="@layout/adapter_test" />
 
-    </com.nextstory.widget.DataBindingRecyclerView>
+    </com.nextstory.widget.DataBindingGridLayout>
 
 </layout>

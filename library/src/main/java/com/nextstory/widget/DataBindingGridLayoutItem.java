@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nextstory.R;
@@ -19,34 +20,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link DataBindingRecyclerView} 뷰 홀더
+ * {@link DataBindingGridLayout} 항목
  *
  * @author troy
- * @version 1.0.2
- * @since 1.0
- * @deprecated 기능 오작동 및 동작에 맞는 이름 변경으로 {@link DataBindingGridLayout}으로 변경함
+ * @version 1.0
+ * @since 1.1
  */
-@Deprecated
-@SuppressWarnings({"UnusedDeclaration", "deprecation"})
-public final class DataBindingRecyclerViewHolder extends FrameLayout {
+@SuppressWarnings("UnusedDeclaration")
+public final class DataBindingGridLayoutItem extends FrameLayout {
     private final int layoutRes;
     private final String itemBindingName, positionBindingName, callbackBindingName;
+    private WeakReference<DataBindingGridLayout> parent;
     private List<?> items = new ArrayList<>();
-    private WeakReference<DataBindingRecyclerView> parent;
-    private DataBindingRecyclerView.OnViewHolderCallback callback = null;
+    private Callback callback = null;
 
-    public DataBindingRecyclerViewHolder(Context context) {
+    /**
+     * 목록 바인딩
+     *
+     * @param v    뷰
+     * @param list 목록
+     */
+    @BindingAdapter("items")
+    public static void setItems(DataBindingGridLayoutItem v, List<?> list) {
+        if (v != null) {
+            v.setItems(list);
+        }
+    }
+
+    /**
+     * 콜백 설정
+     *
+     * @param v        뷰
+     * @param callback 콜백
+     */
+    @BindingAdapter("callback")
+    public static void setCallback(DataBindingGridLayoutItem v, Callback callback) {
+        if (v != null) {
+            v.setCallback(callback);
+        }
+    }
+
+    public DataBindingGridLayoutItem(Context context) {
         this(context, null);
     }
 
-    public DataBindingRecyclerViewHolder(Context context,
-                                         @Nullable AttributeSet attrs) {
+    public DataBindingGridLayoutItem(Context context,
+                                     @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DataBindingRecyclerViewHolder(Context context,
-                                         @Nullable AttributeSet attrs,
-                                         int defStyleAttr) {
+    public DataBindingGridLayoutItem(Context context,
+                                     @Nullable AttributeSet attrs,
+                                     int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (attrs == null) {
             layoutRes = 0;
@@ -55,33 +80,35 @@ public final class DataBindingRecyclerViewHolder extends FrameLayout {
             callbackBindingName = "callback";
         } else {
             TypedArray a = context.obtainStyledAttributes(
-                    attrs, R.styleable.DataBindingRecyclerViewHolder);
+                    attrs, R.styleable.DataBindingGridLayoutItem);
             layoutRes = a.getResourceId(
-                    R.styleable.DataBindingRecyclerViewHolder_layout,
+                    R.styleable.DataBindingGridLayoutItem_layout,
                     0);
-            if (a.hasValue(R.styleable.DataBindingRecyclerViewHolder_itemBindingName)) {
+            if (a.hasValue(R.styleable.DataBindingGridLayoutItem_itemBindingName)) {
                 itemBindingName = a.getString(
-                        R.styleable.DataBindingRecyclerViewHolder_itemBindingName);
+                        R.styleable.DataBindingGridLayoutItem_itemBindingName);
             } else {
                 itemBindingName = "item";
             }
-            if (a.hasValue(R.styleable.DataBindingRecyclerViewHolder_positionBindingName)) {
+            if (a.hasValue(R.styleable.DataBindingGridLayoutItem_positionBindingName)) {
                 positionBindingName = a.getString(
-                        R.styleable.DataBindingRecyclerViewHolder_positionBindingName);
+                        R.styleable.DataBindingGridLayoutItem_positionBindingName);
             } else {
                 positionBindingName = "position";
             }
-            if (a.hasValue(R.styleable.DataBindingRecyclerViewHolder_callbackBindingName)) {
+            if (a.hasValue(R.styleable.DataBindingGridLayoutItem_callbackBindingName)) {
                 callbackBindingName = a.getString(
-                        R.styleable.DataBindingRecyclerViewHolder_callbackBindingName);
+                        R.styleable.DataBindingGridLayoutItem_callbackBindingName);
             } else {
                 callbackBindingName = "callback";
             }
             a.recycle();
         }
+
+        // 디자인 타임에서 표시
         if (isInEditMode() && layoutRes != 0 && getChildCount() == 0) {
             View newChild = View.inflate(getContext(), layoutRes, null);
-            addView(newChild, new LayoutParams(-1, -1));
+            addView(newChild, new FrameLayout.LayoutParams(-1, -1));
         }
     }
 
@@ -111,57 +138,63 @@ public final class DataBindingRecyclerViewHolder extends FrameLayout {
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @NonNull
+    void setParent(DataBindingGridLayout parent) {
+        this.parent = new WeakReference<>(parent);
+    }
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     List<?> getItems() {
         return items;
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    void setItems(@NonNull List<?> items) {
+    void setItems(List<?> items) {
         this.items = items;
         if (parent != null && parent.get() != null) {
             RecyclerView.Adapter<?> adapter = parent.get().getAdapter();
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
-        } else {
-            postDelayed(() -> {
-                if (parent != null && parent.get() != null) {
-                    RecyclerView.Adapter<?> adapter = parent.get().getAdapter();
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }, 50L);
         }
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public String getItemBindingName() {
+    String getItemBindingName() {
         return itemBindingName;
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public String getPositionBindingName() {
+    String getPositionBindingName() {
         return positionBindingName;
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public String getCallbackBindingName() {
+    String getCallbackBindingName() {
         return callbackBindingName;
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    void setParent(DataBindingRecyclerView parent) {
-        this.parent = new WeakReference<>(parent);
-    }
-
     @Nullable
-    public DataBindingRecyclerView.OnViewHolderCallback getCallback() {
+    Callback getCallback() {
         return callback;
     }
 
-    void setCallback(@NonNull DataBindingRecyclerView.OnViewHolderCallback callback) {
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    void setCallback(@NonNull Callback callback) {
         this.callback = callback;
+    }
+
+    /**
+     * 콜백
+     */
+    public interface Callback {
+        /**
+         * 콜백 시 호출
+         *
+         * @param view     참조 뷰
+         * @param item     항목
+         * @param position 항목의 인덱스
+         */
+        void onItemCallback(View view, Object item, int position);
     }
 }

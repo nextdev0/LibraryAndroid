@@ -32,15 +32,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.7
+ * @version 1.0.8
  * @since 1.0
+ * @deprecated 기능 오작동 및 동작에 맞는 이름 변경으로 {@link DataBindingGridLayout}으로 변경함
  */
-@SuppressWarnings("UnusedDeclaration")
+@Deprecated
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public final class DataBindingRecyclerView extends RecyclerView {
     private final List<OnViewHolderCallback> onViewHolderCallbacks = new ArrayList<>();
     private int orientation;
     private DataBindingAdapter adapter;
 
+    @Deprecated
     @BindingAdapter("bindItems")
     public static void bindItems(
             @NonNull final DataBindingRecyclerViewHolder viewHolderItem,
@@ -51,6 +54,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
         viewHolderItem.setItems(items);
     }
 
+    @Deprecated
     @BindingAdapter("onViewHolderCallback")
     public static void addOnViewHolderCallback(
             @NonNull final DataBindingRecyclerViewHolder viewHolderItem,
@@ -61,6 +65,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
         viewHolderItem.setCallback(callback);
     }
 
+    @Deprecated
     @BindingAdapter("onBottomScrollReached")
     public static void addOnBottomScrollReachedListener(
             @NonNull final DataBindingRecyclerView view,
@@ -474,7 +479,7 @@ public final class DataBindingRecyclerView extends RecyclerView {
          * @param newList 모델 (목록)
          */
         @RestrictTo(RestrictTo.Scope.LIBRARY)
-        void  bind(View v, List<?> newList) {
+        void bind(View v, List<?> newList) {
             int startPosition = 0;
             for (ViewHolderType type : types) {
                 if (type.originalView == v) {
