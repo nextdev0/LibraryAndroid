@@ -53,8 +53,8 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
      * @param v        뷰
      * @param callback 콜백
      */
-    @BindingAdapter("callback")
-    public static void setCallback(DataBindingGridLayoutItem v, Callback callback) {
+    @BindingAdapter("onItemCallback")
+    public static void setOnItemCallback(DataBindingGridLayoutItem v, Callback callback) {
         if (v != null) {
             v.setCallback(callback);
         }
