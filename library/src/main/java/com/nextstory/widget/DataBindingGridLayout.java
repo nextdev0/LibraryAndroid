@@ -459,7 +459,7 @@ public final class DataBindingGridLayout extends RecyclerView {
             newParams.bottomMargin = params.bottomMargin;
             newParams.leftMargin = params.leftMargin;
             newParams.rightMargin = params.rightMargin;
-            FrameLayout newParent = new FrameLayout(context);
+            DataBindingGridLayoutViewItem newParent = new DataBindingGridLayoutViewItem(context);
             newParent.addView(v, newParams);
             return newParent;
         }
