@@ -14,7 +14,7 @@ import androidx.annotation.RestrictTo;
  * @since 1.1
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public class DataBindingGridLayoutViewItem extends FrameLayout {
+public final class DataBindingGridLayoutViewItem extends FrameLayout {
     public DataBindingGridLayoutViewItem(@NonNull Context context) {
         super(context);
     }
