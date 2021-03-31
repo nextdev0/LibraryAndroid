@@ -223,6 +223,11 @@ public final class DataBindingGridLayout extends RecyclerView {
         private final List<View> views = new ArrayList<>();
         private final Map<View, Integer> spanCounts = new WeakHashMap<>();
 
+        public InternalAdapter() {
+            super();
+            setHasStableIds(true);
+        }
+
         @Override
         public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
             GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
