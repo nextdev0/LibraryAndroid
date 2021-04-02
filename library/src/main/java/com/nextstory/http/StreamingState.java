@@ -25,6 +25,9 @@ public final class StreamingState {
         this.currentBuffer = new byte[bufferSize];
     }
 
+    /**
+     * @return 현재 다운로드된 데이터 버퍼
+     */
     public byte[] getCurrentBuffer() {
         return currentBuffer;
     }
@@ -34,6 +37,9 @@ public final class StreamingState {
         System.arraycopy(buffer, 0, currentBuffer, 0, buffer.length);
     }
 
+    /**
+     * @return 현재 다운로드 위치
+     */
     public long getCurrentIndex() {
         return currentIndex;
     }
@@ -48,6 +54,9 @@ public final class StreamingState {
         this.currentIndex += length;
     }
 
+    /**
+     * @return 응답 데이터 크기
+     */
     public long getLength() {
         return length;
     }
@@ -57,6 +66,9 @@ public final class StreamingState {
         this.length = length;
     }
 
+    /**
+     * @return 진행 상태, 0~1 사이의 실수 (백분율)
+     */
     public float getProgress() {
         return (float) currentIndex / length;
     }

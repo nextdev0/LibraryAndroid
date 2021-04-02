@@ -26,7 +26,7 @@ import java.util.List;
  * 액티비티, 프래그먼트 내 {@link SaveInstanceStateField}를 구현한 필드들의 상태를 저장 및 복구함.
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

@@ -7,7 +7,10 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
 /**
- * Created by willy on 2018/3/8.
+ * @author willy (2018.3.8)
+ * @version 1.0
+ * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
+ * @since 1.0
  */
 class RatingBarUtils {
     private static final int MAX_CLICK_DISTANCE = 5;

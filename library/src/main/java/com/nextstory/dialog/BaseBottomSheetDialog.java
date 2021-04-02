@@ -29,7 +29,7 @@ import java.lang.reflect.ParameterizedType;
  * 기본 바텀시트 다이얼로그
  *
  * @author troy
- * @version 1.0.2
+ * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})

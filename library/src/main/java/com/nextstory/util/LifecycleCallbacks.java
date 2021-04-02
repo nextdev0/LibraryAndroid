@@ -21,17 +21,25 @@ import java.util.Set;
  * 수명주기 관련 유틸 클래스
  *
  * @author troy
- * @version 1.0.1
+ * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class LifecycleCallbacks implements SimpleActivityLifecycleCallbacks {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     static Application sApplication = null;
+
+    /**
+     * 프래그먼트 콜백
+     */
     private static final Set<FragmentManager.FragmentLifecycleCallbacks> fragmentCallbacks =
             Collections.synchronizedSet(new HashSet<>());
     private static final Set<SimpleFragmentLifecycleCallbacks> simpleFragmentCallbacks =
             Collections.synchronizedSet(new HashSet<>());
+
+    /**
+     * 프래그먼트 콜백 처리
+     */
     private final FragmentManager.FragmentLifecycleCallbacks fragmentLifecycleCallbacks
             = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override

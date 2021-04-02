@@ -5,7 +5,12 @@ import android.os.Parcelable;
 import android.view.View;
 
 /**
- * Created by willy on 2017/11/16.
+ * 위젯 상태 저장용 클래스
+ *
+ * @author willy (2017.11.16)
+ * @version 1.0
+ * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
+ * @since 1.0
  */
 class SavedState extends View.BaseSavedState {
     public static final Creator<SavedState> CREATOR

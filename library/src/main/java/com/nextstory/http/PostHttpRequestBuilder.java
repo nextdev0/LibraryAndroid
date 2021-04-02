@@ -29,7 +29,7 @@ import io.reactivex.rxjava3.core.Single;
  * POST 요청 빌더
  *
  * @author troy
- * @version 1.1.1
+ * @version 1.1
  * @since 1.1
  */
 @SuppressWarnings("unchecked")

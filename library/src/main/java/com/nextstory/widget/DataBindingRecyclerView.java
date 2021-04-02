@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0.8
+ * @version 1.0
  * @since 1.0
  * @deprecated 기능 오작동 및 동작에 맞는 이름 변경으로 {@link DataBindingGridLayout}으로 변경함
  */
@@ -200,8 +200,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
     public final void setLayoutManager(@Nullable LayoutManager layout) {
         // no-op
     }
-
-    // endregion
 
     @Override
     public final void setHasFixedSize(boolean hasFixedSize) {

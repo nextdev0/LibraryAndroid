@@ -20,15 +20,17 @@ import io.reactivex.rxjava3.core.Single;
  * 액티비티 결과 처리 유틸 class
  *
  * @author troy
- * @version 1.0.2
+ * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class RxActivityResult {
     private static final Handler MAIN_THREAD_HANDLER = new Handler(Looper.getMainLooper());
     private final WeakReference<FragmentActivity> activity;
+
     private Intent intent;
     private Listener listener;
+
     private int resultCode;
     private Intent data;
 
@@ -41,16 +43,31 @@ public final class RxActivityResult {
         this.activity = new WeakReference<>(activity);
     }
 
+    /**
+     * Intent 지정
+     *
+     * @param intent Intent
+     * @return 빌더 인스턴스
+     */
     public RxActivityResult setIntent(@NonNull Intent intent) {
         this.intent = Objects.requireNonNull(intent);
         return this;
     }
 
+    /**
+     * 리스너 지정
+     *
+     * @param listener 리스너
+     * @return 빌더 인스턴스
+     */
     public RxActivityResult setListener(@Nullable Listener listener) {
         this.listener = listener;
         return this;
     }
 
+    /**
+     * @return Rx 인스턴스, 결과 반환
+     */
     public Single<RxActivityResult> asSingle() {
         return Single.create(e -> {
             boolean isMainThread = Looper.myLooper() == Looper.getMainLooper();
@@ -83,14 +100,23 @@ public final class RxActivityResult {
         });
     }
 
+    /**
+     * @return 결과 코드
+     */
     public int getResultCode() {
         return resultCode;
     }
 
+    /**
+     * @return 결과 데이터
+     */
     public Intent getData() {
         return data;
     }
 
+    /**
+     * 결과 리스터
+     */
     public interface Listener {
         void onActivityResult(int resultCode, Intent data);
     }

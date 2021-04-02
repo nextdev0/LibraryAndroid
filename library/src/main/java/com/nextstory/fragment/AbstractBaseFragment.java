@@ -32,7 +32,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * 기본 프래그먼트
  *
  * @author troy
- * @version 1.0.2
+ * @version 1.1
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})

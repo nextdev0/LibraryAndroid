@@ -35,7 +35,7 @@ import java.util.Objects;
  * 기본 다이얼로그
  *
  * @author troy
- * @version 1.0.3
+ * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

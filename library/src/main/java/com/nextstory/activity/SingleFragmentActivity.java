@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  * 단일 프래그먼트 액티비티
  *
  * @author troy
- * @version 1.0.2
+ * @version 1.0
  * @since 1.0
  * @deprecated 미사용 (사용금지)
  */

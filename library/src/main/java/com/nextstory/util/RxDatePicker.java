@@ -24,7 +24,7 @@ import io.reactivex.rxjava3.core.Single;
  * Rx 기반 날짜 선택
  *
  * @author troy
- * @version 1.0.2
+ * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -43,11 +43,25 @@ public final class RxDatePicker {
         fragmentManager = activity.getSupportFragmentManager();
     }
 
+    /**
+     * 현재 시간 설정
+     *
+     * @param dateTime 날짜, {@code null}을 지정할 경우 현재 날짜로 지정함
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker currentDateTime(DateTime dateTime) {
         currentDateTime = dateTime == null ? DateTime.now() : dateTime;
         return this;
     }
 
+    /**
+     * 현재 시간 설정
+     * (예외 발생시에 현재 날짜로 지정함)
+     *
+     * @param date   문자열 형식의 날짜
+     * @param format 변환 타입
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker currentDate(String date, String format) {
         try {
             currentDateTime = DateTime.parse(date, DateTimeFormat.forPattern(format));
@@ -57,6 +71,14 @@ public final class RxDatePicker {
         return this;
     }
 
+    /**
+     * 현재 날짜 설정
+     *
+     * @param year  년도
+     * @param month 월
+     * @param day   일
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker currentDate(int year, int month, int day) {
         try {
             currentDateTime = currentDateTime.withDate(year, month, day);
@@ -66,6 +88,14 @@ public final class RxDatePicker {
         return this;
     }
 
+    /**
+     * 현재 시간 설정
+     *
+     * @param hour   시간
+     * @param minute 분
+     * @param second 초
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker currentTime(int hour, int minute, int second) {
         try {
             currentDateTime = currentDateTime.withTime(hour, minute, second, 0);
@@ -75,16 +105,32 @@ public final class RxDatePicker {
         return this;
     }
 
+    /**
+     * 날짜 선택기로 설정
+     *
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker datePicker() {
         dateOrTime = true;
         return this;
     }
 
+    /**
+     * 시간 선택기로 설정
+     *
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker timePicker() {
         dateOrTime = false;
         return this;
     }
 
+    /**
+     * 시간 형식 지정
+     *
+     * @param format 형식 문자
+     * @return 빌더 인스턴스
+     */
     public RxDatePicker format(String format) {
         this.format = format;
         return this;
@@ -132,14 +178,23 @@ public final class RxDatePicker {
         }
     }
 
+    /**
+     * @return Rx 인스턴스, {@link DateTime} 반환
+     */
     public Single<DateTime> asDateTime() {
         return Single.create(e -> startPicker(e::onSuccess));
     }
 
+    /**
+     * @return Rx 인스턴스, 문자열 형식의 날짜로 반환
+     */
     public Single<String> asString() {
         return Single.create(e -> startPicker(dateTime -> e.onSuccess(dateTime.toString(format))));
     }
 
+    /**
+     * @return Rx 인스턴스, {@link Date} 반환
+     */
     public Single<Date> asDate() {
         return Single.create(e -> startPicker(dateTime -> e.onSuccess(dateTime.toDate())));
     }

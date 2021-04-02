@@ -41,6 +41,12 @@ public final class DataBindingGridLayout extends RecyclerView {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     private InternalAdapter adapter;
 
+    /**
+     * 하단 스크롤 도달 리스너
+     *
+     * @param view 뷰
+     * @param l    리스너
+     */
     @BindingAdapter("onBottomScrollReached")
     public static void addOnBottomScrollReachedListener(
             @NonNull final DataBindingGridLayout view,
@@ -259,13 +265,17 @@ public final class DataBindingGridLayout extends RecyclerView {
                 if (parent.isInEditMode()) {
                     return new InternalViewHolder(view);
                 }
+
                 DataBindingGridLayoutItem v = (DataBindingGridLayoutItem) view;
                 ViewDataBinding binding = DataBindingUtil.inflate(
                         LayoutInflater.from(parent.getContext()),
                         v.getLayoutRes(),
                         null,
                         false);
+
+                // 임시로 뷰를 숨김
                 binding.getRoot().setVisibility(View.GONE);
+
                 return new InternalViewHolder(binding, v);
             } else {
                 ViewParent viewParent = view.getParent();
@@ -287,17 +297,22 @@ public final class DataBindingGridLayout extends RecyclerView {
             if (holder.binding == null) {
                 return;
             }
+
             int viewType = getItemViewType(position);
             int realPosition = getRealPosition(position);
             if (!(views.get(viewType) instanceof DataBindingGridLayoutItem)) {
                 return;
             }
+
             DataBindingGridLayoutItem gridItem = (DataBindingGridLayoutItem) views.get(viewType);
             if (gridItem.getItems().size() < realPosition) {
                 return;
             }
+
+            // 임시로 숨겨뒀던 뷰를 표시함
             holder.binding.getRoot().post(() ->
                     holder.binding.getRoot().setVisibility(View.VISIBLE));
+
             if (holder.getItemVarId() != -1) {
                 holder.binding.setVariable(
                         holder.getItemVarId(),
@@ -382,6 +397,12 @@ public final class DataBindingGridLayout extends RecyclerView {
             }
         }
 
+        /**
+         * 어댑터상 위치에서 실제 뷰 홀더의 모델 위치를 찾아 반환함
+         *
+         * @param position 어댑터상 위치
+         * @return 위치
+         */
         public int getRealPosition(int position) {
             int currentPosition = 0;
             for (int type = 0; type < views.size(); type++) {

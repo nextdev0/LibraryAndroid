@@ -85,12 +85,24 @@ public final class RxImagePicker {
         }
     }
 
+    /**
+     * 가져올 이미지 개수 지정
+     * ({@link #multiple()}을 호출할 경우에 동작이 됨)
+     *
+     * @param count 개수
+     * @return 빌더 인스턴스
+     */
     public RxImagePicker count(@IntRange(from = 1) int count) {
         this.count = count;
         this.singleOrMultiple = false;
         return this;
     }
 
+    /**
+     * 단일 이미지 가져오기
+     *
+     * @return Rx 인스턴스, {@link Uri} 형식 반환
+     */
     public Single<Uri> single() {
         this.count = 1;
         this.singleOrMultiple = true;
@@ -109,6 +121,11 @@ public final class RxImagePicker {
                 });
     }
 
+    /**
+     * 여러 이미지 가져오기
+     *
+     * @return Rx 인스턴스, {@link Uri} 목록 형식 반환
+     */
     public Single<List<Uri>> multiple() {
         this.singleOrMultiple = false;
         return new RxActivityResult(activity)
@@ -138,8 +155,9 @@ public final class RxImagePicker {
                 if (images != null) {
                     if (isCropMode) {
                         try {
-                            Bitmap bitmap = Objects.requireNonNull(MediaStore.Images.Media.getBitmap(
-                                    getContentResolver(), images.get(0).getUri()));
+                            Bitmap bitmap = Objects.requireNonNull(
+                                    MediaStore.Images.Media.getBitmap(
+                                            getContentResolver(), images.get(0).getUri()));
                             ExifInterface ei = new ExifInterface(images.get(0).getPath());
                             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                                     ExifInterface.ORIENTATION_UNDEFINED);
@@ -187,7 +205,8 @@ public final class RxImagePicker {
                             }
                         }
                         Intent intent = new Intent();
-                        intent.putExtra(EXTRA_IMAGES, (Serializable) Collections.singletonList(uris));
+                        intent.putExtra(EXTRA_IMAGES,
+                                (Serializable) Collections.singletonList(uris));
                         setResult(RESULT_OK, intent);
                         finish();
                         return;
@@ -199,7 +218,8 @@ public final class RxImagePicker {
                 if (resultCode == RESULT_OK && result != null) {
                     Uri resultUri = result.getUri();
                     Intent intent = new Intent();
-                    intent.putExtra(EXTRA_IMAGES, (Serializable) Collections.singletonList(resultUri));
+                    intent.putExtra(EXTRA_IMAGES,
+                            (Serializable) Collections.singletonList(resultUri));
                     setResult(RESULT_OK, intent);
                     finish();
                     return;
