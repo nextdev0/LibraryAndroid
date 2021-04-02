@@ -32,7 +32,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 데이터바인딩용 {@link RecyclerView}
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  * @deprecated 기능 오작동 및 동작에 맞는 이름 변경으로 {@link DataBindingGridLayout}으로 변경함
  */

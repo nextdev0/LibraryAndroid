@@ -20,7 +20,6 @@ import java.util.Objects;
  * foreground 지원 유틸 class
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

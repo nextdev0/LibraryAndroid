@@ -19,7 +19,6 @@ import java.util.function.Function;
  * {@link Gson} JSON 서비스
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

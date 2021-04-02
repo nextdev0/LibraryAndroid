@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
  * 액티비티 회전 등 설정 변경시 필드가 초기화되는걸 방지하기 위함
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 public interface SaveInstanceStateField {

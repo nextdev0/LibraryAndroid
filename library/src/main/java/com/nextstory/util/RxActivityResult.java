@@ -20,7 +20,6 @@ import io.reactivex.rxjava3.core.Single;
  * 액티비티 결과 처리 유틸 class
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

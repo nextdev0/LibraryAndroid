@@ -19,7 +19,6 @@ import java.util.Objects;
  * 데이터바인딩 적용 기본 프래그먼트
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

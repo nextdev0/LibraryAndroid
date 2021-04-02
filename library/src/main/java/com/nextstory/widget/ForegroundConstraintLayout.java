@@ -13,7 +13,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
  * foreground 지원 {@link ConstraintLayout}
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

@@ -14,7 +14,6 @@ import java.util.List;
  * {@link LifecycleCallbacks} 초기화 클래스
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)

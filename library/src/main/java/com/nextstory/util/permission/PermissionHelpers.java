@@ -24,7 +24,6 @@ import java.util.Objects;
  * 권한 관련 도우미 클래스
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 
 /**
  * @author willy (2017.6.3)
- * @version 1.0
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */

@@ -9,7 +9,6 @@ import androidx.databinding.InverseBindingListener;
  * 바인딩 어댑터
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

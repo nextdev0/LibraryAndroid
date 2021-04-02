@@ -14,7 +14,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * (수명주기가 onPause일 경우 해제)
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

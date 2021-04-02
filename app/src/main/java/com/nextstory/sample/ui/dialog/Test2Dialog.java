@@ -10,7 +10,6 @@ import com.nextstory.sample.databinding.DialogTest2Binding;
 
 /**
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 public final class Test2Dialog extends BaseBottomSheetDialogFragment<DialogTest2Binding> {

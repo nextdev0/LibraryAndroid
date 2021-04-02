@@ -13,7 +13,6 @@ import java.util.Objects;
  * {@code null}을 가질 수 없는 LiveData
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})

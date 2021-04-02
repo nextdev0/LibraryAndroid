@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
  * 상태바 뷰
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

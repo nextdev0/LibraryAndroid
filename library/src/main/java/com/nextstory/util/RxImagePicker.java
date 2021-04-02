@@ -39,7 +39,6 @@ import io.reactivex.rxjava3.core.Single;
  * Rx 기반 이미지 선택
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})

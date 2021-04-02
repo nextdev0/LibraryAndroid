@@ -30,7 +30,6 @@ import java.util.WeakHashMap;
 /**
  * Magic 텍스트뷰
  *
- * @version 1.0
  * @see <a href="https://github.com/m5/MagicTextView">원본 레포지토리</a>
  * @since 1.0
  */

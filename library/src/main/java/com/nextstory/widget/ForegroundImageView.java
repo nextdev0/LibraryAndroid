@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatImageView;
  * foreground 지원 {@link ImageView}
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

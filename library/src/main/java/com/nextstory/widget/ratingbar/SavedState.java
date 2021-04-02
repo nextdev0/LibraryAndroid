@@ -8,7 +8,6 @@ import android.view.View;
  * 위젯 상태 저장용 클래스
  *
  * @author willy (2017.11.16)
- * @version 1.0
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */

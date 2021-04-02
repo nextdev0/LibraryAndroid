@@ -18,7 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * (연속 클릭 방지를 위해 사용)
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

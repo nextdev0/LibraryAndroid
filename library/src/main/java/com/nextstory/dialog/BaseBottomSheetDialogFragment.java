@@ -31,7 +31,6 @@ import java.util.Objects;
  * 기본 바텀시트 다이얼로그 프래그먼트
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

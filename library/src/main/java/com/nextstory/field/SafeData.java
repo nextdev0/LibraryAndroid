@@ -11,7 +11,6 @@ import java.io.Serializable;
  * 상태 유지가 가능한 데이터
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})

@@ -24,7 +24,6 @@ import io.reactivex.rxjava3.core.Single;
  * Rx 기반 날짜 선택
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

@@ -29,7 +29,6 @@ import java.util.Objects;
  * 데이터바인딩 뷰 페이저
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 public final class DataBindingViewPager extends ViewPager {

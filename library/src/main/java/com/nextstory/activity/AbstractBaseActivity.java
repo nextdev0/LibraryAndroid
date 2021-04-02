@@ -38,7 +38,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * 기본 액티비티
  *
  * @author troy
- * @version 1.1
  * @since 1.0
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})

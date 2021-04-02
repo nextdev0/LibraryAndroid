@@ -9,7 +9,6 @@ import java.lang.annotation.RetentionPolicy;
  * 테마 타입
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @Retention(RetentionPolicy.SOURCE)

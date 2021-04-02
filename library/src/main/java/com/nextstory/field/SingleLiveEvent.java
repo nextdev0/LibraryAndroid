@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 이벤트 전달용 LiveData
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

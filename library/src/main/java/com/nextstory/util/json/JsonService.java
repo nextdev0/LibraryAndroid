@@ -6,7 +6,6 @@ import java.lang.reflect.Type;
  * JSON 서비스
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 public interface JsonService {

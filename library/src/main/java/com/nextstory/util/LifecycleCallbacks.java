@@ -21,7 +21,6 @@ import java.util.Set;
  * 수명주기 관련 유틸 클래스
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

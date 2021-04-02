@@ -16,7 +16,6 @@ import androidx.appcompat.widget.AppCompatTextView;
  * Drawable 생성없이 모양을 구성할 수 있는 {@link android.widget.TextView}
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

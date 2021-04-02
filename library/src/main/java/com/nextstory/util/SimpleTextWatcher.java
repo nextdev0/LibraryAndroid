@@ -7,7 +7,6 @@ import android.text.TextWatcher;
  * {@link TextWatcher} 간소화 인터페이스
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

@@ -22,7 +22,6 @@ import java.util.List;
  * {@link DataBindingRecyclerView} 뷰 홀더
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  * @deprecated 기능 오작동 및 동작에 맞는 이름 변경으로 {@link DataBindingGridLayout}으로 변경함
  */

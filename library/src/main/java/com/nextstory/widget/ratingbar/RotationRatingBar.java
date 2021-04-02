@@ -14,7 +14,6 @@ import com.nextstory.R;
  * 회전 효과 레이팅바
  *
  * @author nappannda (2017.5.16)
- * @version 1.0
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */

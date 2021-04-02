@@ -24,7 +24,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @AndroidEntryPoint

@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @AndroidEntryPoint

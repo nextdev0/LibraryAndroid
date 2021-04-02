@@ -8,7 +8,6 @@ import dagger.hilt.android.HiltAndroidApp;
  * 애플리케이션
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @HiltAndroidApp

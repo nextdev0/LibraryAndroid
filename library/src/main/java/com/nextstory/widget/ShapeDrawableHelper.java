@@ -20,7 +20,6 @@ import com.nextstory.R;
  * Shape 배경 구현 클래스
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

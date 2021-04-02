@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatTextView;
  * foreground 지원 {@link TextView}
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
  * foreground 지원 {@link LinearLayout}
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

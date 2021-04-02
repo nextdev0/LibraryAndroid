@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
  * 간단한 프로그래스창
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

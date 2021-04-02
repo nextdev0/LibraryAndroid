@@ -51,7 +51,6 @@ import com.nextstory.R;
 /**
  * 원 모양의 이미지뷰
  *
- * @version 1.0
  * @see <a href="https://github.com/hdodenhof/CircleImageView">원본 레포지토리</a>
  * @since 1.0
  */

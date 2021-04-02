@@ -9,7 +9,6 @@ import androidx.annotation.RestrictTo;
  * HTTP 클라이언트
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

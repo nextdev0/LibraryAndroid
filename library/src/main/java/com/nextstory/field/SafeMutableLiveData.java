@@ -13,7 +13,6 @@ import java.util.Objects;
  * {@link MutableLiveData}에서 상태 유지가 가능한 버전
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})

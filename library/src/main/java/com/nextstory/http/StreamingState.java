@@ -6,7 +6,6 @@ import androidx.annotation.RestrictTo;
  * 스트리밍 상태 모델
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

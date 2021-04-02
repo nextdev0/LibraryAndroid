@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 페이지 레이아웃
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

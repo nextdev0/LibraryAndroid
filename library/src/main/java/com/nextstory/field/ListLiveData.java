@@ -10,7 +10,6 @@ import java.util.List;
  * 리스트 LiveData
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")

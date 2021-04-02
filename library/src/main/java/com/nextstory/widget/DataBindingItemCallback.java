@@ -6,7 +6,6 @@ import android.view.View;
  * 항목 콜백 인터페이스
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 public interface DataBindingItemCallback {

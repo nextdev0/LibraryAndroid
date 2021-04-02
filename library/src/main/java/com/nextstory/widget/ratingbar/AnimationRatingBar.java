@@ -13,7 +13,6 @@ import java.util.UUID;
  * 애니메이션 레이팅바
  *
  * @author willy (2017.5.5)
- * @version 1.0
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */

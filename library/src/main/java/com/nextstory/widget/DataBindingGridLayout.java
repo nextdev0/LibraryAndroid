@@ -31,7 +31,6 @@ import java.util.WeakHashMap;
  * 데이터바인딩 그리드 레이아웃
  *
  * @author troy
- * @version 1.0
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")

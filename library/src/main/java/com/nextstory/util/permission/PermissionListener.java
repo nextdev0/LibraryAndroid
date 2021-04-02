@@ -6,7 +6,6 @@ import java.util.List;
  * 권한 요청 리스너
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 public interface PermissionListener {

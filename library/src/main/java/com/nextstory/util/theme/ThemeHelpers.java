@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatDelegate;
  * 테마 도우미 클래스
  *
  * @author troy
- * @version 1.0
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
