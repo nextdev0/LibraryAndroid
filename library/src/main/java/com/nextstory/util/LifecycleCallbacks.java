@@ -26,9 +26,6 @@ import java.util.Set;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class LifecycleCallbacks implements SimpleActivityLifecycleCallbacks {
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    static Application sApplication = null;
-
     /**
      * 프래그먼트 콜백
      */
@@ -36,6 +33,9 @@ public final class LifecycleCallbacks implements SimpleActivityLifecycleCallback
             Collections.synchronizedSet(new HashSet<>());
     private static final Set<SimpleFragmentLifecycleCallbacks> simpleFragmentCallbacks =
             Collections.synchronizedSet(new HashSet<>());
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    static Application sApplication = null;
 
     /**
      * 프래그먼트 콜백 처리

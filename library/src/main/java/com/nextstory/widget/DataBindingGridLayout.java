@@ -41,6 +41,24 @@ public final class DataBindingGridLayout extends RecyclerView {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     private InternalAdapter adapter;
 
+    public DataBindingGridLayout(@NonNull Context context) {
+        super(context);
+        initialize(context, null);
+    }
+
+    public DataBindingGridLayout(@NonNull Context context,
+                                 @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initialize(context, attrs);
+    }
+
+    public DataBindingGridLayout(@NonNull Context context,
+                                 @Nullable AttributeSet attrs,
+                                 int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialize(context, attrs);
+    }
+
     /**
      * 하단 스크롤 도달 리스너
      *
@@ -62,24 +80,6 @@ public final class DataBindingGridLayout extends RecyclerView {
                 }
             }
         });
-    }
-
-    public DataBindingGridLayout(@NonNull Context context) {
-        super(context);
-        initialize(context, null);
-    }
-
-    public DataBindingGridLayout(@NonNull Context context,
-                                 @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        initialize(context, attrs);
-    }
-
-    public DataBindingGridLayout(@NonNull Context context,
-                                 @Nullable AttributeSet attrs,
-                                 int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initialize(context, attrs);
     }
 
     /**
@@ -192,6 +192,16 @@ public final class DataBindingGridLayout extends RecyclerView {
 
     public int getOrientation() {
         return orientation;
+    }
+
+    /**
+     * 하단 스크롤 리스너
+     */
+    public interface OnBottomScrollReachedListener {
+        /**
+         * 하단 스크롤 도달 시 호출
+         */
+        void onBottomScrollReached();
     }
 
     /**
@@ -538,15 +548,5 @@ public final class DataBindingGridLayout extends RecyclerView {
         public int getSpanCount() {
             return spanCount;
         }
-    }
-
-    /**
-     * 하단 스크롤 리스너
-     */
-    public interface OnBottomScrollReachedListener {
-        /**
-         * 하단 스크롤 도달 시 호출
-         */
-        void onBottomScrollReached();
     }
 }

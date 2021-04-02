@@ -43,6 +43,24 @@ public final class DataBindingRecyclerView extends RecyclerView {
     private int orientation;
     private DataBindingAdapter adapter;
 
+    public DataBindingRecyclerView(@NonNull Context context) {
+        super(context);
+        initialize(context, null);
+    }
+
+    public DataBindingRecyclerView(@NonNull Context context,
+                                   @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initialize(context, attrs);
+    }
+
+    public DataBindingRecyclerView(@NonNull Context context,
+                                   @Nullable AttributeSet attrs,
+                                   int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialize(context, attrs);
+    }
+
     @Deprecated
     @BindingAdapter("bindItems")
     public static void bindItems(
@@ -81,24 +99,6 @@ public final class DataBindingRecyclerView extends RecyclerView {
                 }
             }
         });
-    }
-
-    public DataBindingRecyclerView(@NonNull Context context) {
-        super(context);
-        initialize(context, null);
-    }
-
-    public DataBindingRecyclerView(@NonNull Context context,
-                                   @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        initialize(context, attrs);
-    }
-
-    public DataBindingRecyclerView(@NonNull Context context,
-                                   @Nullable AttributeSet attrs,
-                                   int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initialize(context, attrs);
     }
 
     /**

@@ -1,11 +1,9 @@
-package com.nextstory.util;
+package com.nextstory.widget.ratingbar;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
-
-import com.nextstory.widget.ratingbar.BaseRatingBar;
 
 /**
  * 바인딩 어댑터
@@ -15,8 +13,8 @@ import com.nextstory.widget.ratingbar.BaseRatingBar;
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
-public final class BindingAdapters {
-    private BindingAdapters() {
+public final class SimpleRatingBarBindingAdapters {
+    private SimpleRatingBarBindingAdapters() {
         // no-op
     }
 

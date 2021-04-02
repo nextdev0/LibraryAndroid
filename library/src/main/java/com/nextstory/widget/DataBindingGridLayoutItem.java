@@ -34,32 +34,6 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
     private List<?> items = new ArrayList<>();
     private Callback callback = null;
 
-    /**
-     * 목록 바인딩
-     *
-     * @param v    뷰
-     * @param list 목록
-     */
-    @BindingAdapter("items")
-    public static void setItems(DataBindingGridLayoutItem v, List<?> list) {
-        if (v != null) {
-            v.setItems(list);
-        }
-    }
-
-    /**
-     * 콜백 설정
-     *
-     * @param v        뷰
-     * @param callback 콜백
-     */
-    @BindingAdapter("onItemCallback")
-    public static void setOnItemCallback(DataBindingGridLayoutItem v, Callback callback) {
-        if (v != null) {
-            v.setCallback(callback);
-        }
-    }
-
     public DataBindingGridLayoutItem(Context context) {
         this(context, null);
     }
@@ -109,6 +83,32 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
         if (isInEditMode() && layoutRes != 0 && getChildCount() == 0) {
             View newChild = View.inflate(getContext(), layoutRes, null);
             addView(newChild, new FrameLayout.LayoutParams(-1, -1));
+        }
+    }
+
+    /**
+     * 목록 바인딩
+     *
+     * @param v    뷰
+     * @param list 목록
+     */
+    @BindingAdapter("items")
+    public static void setItems(DataBindingGridLayoutItem v, List<?> list) {
+        if (v != null) {
+            v.setItems(list);
+        }
+    }
+
+    /**
+     * 콜백 설정
+     *
+     * @param v        뷰
+     * @param callback 콜백
+     */
+    @BindingAdapter("onItemCallback")
+    public static void setOnItemCallback(DataBindingGridLayoutItem v, Callback callback) {
+        if (v != null) {
+            v.setCallback(callback);
         }
     }
 

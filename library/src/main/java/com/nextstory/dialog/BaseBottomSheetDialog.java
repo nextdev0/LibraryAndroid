@@ -35,10 +35,11 @@ import java.lang.reflect.ParameterizedType;
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends BottomSheetDialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
-    private FrameLayout viewContainer;
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     B binding = null;
+
+    private FrameLayout viewContainer;
 
     public BaseBottomSheetDialog(@NonNull Context context) {
         this(context, R.style.Theme_Dialog_Base_BottomDialog);

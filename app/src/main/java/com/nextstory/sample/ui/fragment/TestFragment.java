@@ -29,11 +29,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  */
 @AndroidEntryPoint
 public final class TestFragment extends BaseFragment<FragmentTestBinding> {
-    private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
-
     public final ListLiveData<String> testList = new ListLiveData<>();
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
     public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
+    private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
