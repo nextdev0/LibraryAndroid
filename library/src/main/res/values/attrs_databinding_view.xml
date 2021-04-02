@@ -55,6 +55,7 @@
 
     <declare-styleable name="DataBindingViewPager">
         <attr name="infiniteScrollEnabled" format="boolean" />
+        <attr name="currentPagePosition" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="DataBindingViewPagerItem">

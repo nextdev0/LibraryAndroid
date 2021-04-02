@@ -13,7 +13,10 @@ import android.view.ViewParent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseBindingListener;
 import androidx.databinding.ViewDataBinding;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -22,7 +25,9 @@ import com.nextstory.R;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,9 +36,13 @@ import java.util.Objects;
  * @author troy
  * @since 1.1
  */
+@SuppressWarnings("UnusedDeclaration")
 public final class DataBindingViewPager extends ViewPager {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     final boolean isInfiniteScrollEnabled;
+
+    private final Map<OnPageChangeListener, OnPageChangeListener> listeners = new LinkedHashMap<>();
+    private final int startPage;
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     private PagerAdapter adapter;
@@ -47,25 +56,71 @@ public final class DataBindingViewPager extends ViewPager {
 
         if (attrs == null) {
             isInfiniteScrollEnabled = false;
+            startPage = 0;
         } else {
             TypedArray a =
                     context.obtainStyledAttributes(attrs, R.styleable.DataBindingViewPager);
             isInfiniteScrollEnabled = a.getBoolean(
                     R.styleable.DataBindingViewPager_infiniteScrollEnabled,
                     false);
+            startPage = a.getInt(
+                    R.styleable.DataBindingViewPager_currentPagePosition,
+                    0);
             a.recycle();
         }
     }
 
-    private static int getBindingId(String id) {
-        String className = id.substring(0, id.lastIndexOf("."));
-        String fieldName = id.substring(id.lastIndexOf(".") + 1);
-        try {
-            Class<?> brClass = Class.forName(className);
-            Field varField = brClass.getField(fieldName);
-            return (int) Objects.requireNonNull(varField.get(null));
-        } catch (Throwable ignore) {
-            return -1;
+    /**
+     * 페이지 위치 지정
+     *
+     * @param v     뷰
+     * @param value 페이지
+     */
+    @BindingAdapter("currentPagePosition")
+    public static void setCurrentPagePosition(@NonNull DataBindingViewPager v, int value) {
+        if (v.isInfiniteScrollEnabled && v.getAdapter() != null) {
+            int realCount = ((InfinitePagerAdapterWrapper) v.getAdapter()).getRealCount();
+            int currentPages = v.getCurrentItem() / realCount;
+            int realPosition = (currentPages * realCount) + value;
+            v.setCurrentItem(realPosition, true);
+        } else {
+            v.setCurrentItem(value, true);
+        }
+    }
+
+    /**
+     * 페이지 위치 반환
+     *
+     * @param v 뷰
+     */
+    @InverseBindingAdapter(
+            attribute = "currentPagePosition",
+            event = "currentPagePositionAttrChanged"
+    )
+    public static int getCurrentPagePosition(@NonNull DataBindingViewPager v) {
+        if (v.getAdapter() instanceof InfinitePagerAdapterWrapper) {
+            return v.getCurrentItem()
+                    % ((InfinitePagerAdapterWrapper) v.getAdapter()).getRealCount();
+        }
+        return v.getCurrentItem();
+    }
+
+    /**
+     * 페이지 변경 리스너 설정
+     *
+     * @param v                 뷰
+     * @param ratingAttrChanged inverse 어댑터, 값 변경 반환용으로 사용
+     */
+    @BindingAdapter("currentPagePositionAttrChanged")
+    public static void getCurrentPagePositionListener(@NonNull DataBindingViewPager v,
+                                                      InverseBindingListener ratingAttrChanged) {
+        if (ratingAttrChanged != null) {
+            v.addOnPageChangeListener(new SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    ratingAttrChanged.onChange();
+                }
+            });
         }
     }
 
@@ -86,6 +141,22 @@ public final class DataBindingViewPager extends ViewPager {
             }
             removeAllViews();
             super.setAdapter(adapter);
+            adapter.registerDataSetObserver(new DataSetObserver() {
+                @Override
+                public void onChanged() {
+                    if (isInfiniteScrollEnabled) {
+                        DataBindingViewPager.super.setAdapter(
+                                new InfinitePagerAdapterWrapper(internalAdapter));
+                        int remain = 10000 * internalAdapter.getCount();
+                        setCurrentItem(remain, false);
+                    }
+                }
+            });
+            if (isInfiniteScrollEnabled) {
+                post(() -> setCurrentItem(internalAdapter.getCount() * 10000 + startPage, false));
+            } else {
+                post(() -> setCurrentItem(startPage, false));
+            }
         }
     }
 
@@ -100,12 +171,108 @@ public final class DataBindingViewPager extends ViewPager {
         // no-op
     }
 
+    @Deprecated
+    @SuppressWarnings("deprecation")
+    @Override
+    public void setOnPageChangeListener(OnPageChangeListener listener) {
+        super.setOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {
+                PagerAdapter adapter = getAdapter();
+                if (adapter instanceof InfinitePagerAdapterWrapper) {
+                    int realPosition = ((InfinitePagerAdapterWrapper) adapter).getRealCount();
+                    listener.onPageScrolled(realPosition, positionOffset, positionOffsetPixels);
+                } else {
+                    listener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                PagerAdapter adapter = getAdapter();
+                if (adapter instanceof InfinitePagerAdapterWrapper) {
+                    int realPosition = ((InfinitePagerAdapterWrapper) adapter).getRealCount();
+                    listener.onPageSelected(realPosition);
+                } else {
+                    listener.onPageSelected(position);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                listener.onPageScrollStateChanged(state);
+            }
+        });
+    }
+
+    @Override
+    public void addOnPageChangeListener(@NonNull OnPageChangeListener listener) {
+        OnPageChangeListener newListener = new OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {
+                PagerAdapter adapter = getAdapter();
+                if (adapter instanceof InfinitePagerAdapterWrapper) {
+                    int realPosition = ((InfinitePagerAdapterWrapper) adapter).getRealCount();
+                    listener.onPageScrolled(realPosition, positionOffset, positionOffsetPixels);
+                } else {
+                    listener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                PagerAdapter adapter = getAdapter();
+                if (adapter instanceof InfinitePagerAdapterWrapper) {
+                    int realPosition = ((InfinitePagerAdapterWrapper) adapter).getRealCount();
+                    listener.onPageSelected(realPosition);
+                } else {
+                    listener.onPageSelected(position);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                listener.onPageScrollStateChanged(state);
+            }
+        };
+        listeners.put(listener, newListener);
+        super.addOnPageChangeListener(newListener);
+    }
+
+    @Override
+    public void removeOnPageChangeListener(@NonNull OnPageChangeListener listener) {
+        OnPageChangeListener originalListener = listeners.get(listener);
+        super.removeOnPageChangeListener(Objects.requireNonNull(originalListener));
+    }
+
+    @Override
+    public void clearOnPageChangeListeners() {
+        listeners.clear();
+        super.clearOnPageChangeListeners();
+    }
+
     /**
      * 내부 어댑터 wrapper class
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     static class InternalAdapter extends PagerAdapter {
         private final List<View> views = new ArrayList<>();
+
+        private static int getBindingId(String id) {
+            String className = id.substring(0, id.lastIndexOf("."));
+            String fieldName = id.substring(id.lastIndexOf(".") + 1);
+            try {
+                Class<?> brClass = Class.forName(className);
+                Field varField = brClass.getField(fieldName);
+                return (int) Objects.requireNonNull(varField.get(null));
+            } catch (Throwable ignore) {
+                return -1;
+            }
+        }
 
         @Override
         public int getItemPosition(@NonNull Object object) {

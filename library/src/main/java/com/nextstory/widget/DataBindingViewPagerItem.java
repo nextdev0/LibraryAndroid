@@ -172,14 +172,6 @@ public final class DataBindingViewPagerItem extends FrameLayout {
             PagerAdapter adapter = parent.get().getAdapter();
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
-                if (parent.get().isInfiniteScrollEnabled) {
-                    parent.get().post(() -> {
-                        DataBindingViewPager.InfinitePagerAdapterWrapper infinitePagerAdapter =
-                                (DataBindingViewPager.InfinitePagerAdapterWrapper) adapter;
-                        int remain = 10000 * infinitePagerAdapter.getRealCount();
-                        parent.get().setCurrentItem(remain, false);
-                    });
-                }
             }
         }
     }
