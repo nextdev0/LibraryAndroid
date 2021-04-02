@@ -17,6 +17,7 @@ import com.nextstory.R;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -144,6 +145,9 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     List<?> getItems() {
+        if (isInEditMode()) {
+            return Collections.singletonList(new Object());
+        }
         return items;
     }
 
