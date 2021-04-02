@@ -167,8 +167,8 @@ public final class DataBindingViewPager extends ViewPager {
                     if (callbackVarId != -1) {
                         binding.setVariable(
                                 callbackVarId,
-                                (DataBindingViewPagerItem.Callback) (v1, o, i) -> {
-                                    DataBindingViewPagerItem.Callback callback = v.getCallback();
+                                (DataBindingItemCallback) (v1, o, i) -> {
+                                    DataBindingItemCallback callback = v.getCallback();
                                     if (callback != null) {
                                         callback.onItemCallback(v1, o, i);
                                         return;

@@ -336,8 +336,8 @@ public final class DataBindingGridLayout extends RecyclerView {
             if (holder.getCallbackVarId() != -1) {
                 holder.binding.setVariable(
                         holder.getCallbackVarId(),
-                        (DataBindingGridLayoutItem.Callback) (v, o, i) -> {
-                            DataBindingGridLayoutItem.Callback callback = gridItem.getCallback();
+                        (DataBindingItemCallback) (v, o, i) -> {
+                            DataBindingItemCallback callback = gridItem.getCallback();
                             if (callback != null) {
                                 callback.onItemCallback(v, o, i);
                                 return;

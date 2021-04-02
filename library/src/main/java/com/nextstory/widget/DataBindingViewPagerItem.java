@@ -27,12 +27,13 @@ import java.util.List;
  * @version 1.0
  * @since 1.1
  */
+@SuppressWarnings("UnusedDeclaration")
 public final class DataBindingViewPagerItem extends FrameLayout {
     private final int layoutRes;
     private final String itemBindingName, positionBindingName, callbackBindingName;
     private WeakReference<DataBindingViewPager> parent;
     private List<?> items = new ArrayList<>();
-    private Callback callback = null;
+    private DataBindingItemCallback callback = null;
 
     public DataBindingViewPagerItem(Context context) {
         this(context, null);
@@ -105,8 +106,23 @@ public final class DataBindingViewPagerItem extends FrameLayout {
      * @param v        뷰
      * @param callback 콜백
      */
+    @SuppressWarnings("deprecation")
     @BindingAdapter("onItemCallback")
     public static void setOnItemCallback(DataBindingViewPagerItem v, Callback callback) {
+        if (v != null) {
+            v.setCallback(callback::onItemCallback);
+        }
+    }
+
+    /**
+     * 콜백 설정
+     *
+     * @param v        뷰
+     * @param callback 콜백
+     */
+    @BindingAdapter("onItemCallback")
+    public static void setOnItemCallback(DataBindingViewPagerItem v,
+                                         DataBindingItemCallback callback) {
         if (v != null) {
             v.setCallback(callback);
         }
@@ -186,18 +202,21 @@ public final class DataBindingViewPagerItem extends FrameLayout {
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Nullable
-    Callback getCallback() {
+    DataBindingItemCallback getCallback() {
         return callback;
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    void setCallback(@NonNull Callback callback) {
+    void setCallback(@NonNull DataBindingItemCallback callback) {
         this.callback = callback;
     }
 
     /**
      * 콜백
+     *
+     * @deprecated {@link DataBindingItemCallback} 사용
      */
+    @Deprecated
     public interface Callback {
         /**
          * 콜백 시 호출

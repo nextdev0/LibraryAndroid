@@ -33,7 +33,7 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
     private final String itemBindingName, positionBindingName, callbackBindingName;
     private WeakReference<DataBindingGridLayout> parent;
     private List<?> items = new ArrayList<>();
-    private Callback callback = null;
+    private DataBindingItemCallback callback = null;
 
     public DataBindingGridLayoutItem(Context context) {
         this(context, null);
@@ -106,8 +106,23 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
      * @param v        뷰
      * @param callback 콜백
      */
+    @SuppressWarnings("deprecation")
     @BindingAdapter("onItemCallback")
     public static void setOnItemCallback(DataBindingGridLayoutItem v, Callback callback) {
+        if (v != null) {
+            v.setCallback(callback::onItemCallback);
+        }
+    }
+
+    /**
+     * 콜백 설정
+     *
+     * @param v        뷰
+     * @param callback 콜백
+     */
+    @BindingAdapter("onItemCallback")
+    public static void setOnItemCallback(DataBindingGridLayoutItem v,
+                                         DataBindingItemCallback callback) {
         if (v != null) {
             v.setCallback(callback);
         }
@@ -179,18 +194,21 @@ public final class DataBindingGridLayoutItem extends FrameLayout {
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Nullable
-    Callback getCallback() {
+    DataBindingItemCallback getCallback() {
         return callback;
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    void setCallback(@NonNull Callback callback) {
+    void setCallback(@NonNull DataBindingItemCallback callback) {
         this.callback = callback;
     }
 
     /**
      * 콜백
+     *
+     * @deprecated {@link DataBindingItemCallback} 사용
      */
+    @Deprecated
     public interface Callback {
         /**
          * 콜백 시 호출
