@@ -23,12 +23,15 @@ import androidx.core.view.ViewCompat;
 import androidx.databinding.ViewDataBinding;
 
 import com.nextstory.R;
+import com.nextstory.util.locale.LocaleManager;
+import com.nextstory.util.locale.LocaleManagerImpl;
 import com.nextstory.util.theme.ThemeHelpers;
 import com.nextstory.util.theme.ThemeType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -40,6 +43,8 @@ import java.util.Objects;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
+    private final LocaleManager localeManager =
+            new LocaleManagerImpl(() -> getContext().getApplicationContext());
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     B binding = null;
@@ -174,6 +179,23 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
      */
     public void applyApplicationTheme(@ThemeType int type) {
         themeHelpers.applyTheme(type);
+    }
+
+    /**
+     * @return 현재 로케일
+     */
+    @NonNull
+    public Locale getLocale() {
+        return localeManager.getLocale();
+    }
+
+    /**
+     * 로케일 적용
+     *
+     * @param locale 로케일
+     */
+    public void applyLocale(@NonNull Locale locale) {
+        localeManager.applyLocale(Objects.requireNonNull(locale));
     }
 
     /**

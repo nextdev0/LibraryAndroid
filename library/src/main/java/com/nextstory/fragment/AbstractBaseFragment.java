@@ -20,10 +20,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 
 import com.nextstory.R;
+import com.nextstory.util.locale.LocaleManager;
+import com.nextstory.util.locale.LocaleManagerImpl;
 import com.nextstory.util.permission.PermissionHelpers;
 import com.nextstory.util.permission.PermissionListener;
 import com.nextstory.util.theme.ThemeHelpers;
 import com.nextstory.util.theme.ThemeType;
+
+import java.util.Locale;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -45,6 +50,8 @@ public abstract class AbstractBaseFragment extends Fragment {
         }
     };
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
+    private final LocaleManager localeManager =
+            new LocaleManagerImpl(() -> requireContext().getApplicationContext());
     private final PermissionHelpers permissionHelpers = new PermissionHelpers(this);
 
     @Deprecated
@@ -107,6 +114,23 @@ public abstract class AbstractBaseFragment extends Fragment {
      */
     public void applyApplicationTheme(@ThemeType int type) {
         themeHelpers.applyTheme(type);
+    }
+
+    /**
+     * @return 현재 로케일
+     */
+    @NonNull
+    public Locale getLocale() {
+        return localeManager.getLocale();
+    }
+
+    /**
+     * 로케일 적용
+     *
+     * @param locale 로케일
+     */
+    public void applyLocale(@NonNull Locale locale) {
+        localeManager.applyLocale(Objects.requireNonNull(locale));
     }
 
     /**

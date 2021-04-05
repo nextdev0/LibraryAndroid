@@ -33,6 +33,13 @@
             android:text="다이얼로그 테스트 2"
             tools:ignore="HardcodedText" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> activity.onLocaleTestClick()}"
+            android:text="로케일 테스트"
+            tools:ignore="HardcodedText" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,6 +76,11 @@
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/test" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_test"

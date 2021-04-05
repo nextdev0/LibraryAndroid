@@ -9,11 +9,13 @@ import androidx.annotation.Nullable;
 import com.nextstory.field.ListLiveData;
 import com.nextstory.field.NonNullLiveData;
 import com.nextstory.field.OnDestroyDisposables;
+import com.nextstory.field.SafeData;
 import com.nextstory.fragment.BaseFragment;
 import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
 
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +34,7 @@ public final class TestFragment extends BaseFragment<FragmentTestBinding> {
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
     public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
     private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
+    private final SafeData<Boolean> localeToggle = new SafeData<>(false);
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -54,6 +57,16 @@ public final class TestFragment extends BaseFragment<FragmentTestBinding> {
 
     public void onDialogTest2Click() {
         new Test2Dialog().show(this);
+    }
+
+    public void onLocaleTestClick() {
+        if (localeToggle.getValue()) {
+            applyLocale(Locale.KOREAN);
+        } else {
+            applyLocale(Locale.ENGLISH);
+        }
+        localeToggle.setValue(!localeToggle.getValue());
+        requireActivity().recreate();
     }
 
     public void onSafeFieldTestClick() {

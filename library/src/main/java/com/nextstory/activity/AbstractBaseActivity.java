@@ -26,10 +26,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
 
 import com.nextstory.R;
+import com.nextstory.util.locale.LocaleManager;
+import com.nextstory.util.locale.LocaleManagerImpl;
 import com.nextstory.util.permission.PermissionHelpers;
 import com.nextstory.util.permission.PermissionListener;
 import com.nextstory.util.theme.ThemeHelpers;
 import com.nextstory.util.theme.ThemeType;
+
+import java.util.Locale;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -45,6 +50,7 @@ public abstract class AbstractBaseActivity
         extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
+    private final LocaleManager localeManager = new LocaleManagerImpl(this);
     private final PermissionHelpers permissionHelpers = new PermissionHelpers(this);
     private final PointF touchPoint = new PointF(0f, 0f);
 
@@ -62,6 +68,11 @@ public abstract class AbstractBaseActivity
     private InputMethodManager inputMethodManager = null;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(localeManager.wrapContext(newBase, null));
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -74,8 +85,11 @@ public abstract class AbstractBaseActivity
         super.onCreate(savedInstanceState);
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         decorView = getWindow().getDecorView();
         contentView = getWindow().findViewById(android.R.id.content);
+
+        localeManager.wrapContext(this, null);
     }
 
     @Override
@@ -165,6 +179,11 @@ public abstract class AbstractBaseActivity
     }
 
     @Override
+    public Resources getResources() {
+        return localeManager.wrapContext(this, super.getResources()).getResources();
+    }
+
+    @Override
     public void onGlobalLayout() {
         Rect r = new Rect();
         decorView.getWindowVisibleDisplayFrame(r);
@@ -200,6 +219,23 @@ public abstract class AbstractBaseActivity
      */
     public void applyApplicationTheme(@ThemeType int type) {
         themeHelpers.applyTheme(type);
+    }
+
+    /**
+     * @return 현재 로케일
+     */
+    @NonNull
+    public Locale getLocale() {
+        return localeManager.getLocale();
+    }
+
+    /**
+     * 로케일 적용
+     *
+     * @param locale 로케일
+     */
+    public void applyLocale(@NonNull Locale locale) {
+        localeManager.applyLocale(Objects.requireNonNull(locale));
     }
 
     /**

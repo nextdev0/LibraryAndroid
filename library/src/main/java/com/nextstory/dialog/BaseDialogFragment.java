@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.nextstory.R;
+import com.nextstory.util.locale.LocaleManager;
+import com.nextstory.util.locale.LocaleManagerImpl;
 import com.nextstory.util.theme.ThemeHelpers;
 import com.nextstory.util.theme.ThemeType;
 
@@ -25,6 +27,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -36,6 +39,8 @@ import java.util.Objects;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class BaseDialogFragment<B extends ViewDataBinding> extends DialogFragment {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
+    private final LocaleManager localeManager =
+            new LocaleManagerImpl(() -> getContext().getApplicationContext());
     private BaseDialog<B> dialog = null;
     private WeakReference<Bundle> savedInstanceState = null;
 
@@ -146,6 +151,23 @@ public abstract class BaseDialogFragment<B extends ViewDataBinding> extends Dial
      */
     public void applyApplicationTheme(@ThemeType int type) {
         themeHelpers.applyTheme(type);
+    }
+
+    /**
+     * @return 현재 로케일
+     */
+    @NonNull
+    public Locale getLocale() {
+        return localeManager.getLocale();
+    }
+
+    /**
+     * 로케일 적용
+     *
+     * @param locale 로케일
+     */
+    public void applyLocale(@NonNull Locale locale) {
+        localeManager.applyLocale(Objects.requireNonNull(locale));
     }
 
     /**

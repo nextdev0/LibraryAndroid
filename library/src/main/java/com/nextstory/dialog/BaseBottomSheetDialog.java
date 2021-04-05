@@ -18,12 +18,16 @@ import androidx.databinding.ViewDataBinding;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.nextstory.R;
+import com.nextstory.util.locale.LocaleManager;
+import com.nextstory.util.locale.LocaleManagerImpl;
 import com.nextstory.util.theme.ThemeHelpers;
 import com.nextstory.util.theme.ThemeType;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * 기본 바텀시트 다이얼로그
@@ -34,6 +38,8 @@ import java.lang.reflect.ParameterizedType;
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends BottomSheetDialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
+    private final LocaleManager localeManager =
+            new LocaleManagerImpl(() -> getContext().getApplicationContext());
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     B binding = null;
@@ -131,6 +137,13 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     }
 
     /**
+     * 아무동작 없음 (데이터바인딩시 창 클릭시 닫기지 않도록 하기 위함)
+     */
+    public final void nothing() {
+        // no-op
+    }
+
+    /**
      * 현재 적용된 테마 반환
      *
      * @return 테마
@@ -152,10 +165,20 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     }
 
     /**
-     * 아무동작 없음 (데이터바인딩시 창 클릭시 닫기지 않도록 하기 위함)
+     * @return 현재 로케일
      */
-    public final void nothing() {
-        // no-op
+    @NonNull
+    public Locale getLocale() {
+        return localeManager.getLocale();
+    }
+
+    /**
+     * 로케일 적용
+     *
+     * @param locale 로케일
+     */
+    public void applyLocale(@NonNull Locale locale) {
+        localeManager.applyLocale(Objects.requireNonNull(locale));
     }
 
     /**
