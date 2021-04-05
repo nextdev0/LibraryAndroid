@@ -15,7 +15,7 @@
     </style>
 
     <!-- 기본 알림창 -->
-    <style name="Theme.Dialog.Base" parent="Theme.AppCompat.DayNight.Dialog">
+    <style name="Theme.Dialog.Base" parent="Theme.MaterialComponents.DayNight.Dialog">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowBackground">@color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -33,7 +33,7 @@
     </style>
 
     <!-- 하단 알림창 -->
-    <style name="Theme.Dialog.Base.BottomDialog" parent="Theme.Design.BottomSheetDialog">
+    <style name="Theme.Dialog.Base.BottomDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">false</item>
         <item name="android:windowFullscreen">false</item>
@@ -44,7 +44,7 @@
     </style>
 
     <!-- 하단 알림창 스타일 -->
-    <style name="Theme.Dialog.Base.BottomDialog.Modal" parent="Widget.Design.BottomSheet.Modal">
+    <style name="Theme.Dialog.Base.BottomDialog.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="android:background">@color/transparent</item>
     </style>
 
