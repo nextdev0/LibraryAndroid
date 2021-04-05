@@ -53,7 +53,6 @@ public abstract class AbstractBaseActivity
     private final LocaleManager localeManager = new LocaleManagerImpl(this);
     private final PermissionHelpers permissionHelpers = new PermissionHelpers(this);
     private final PointF touchPoint = new PointF(0f, 0f);
-    private Locale currentLocale = null;
 
     @Deprecated
     private final CompositeDisposable onPauseDisposables = new CompositeDisposable();
@@ -62,6 +61,7 @@ public abstract class AbstractBaseActivity
     @Deprecated
     private final CompositeDisposable onDestroyDisposables = new CompositeDisposable();
 
+    private Locale currentLocale = null;
     private boolean isFocused = false;
     private View decorView = null;
     private View contentView = null;

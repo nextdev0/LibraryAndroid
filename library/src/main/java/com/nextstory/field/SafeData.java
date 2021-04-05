@@ -31,12 +31,12 @@ public final class SafeData<T> implements SaveInstanceStateField {
         return value;
     }
 
-    public T requireValue() {
-        return Objects.requireNonNull(value);
-    }
-
     public void setValue(T value) {
         this.value = value;
+    }
+
+    public T requireValue() {
+        return Objects.requireNonNull(value);
     }
 
     @Override
