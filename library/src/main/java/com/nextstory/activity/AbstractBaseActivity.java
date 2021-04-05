@@ -53,6 +53,7 @@ public abstract class AbstractBaseActivity
     private final LocaleManager localeManager = new LocaleManagerImpl(this);
     private final PermissionHelpers permissionHelpers = new PermissionHelpers(this);
     private final PointF touchPoint = new PointF(0f, 0f);
+    private Locale currentLocale = null;
 
     @Deprecated
     private final CompositeDisposable onPauseDisposables = new CompositeDisposable();
@@ -90,6 +91,7 @@ public abstract class AbstractBaseActivity
         contentView = getWindow().findViewById(android.R.id.content);
 
         localeManager.wrapContext(this, null);
+        currentLocale = localeManager.getLocale();
     }
 
     @Override
@@ -101,6 +103,9 @@ public abstract class AbstractBaseActivity
                 viewTreeObserver = contentView.getViewTreeObserver();
             }
             viewTreeObserver.addOnGlobalLayoutListener(this);
+        }
+        if (currentLocale != localeManager.getLocale()) {
+            recreate();
         }
     }
 
