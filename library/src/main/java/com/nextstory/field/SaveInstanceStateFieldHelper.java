@@ -118,6 +118,7 @@ public final class SaveInstanceStateFieldHelper
         for (Field field : fields) {
             boolean isAccessible = field.isAccessible();
             try {
+                field.setAccessible(true);
                 Object object = field.get(instance);
                 if (object instanceof SaveInstanceStateField) {
                     SaveInstanceStateField saveInstanceStateField = (SaveInstanceStateField) object;

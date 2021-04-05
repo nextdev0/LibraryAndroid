@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * 상태 유지가 가능한 데이터
@@ -16,7 +17,27 @@ import java.io.Serializable;
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})
 public final class SafeData<T> implements SaveInstanceStateField {
     private String key = "";
-    private T value = null;
+    private T value;
+
+    public SafeData() {
+        value = null;
+    }
+
+    public SafeData(T defaultValue) {
+        value = defaultValue;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public T requireValue() {
+        return Objects.requireNonNull(value);
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
 
     @Override
     public String getKey() {
