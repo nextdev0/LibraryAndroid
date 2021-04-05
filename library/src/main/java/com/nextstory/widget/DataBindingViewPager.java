@@ -80,9 +80,13 @@ public final class DataBindingViewPager extends ViewPager {
     public static void setCurrentPagePosition(@NonNull DataBindingViewPager v, int value) {
         if (v.isInfiniteScrollEnabled && v.getAdapter() != null) {
             int realCount = ((InfinitePagerAdapterWrapper) v.getAdapter()).getRealCount();
-            int currentPages = v.getCurrentItem() / realCount;
-            int realPosition = (currentPages * realCount) + value;
-            v.setCurrentItem(realPosition, true);
+            if (realCount > 0) {
+                int currentPages = v.getCurrentItem() / realCount;
+                int realPosition = (currentPages * realCount) + value;
+                v.setCurrentItem(realPosition, true);
+            } else {
+                v.setCurrentItem(value, true);
+            }
         } else {
             v.setCurrentItem(value, true);
         }
