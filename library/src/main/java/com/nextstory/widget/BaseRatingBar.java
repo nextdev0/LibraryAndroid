@@ -1,4 +1,4 @@
-package com.nextstory.widget.ratingbar;
+package com.nextstory.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

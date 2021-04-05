@@ -1,4 +1,4 @@
-package com.nextstory.widget.ratingbar;
+package com.nextstory.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,25 +11,25 @@ import androidx.annotation.Nullable;
 import com.nextstory.R;
 
 /**
- * 회전 효과 레이팅바
+ * 확대 효과 레이팅바
  *
- * @author nappannda (2017.5.16)
+ * @author willy (2017.5.5)
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */
-public class RotationRatingBar extends AnimationRatingBar {
+public class ScaleRatingBar extends AnimationRatingBar {
     // Control animation speed
     private static final long ANIMATION_DELAY = 15;
 
-    public RotationRatingBar(Context context) {
+    public ScaleRatingBar(Context context) {
         super(context);
     }
 
-    public RotationRatingBar(Context context, @Nullable AttributeSet attrs) {
+    public ScaleRatingBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RotationRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ScaleRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -41,13 +41,13 @@ public class RotationRatingBar extends AnimationRatingBar {
         }
 
         long delay = 0;
-        for (final PartialView partialView : mPartialViews) {
-            mHandler.postDelayed(partialView::setEmpty, delay += 5);
+        for (final PartialView view : mPartialViews) {
+            mHandler.postDelayed(view::setEmpty, delay += 5);
         }
     }
 
     @Override
-    protected void fillRatingBar(float rating) {
+    protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
         if (mRunnable != null) {
             mHandler.removeCallbacksAndMessages(mRunnableToken);
@@ -68,7 +68,7 @@ public class RotationRatingBar extends AnimationRatingBar {
     }
 
     @NonNull
-    private Runnable getAnimationRunnable(float rating, PartialView partialView, int ratingViewId, double maxIntOfRating) {
+    private Runnable getAnimationRunnable(final float rating, final PartialView partialView, final int ratingViewId, final double maxIntOfRating) {
         return () -> {
             if (ratingViewId == maxIntOfRating) {
                 partialView.setPartialFilled(rating);
@@ -77,8 +77,10 @@ public class RotationRatingBar extends AnimationRatingBar {
             }
 
             if (ratingViewId == rating) {
-                Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
-                partialView.startAnimation(rotation);
+                Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
+                Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
+                partialView.startAnimation(scaleUp);
+                partialView.startAnimation(scaleDown);
             }
         };
     }

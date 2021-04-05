@@ -1,4 +1,4 @@
-package com.nextstory.widget.ratingbar;
+package com.nextstory.widget;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
