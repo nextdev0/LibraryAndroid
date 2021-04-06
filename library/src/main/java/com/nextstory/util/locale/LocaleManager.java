@@ -9,7 +9,7 @@ import java.util.Locale;
  * 로케일 관리자 인터페이스
  *
  * @author troy
- * @since 1.1
+ * @since 1.2
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface LocaleManager {

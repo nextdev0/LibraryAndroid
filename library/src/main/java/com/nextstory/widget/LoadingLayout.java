@@ -17,7 +17,7 @@ import com.nextstory.R;
  * 로딩 레이아웃
  *
  * @author troy
- * @since 1.1
+ * @since 1.2
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class LoadingLayout extends FrameLayout {

@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 /**
  * @author troy
- * @since 1.1
+ * @since 1.2
  */
 @SuppressWarnings("deprecation")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
