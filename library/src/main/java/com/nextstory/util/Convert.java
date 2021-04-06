@@ -3,9 +3,10 @@ package com.nextstory.util;
 import androidx.annotation.Nullable;
 
 /**
- * 문자열 > 기본형 숫자 변환 유틸
+ * 문자열 > 기본형 변환 유틸
  *
  * @author troy
+ * @since 1.2
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class Convert {
@@ -31,11 +32,7 @@ public final class Convert {
         if (s == null || s.trim().isEmpty()) {
             return defaultValue;
         }
-        try {
-            return Boolean.parseBoolean(s);
-        } catch (NumberFormatException e) {
-            return defaultValue;
-        }
+        return Boolean.parseBoolean(s.trim());
     }
 
     /**
@@ -57,7 +54,7 @@ public final class Convert {
             return defaultValue;
         }
         try {
-            return Byte.parseByte(s);
+            return Byte.parseByte(s.trim());
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -82,7 +79,7 @@ public final class Convert {
             return defaultValue;
         }
         try {
-            return Integer.parseInt(s);
+            return Integer.parseInt(s.trim());
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -107,7 +104,7 @@ public final class Convert {
             return defaultValue;
         }
         try {
-            return Long.parseLong(s);
+            return Long.parseLong(s.trim());
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -132,7 +129,7 @@ public final class Convert {
             return defaultValue;
         }
         try {
-            return Float.parseFloat(s);
+            return Float.parseFloat(s.trim());
         } catch (NumberFormatException e) {
             return defaultValue;
         }
@@ -157,10 +154,26 @@ public final class Convert {
             return defaultValue;
         }
         try {
-            return Double.parseDouble(s);
+            return Double.parseDouble(s.trim());
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    /**
+     * 문자열이 boolean 형식인지 체크
+     *
+     * @param s 문자열
+     * @return boolean 유무
+     */
+    public static boolean isBoolean(@Nullable String s, boolean defaultValue) {
+        if (s == null || s.trim().isEmpty()) {
+            return false;
+        }
+        if (s.trim().equalsIgnoreCase("true")) {
+            return true;
+        }
+        return s.trim().equalsIgnoreCase("false");
     }
 
     /**
@@ -174,7 +187,7 @@ public final class Convert {
             return false;
         }
         try {
-            Double.parseDouble(s);
+            Double.parseDouble(s.trim());
             return true;
         } catch (NumberFormatException e) {
             return false;
