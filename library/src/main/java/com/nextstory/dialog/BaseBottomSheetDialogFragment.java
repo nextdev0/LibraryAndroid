@@ -40,7 +40,7 @@ import java.util.Objects;
 public class BaseBottomSheetDialogFragment<B extends ViewDataBinding> extends DialogFragment {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
     private final LocaleManager localeManager =
-            new LocaleManagerImpl(() -> getContext().getApplicationContext());
+            new LocaleManagerImpl(() -> requireContext().getApplicationContext());
     private BaseBottomSheetDialog<B> dialog = null;
     private WeakReference<Bundle> savedInstanceState = null;
 
