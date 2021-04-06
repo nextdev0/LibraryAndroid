@@ -22,6 +22,7 @@ import com.nextstory.R;
 @SuppressWarnings("UnusedDeclaration")
 public final class LoadingLayout extends FrameLayout {
     private final int loadingViewId;
+    private final boolean allowBackKey;
     private boolean isLoading;
     private View loadingView = null;
 
@@ -39,6 +40,7 @@ public final class LoadingLayout extends FrameLayout {
         if (attrs == null) {
             loadingViewId = NO_ID;
             isLoading = false;
+            allowBackKey = false;
         } else {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoadingLayout, 0, 0);
             loadingViewId = a.getResourceId(
@@ -46,6 +48,9 @@ public final class LoadingLayout extends FrameLayout {
                     NO_ID);
             isLoading = a.getBoolean(
                     R.styleable.LoadingLayout_loading,
+                    false);
+            allowBackKey = a.getBoolean(
+                    R.styleable.LoadingLayout_allowBackKey,
                     false);
             a.recycle();
         }
@@ -94,7 +99,7 @@ public final class LoadingLayout extends FrameLayout {
 
     @Override
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
-        if (isLoading && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+        if (!allowBackKey && isLoading && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             return true;
         }
         return super.dispatchKeyEventPreIme(event);

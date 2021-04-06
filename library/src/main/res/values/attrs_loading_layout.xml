@@ -4,6 +4,7 @@
     <declare-styleable name="LoadingLayout">
         <attr name="loadingViewId" format="reference" />
         <attr name="loading" format="boolean" />
+        <attr name="allowBackKey" format="boolean" />
     </declare-styleable>
 
 </resources>
