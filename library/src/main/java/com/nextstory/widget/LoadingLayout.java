@@ -85,7 +85,7 @@ public final class LoadingLayout extends FrameLayout {
         }
         if (loadingView != null) {
             loadingView.bringToFront();
-            loadingView.setVisibility(isLoading ? VISIBLE : GONE);
+            updateLoadingView();
         }
     }
 
@@ -105,14 +105,22 @@ public final class LoadingLayout extends FrameLayout {
         return super.dispatchKeyEventPreIme(event);
     }
 
+    private void updateLoadingView() {
+        if (loadingView != null) {
+            loadingView.setVisibility(isLoading ? VISIBLE : GONE);
+            View progressView = loadingView.findViewById(R.id.progress_bar);
+            if (progressView != null) {
+                progressView.setVisibility(isLoading ? VISIBLE : GONE);
+            }
+        }
+    }
+
     public boolean isLoading() {
         return isLoading;
     }
 
     public void setLoading(boolean loading) {
         isLoading = loading;
-        if (loadingView != null) {
-            loadingView.setVisibility(isLoading ? VISIBLE : GONE);
-        }
+        updateLoadingView();
     }
 }
