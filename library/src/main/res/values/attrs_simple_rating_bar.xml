@@ -16,4 +16,53 @@
         <attr name="srb_starHeight" format="dimension" />
         <attr name="srb_stepSize" format="float" />
     </declare-styleable>
+
+    <declare-styleable name="AnimationRatingBar">
+        <attr name="srb_numStars" />
+        <attr name="srb_minimumStars" />
+        <attr name="srb_rating" />
+        <attr name="srb_starPadding" />
+        <attr name="srb_drawableEmpty" />
+        <attr name="srb_drawableFilled" />
+        <attr name="srb_isIndicator" />
+        <attr name="srb_scrollable" />
+        <attr name="srb_clickable" />
+        <attr name="srb_clearRatingEnabled" />
+        <attr name="srb_starWidth" />
+        <attr name="srb_starHeight" />
+        <attr name="srb_stepSize" />
+    </declare-styleable>
+
+    <declare-styleable name="ScaleRatingBar">
+        <attr name="srb_numStars" />
+        <attr name="srb_minimumStars" />
+        <attr name="srb_rating" />
+        <attr name="srb_starPadding" />
+        <attr name="srb_drawableEmpty" />
+        <attr name="srb_drawableFilled" />
+        <attr name="srb_isIndicator" />
+        <attr name="srb_scrollable" />
+        <attr name="srb_clickable" />
+        <attr name="srb_clearRatingEnabled" />
+        <attr name="srb_starWidth" />
+        <attr name="srb_starHeight" />
+        <attr name="srb_stepSize" />
+    </declare-styleable>
+
+    <declare-styleable name="RotationRatingBar">
+        <attr name="srb_numStars" />
+        <attr name="srb_minimumStars" />
+        <attr name="srb_rating" />
+        <attr name="srb_starPadding" />
+        <attr name="srb_drawableEmpty" />
+        <attr name="srb_drawableFilled" />
+        <attr name="srb_isIndicator" />
+        <attr name="srb_scrollable" />
+        <attr name="srb_clickable" />
+        <attr name="srb_clearRatingEnabled" />
+        <attr name="srb_starWidth" />
+        <attr name="srb_starHeight" />
+        <attr name="srb_stepSize" />
+    </declare-styleable>
+
 </resources>

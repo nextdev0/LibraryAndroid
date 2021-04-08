@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
  * @author troy
  * @since 1.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface JsonService {
     /**
      * json 직렬화

@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.nextstory.widget.util.ForegroundHelper;
+
 /**
  * foreground 지원 {@link ConstraintLayout}
  *
@@ -17,7 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ForegroundConstraintLayout extends ConstraintLayout {
-    final ForegroundCompat foregroundCompat = new ForegroundCompat(this);
+    final ForegroundHelper foregroundHelper = new ForegroundHelper(this);
 
     public ForegroundConstraintLayout(Context context) {
         this(context, null);
@@ -32,31 +34,31 @@ public class ForegroundConstraintLayout extends ConstraintLayout {
                                       @Nullable AttributeSet attrs,
                                       int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        foregroundCompat.resolveAttribute(context, attrs, defStyleAttr);
+        foregroundHelper.resolveAttribute(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        foregroundCompat.onSizeChanged(w, h, oldw, oldh);
+        foregroundHelper.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        foregroundCompat.draw(canvas);
+        foregroundHelper.draw(canvas);
     }
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
         super.drawableHotspotChanged(x, y);
-        foregroundCompat.drawableHotspotChanged(x, y);
+        foregroundHelper.drawableHotspotChanged(x, y);
     }
 
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        foregroundCompat.drawableStateChanged();
+        foregroundHelper.drawableStateChanged();
     }
 
     @Override
@@ -67,19 +69,19 @@ public class ForegroundConstraintLayout extends ConstraintLayout {
     @Override
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
-        foregroundCompat.jumpDrawablesToCurrentState();
+        foregroundHelper.jumpDrawablesToCurrentState();
     }
 
     @Override
     protected boolean verifyDrawable(@NonNull Drawable who) {
-        return super.verifyDrawable(who) || (who == foregroundCompat.getForeground());
+        return super.verifyDrawable(who) || (who == foregroundHelper.getForeground());
     }
 
     public Drawable getForeground() {
-        return foregroundCompat.getForeground();
+        return foregroundHelper.getForeground();
     }
 
     public void setForeground(Drawable drawable) {
-        foregroundCompat.setForeground(drawable);
+        foregroundHelper.setForeground(drawable);
     }
 }

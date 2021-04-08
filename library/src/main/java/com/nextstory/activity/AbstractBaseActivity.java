@@ -45,7 +45,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * @author troy
  * @since 1.0
  */
-@SuppressWarnings({"UnusedDeclaration", "deprecation"})
+@SuppressWarnings({"UnusedDeclaration", "deprecation", "DeprecatedIsStillUsed"})
 public abstract class AbstractBaseActivity
         extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());

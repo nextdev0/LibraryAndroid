@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.nextstory.widget.util.ForegroundHelper;
+import com.nextstory.widget.util.ShapeDrawableHelper;
+
 /**
  * Drawable 생성없이 모양을 구성할 수 있는 {@link android.widget.ImageView}
  *
@@ -20,7 +23,7 @@ import androidx.appcompat.widget.AppCompatImageView;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class ShapeImageView extends AppCompatImageView {
-    private final ForegroundCompat foregroundCompat = new ForegroundCompat(this);
+    private final ForegroundHelper foregroundHelper = new ForegroundHelper(this);
     private final ShapeDrawableHelper shapeDrawableHelper;
 
     public ShapeImageView(@NonNull Context context) {
@@ -33,7 +36,7 @@ public final class ShapeImageView extends AppCompatImageView {
 
     public ShapeImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        foregroundCompat.resolveAttribute(context, attrs, defStyleAttr);
+        foregroundHelper.resolveAttribute(context, attrs, defStyleAttr);
         shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, getBackground());
         setBackgroundDrawable(shapeDrawableHelper.getDrawable());
         setClipToOutline(true);
@@ -51,25 +54,25 @@ public final class ShapeImageView extends AppCompatImageView {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         shapeDrawableHelper.getShapeDrawable().draw(canvas);
-        foregroundCompat.draw(canvas);
+        foregroundHelper.draw(canvas);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        foregroundCompat.onSizeChanged(w, h, oldw, oldh);
+        foregroundHelper.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
         super.drawableHotspotChanged(x, y);
-        foregroundCompat.drawableHotspotChanged(x, y);
+        foregroundHelper.drawableHotspotChanged(x, y);
     }
 
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        foregroundCompat.drawableStateChanged();
+        foregroundHelper.drawableStateChanged();
     }
 
     @Override
@@ -80,20 +83,20 @@ public final class ShapeImageView extends AppCompatImageView {
     @Override
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
-        foregroundCompat.jumpDrawablesToCurrentState();
+        foregroundHelper.jumpDrawablesToCurrentState();
     }
 
     @Override
     protected boolean verifyDrawable(@NonNull Drawable who) {
-        return super.verifyDrawable(who) || (who == foregroundCompat.getForeground());
+        return super.verifyDrawable(who) || (who == foregroundHelper.getForeground());
     }
 
     public Drawable getForeground() {
-        return foregroundCompat.getForeground();
+        return foregroundHelper.getForeground();
     }
 
     public void setForeground(Drawable drawable) {
-        foregroundCompat.setForeground(drawable);
+        foregroundHelper.setForeground(drawable);
     }
 
     public int getCornerRadius() {

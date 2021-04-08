@@ -1,4 +1,4 @@
-package com.nextstory.widget;
+package com.nextstory.widget.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,11 +24,11 @@ import java.util.Objects;
  */
 @SuppressWarnings("UnusedDeclaration")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-final class ForegroundCompat {
+public final class ForegroundHelper {
     final View view;
     Drawable foregroundDrawable = null;
 
-    public ForegroundCompat(View view) {
+    public ForegroundHelper(View view) {
         this.view = view;
     }
 

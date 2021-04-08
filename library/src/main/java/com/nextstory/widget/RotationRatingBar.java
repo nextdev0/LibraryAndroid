@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nextstory.R;
+import com.nextstory.widget.util.PartialView;
 
 /**
  * 회전 효과 레이팅바
@@ -17,7 +18,7 @@ import com.nextstory.R;
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */
-public class RotationRatingBar extends AnimationRatingBar {
+public final class RotationRatingBar extends AnimationRatingBar {
     // Control animation speed
     private static final long ANIMATION_DELAY = 15;
 
@@ -35,7 +36,8 @@ public class RotationRatingBar extends AnimationRatingBar {
 
     @Override
     protected void emptyRatingBar() {
-        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
+        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of
+        // sync
         if (mRunnable != null) {
             mHandler.removeCallbacksAndMessages(mRunnableToken);
         }
@@ -48,7 +50,8 @@ public class RotationRatingBar extends AnimationRatingBar {
 
     @Override
     protected void fillRatingBar(float rating) {
-        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
+        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of
+        // sync
         if (mRunnable != null) {
             mHandler.removeCallbacksAndMessages(mRunnableToken);
         }
@@ -68,14 +71,16 @@ public class RotationRatingBar extends AnimationRatingBar {
     }
 
     @NonNull
-    private Runnable getAnimationRunnable(float rating, PartialView partialView, int ratingViewId, double maxIntOfRating) {
+    private Runnable getAnimationRunnable(float rating,
+                                          PartialView partialView,
+                                          int ratingViewId,
+                                          double maxIntOfRating) {
         return () -> {
             if (ratingViewId == maxIntOfRating) {
                 partialView.setPartialFilled(rating);
             } else {
                 partialView.setFilled();
             }
-
             if (ratingViewId == rating) {
                 Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
                 partialView.startAnimation(rotation);

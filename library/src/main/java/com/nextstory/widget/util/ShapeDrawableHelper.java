@@ -1,4 +1,4 @@
-package com.nextstory.widget;
+package com.nextstory.widget.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -24,7 +24,7 @@ import com.nextstory.R;
  */
 @SuppressWarnings("UnusedDeclaration")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-final class ShapeDrawableHelper {
+public final class ShapeDrawableHelper {
     private final LayerDrawable drawable;
     private final GradientDrawable shapeDrawable;
     private int cornerRadius = 0;

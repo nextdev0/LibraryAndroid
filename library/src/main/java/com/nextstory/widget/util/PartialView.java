@@ -1,4 +1,4 @@
-package com.nextstory.widget;
+package com.nextstory.widget.util;
 
 import android.content.Context;
 import android.graphics.drawable.ClipDrawable;
@@ -12,13 +12,15 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 
 /**
  * @author willy (2017.6.3)
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */
-class PartialView extends RelativeLayout {
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public final class PartialView extends RelativeLayout {
     private ImageView mFilledView;
     private ImageView mEmptyView;
     private int mStarWidth = 0;

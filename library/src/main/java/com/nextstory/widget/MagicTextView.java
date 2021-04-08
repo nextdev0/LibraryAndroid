@@ -34,7 +34,7 @@ import java.util.WeakHashMap;
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
-public class MagicTextView extends AppCompatTextView {
+public final class MagicTextView extends AppCompatTextView {
     private ArrayList<Shadow> outerShadows;
     private ArrayList<Shadow> innerShadows;
 
@@ -186,7 +186,9 @@ public class MagicTextView extends AppCompatTextView {
     }
 
     public Drawable getForeground() {
-        return this.foregroundDrawable == null ? this.foregroundDrawable : new ColorDrawable(this.getCurrentTextColor());
+        return this.foregroundDrawable != null
+                ? foregroundDrawable
+                : new ColorDrawable(this.getCurrentTextColor());
     }
 
     @SuppressLint("DrawAllocation")
@@ -256,7 +258,11 @@ public class MagicTextView extends AppCompatTextView {
 
 
         if (restoreDrawables != null) {
-            this.setCompoundDrawablesWithIntrinsicBounds(restoreDrawables[0], restoreDrawables[1], restoreDrawables[2], restoreDrawables[3]);
+            this.setCompoundDrawablesWithIntrinsicBounds(
+                    restoreDrawables[0],
+                    restoreDrawables[1],
+                    restoreDrawables[2],
+                    restoreDrawables[3]);
         }
         this.setBackgroundDrawable(restoreBackground);
         this.setTextColor(restoreColor);

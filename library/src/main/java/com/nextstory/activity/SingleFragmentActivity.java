@@ -74,7 +74,7 @@ public final class SingleFragmentActivity extends BaseActivity<ActivitySingleFra
         return newIntent(context, klass, listener, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    @SuppressWarnings("SameParameterValue")
+    @SuppressWarnings({"SameParameterValue", "deprecation"})
     private static <T extends Fragment> Intent newIntent(@NonNull Context context,
                                                          @NonNull Class<T> klass,
                                                          @Nullable Consumer<T> listener,

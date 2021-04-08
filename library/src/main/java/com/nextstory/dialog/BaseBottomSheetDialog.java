@@ -101,6 +101,7 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
         setContentView(view);
     }
 
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Deprecated
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override

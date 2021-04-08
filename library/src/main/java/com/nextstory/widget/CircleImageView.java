@@ -55,7 +55,7 @@ import com.nextstory.R;
  * @since 1.0
  */
 @SuppressWarnings("UnusedDeclaration")
-public class CircleImageView extends AppCompatImageView {
+public final class CircleImageView extends AppCompatImageView {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
@@ -108,12 +108,21 @@ public class CircleImageView extends AppCompatImageView {
     public CircleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, defStyle, 0);
+        TypedArray a = context.obtainStyledAttributes(
+                attrs, R.styleable.CircleImageView, defStyle, 0);
 
-        mBorderWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_civ_border_width, DEFAULT_BORDER_WIDTH);
-        mBorderColor = a.getColor(R.styleable.CircleImageView_civ_border_color, DEFAULT_BORDER_COLOR);
-        mBorderOverlay = a.getBoolean(R.styleable.CircleImageView_civ_border_overlay, DEFAULT_BORDER_OVERLAY);
-        mCircleBackgroundColor = a.getColor(R.styleable.CircleImageView_civ_circle_background_color, DEFAULT_CIRCLE_BACKGROUND_COLOR);
+        mBorderWidth = a.getDimensionPixelSize(
+                R.styleable.CircleImageView_civ_border_width,
+                DEFAULT_BORDER_WIDTH);
+        mBorderColor = a.getColor(
+                R.styleable.CircleImageView_civ_border_color,
+                DEFAULT_BORDER_COLOR);
+        mBorderOverlay = a.getBoolean(
+                R.styleable.CircleImageView_civ_border_overlay,
+                DEFAULT_BORDER_OVERLAY);
+        mCircleBackgroundColor = a.getColor(
+                R.styleable.CircleImageView_civ_circle_background_color,
+                DEFAULT_CIRCLE_BACKGROUND_COLOR);
 
         a.recycle();
 
@@ -148,7 +157,8 @@ public class CircleImageView extends AppCompatImageView {
     @Override
     public void setScaleType(ScaleType scaleType) {
         if (scaleType != SCALE_TYPE) {
-            throw new IllegalArgumentException(String.format("ScaleType %s not supported.", scaleType));
+            throw new IllegalArgumentException(
+                    String.format("ScaleType %s not supported.", scaleType));
         }
     }
 
@@ -168,7 +178,11 @@ public class CircleImageView extends AppCompatImageView {
         }
 
         if (mCircleBackgroundColor != Color.TRANSPARENT) {
-            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mCircleBackgroundPaint);
+            canvas.drawCircle(
+                    mDrawableRect.centerX(),
+                    mDrawableRect.centerY(),
+                    mDrawableRadius,
+                    mCircleBackgroundPaint);
         }
 
         if (mBitmap != null) {
@@ -181,18 +195,27 @@ public class CircleImageView extends AppCompatImageView {
 
             if (mRebuildShader) {
                 mRebuildShader = false;
-
-                BitmapShader bitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+                BitmapShader bitmapShader = new BitmapShader(
+                        mBitmap,
+                        Shader.TileMode.CLAMP,
+                        Shader.TileMode.CLAMP);
                 bitmapShader.setLocalMatrix(mShaderMatrix);
-
                 mBitmapPaint.setShader(bitmapShader);
             }
 
-            canvas.drawCircle(mDrawableRect.centerX(), mDrawableRect.centerY(), mDrawableRadius, mBitmapPaint);
+            canvas.drawCircle(
+                    mDrawableRect.centerX(),
+                    mDrawableRect.centerY(),
+                    mDrawableRadius,
+                    mBitmapPaint);
         }
 
         if (mBorderWidth > 0) {
-            canvas.drawCircle(mBorderRect.centerX(), mBorderRect.centerY(), mBorderRadius, mBorderPaint);
+            canvas.drawCircle(
+                    mBorderRect.centerX(),
+                    mBorderRect.centerY(),
+                    mBorderRadius,
+                    mBorderPaint);
         }
     }
 
@@ -395,9 +418,15 @@ public class CircleImageView extends AppCompatImageView {
             Bitmap bitmap;
 
             if (drawable instanceof ColorDrawable) {
-                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(
+                        COLORDRAWABLE_DIMENSION,
+                        COLORDRAWABLE_DIMENSION,
+                        BITMAP_CONFIG);
             } else {
-                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(
+                        drawable.getIntrinsicWidth(),
+                        drawable.getIntrinsicHeight(),
+                        BITMAP_CONFIG);
             }
 
             Canvas canvas = new Canvas(bitmap);
@@ -432,7 +461,9 @@ public class CircleImageView extends AppCompatImageView {
 
     private void updateDimensions() {
         mBorderRect.set(calculateBounds());
-        mBorderRadius = Math.min((mBorderRect.height() - mBorderWidth) / 2.0f, (mBorderRect.width() - mBorderWidth) / 2.0f);
+        mBorderRadius = Math.min(
+                (mBorderRect.height() - mBorderWidth) / 2.0f,
+                (mBorderRect.width() - mBorderWidth) / 2.0f);
 
         mDrawableRect.set(mBorderRect);
         if (!mBorderOverlay && mBorderWidth > 0) {
@@ -478,8 +509,9 @@ public class CircleImageView extends AppCompatImageView {
         }
 
         mShaderMatrix.setScale(scale, scale);
-        mShaderMatrix.postTranslate((int) (dx + 0.5f) + mDrawableRect.left, (int) (dy + 0.5f) + mDrawableRect.top);
-
+        mShaderMatrix.postTranslate(
+                (int) (dx + 0.5f) + mDrawableRect.left,
+                (int) (dy + 0.5f) + mDrawableRect.top);
         mRebuildShader = true;
     }
 
@@ -498,12 +530,12 @@ public class CircleImageView extends AppCompatImageView {
             return true;
         }
 
-        return Math.pow(x - mBorderRect.centerX(), 2) + Math.pow(y - mBorderRect.centerY(), 2) <= Math.pow(mBorderRadius, 2);
+        return (Math.pow(x - mBorderRect.centerX(), 2) + Math.pow(y - mBorderRect.centerY(), 2))
+                <= Math.pow(mBorderRadius, 2);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private class OutlineProvider extends ViewOutlineProvider {
-
         @Override
         public void getOutline(View view, Outline outline) {
             if (mDisableCircularTransformation) {
@@ -514,7 +546,5 @@ public class CircleImageView extends AppCompatImageView {
                 outline.setRoundRect(bounds, bounds.width() / 2.0f);
             }
         }
-
     }
-
 }

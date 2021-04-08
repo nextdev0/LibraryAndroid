@@ -1,4 +1,4 @@
-package com.nextstory.widget;
+package com.nextstory.widget.util;
 
 import android.graphics.drawable.Drawable;
 
@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
+import androidx.annotation.RestrictTo;
 
 /**
  * 레이팅바 인터페이스
@@ -14,8 +15,9 @@ import androidx.annotation.NonNull;
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 @SuppressWarnings("UnusedDeclaration")
-interface SimpleRatingBar {
+public interface SimpleRatingBar {
 
     int getNumStars();
 
@@ -66,6 +68,4 @@ interface SimpleRatingBar {
     float getStepSize();
 
     void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize);
-
-
 }

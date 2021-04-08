@@ -12,7 +12,7 @@ import androidx.annotation.RestrictTo;
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")
-public class HttpClient {
+public final class HttpClient {
     private static final String TAG = "HttpClient";
 
     private final Context context;
