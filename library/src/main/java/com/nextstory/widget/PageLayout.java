@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author troy
  * @since 1.0
+ * @deprecated 1.2, 여러 뷰를 가진상태에서 오동작 가능성이 있어서 미사용
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class PageLayout extends ViewPager {
