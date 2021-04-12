@@ -18,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -58,6 +59,14 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
             }
         } else {
             this.fields.append(value);
+        }
+        return this;
+    }
+
+    @Override
+    public HttpRequestBuilder addField(Map<String, Object> map) {
+        for (String key : map.keySet()) {
+            addField(key, map.get(key));
         }
         return this;
     }

@@ -67,6 +67,14 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
     }
 
     @Override
+    public HttpRequestBuilder addField(Map<String, Object> map) {
+        for (String key : map.keySet()) {
+            addField(key, map.get(key));
+        }
+        return this;
+    }
+
+    @Override
     public HttpRequestBuilder addMultipartByUri(@NonNull String body, @NonNull Uri uri) {
         multipart.put(body, uri);
         return this;

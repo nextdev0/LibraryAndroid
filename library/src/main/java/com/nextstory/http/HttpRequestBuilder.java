@@ -5,6 +5,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
@@ -31,6 +32,14 @@ public interface HttpRequestBuilder {
      * @param value 필드 값
      */
     HttpRequestBuilder addField(String key, Object value);
+
+    /**
+     * 요청 시 포함할 필드를 추가함
+     *
+     * @param map 컬렉션 형태의 필드
+     * @since 1.2
+     */
+    HttpRequestBuilder addField(Map<String, Object> map);
 
     /**
      * 요청 시 포함할 필드를 추가함
