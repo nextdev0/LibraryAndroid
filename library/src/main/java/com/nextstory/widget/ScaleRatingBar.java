@@ -18,6 +18,7 @@ import com.nextstory.widget.util.PartialView;
  * @see <a href="https://github.com/williamyyu/SimpleRatingBar">원본 레포지토리</a>
  * @since 1.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public final class ScaleRatingBar extends AnimationRatingBar {
     // Control animation speed
     private static final long ANIMATION_DELAY = 15;

@@ -31,7 +31,7 @@ import io.reactivex.rxjava3.core.Single;
  * @author troy
  * @since 1.1
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"UnusedDeclaration", "unchecked"})
 final class PostHttpRequestBuilder implements HttpRequestBuilder {
     private static final String TAG = "HttpRequest";
     private final StringBuilder fields = new StringBuilder();

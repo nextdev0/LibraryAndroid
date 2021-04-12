@@ -2,6 +2,7 @@ package com.nextstory.widget;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 
@@ -23,26 +24,19 @@ public class AnimationRatingBar extends BaseRatingBar {
 
     protected AnimationRatingBar(Context context) {
         super(context);
-        init();
     }
 
     protected AnimationRatingBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     protected AnimationRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    private void init() {
-        mHandler = new Handler();
     }
 
     protected void postRunnable(Runnable runnable, long ANIMATION_DELAY) {
         if (mHandler == null) {
-            mHandler = new Handler();
+            mHandler = new Handler(Looper.getMainLooper());
         }
 
         long timeMillis = SystemClock.uptimeMillis() + ANIMATION_DELAY;

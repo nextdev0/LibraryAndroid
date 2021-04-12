@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * @author troy
  * @since 1.2
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class LocaleManagerImpl implements LocaleManager {
     private static final String LANGUAGE = "language";

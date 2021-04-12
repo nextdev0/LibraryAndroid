@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
  * @author troy
  * @since 1.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface SaveInstanceStateField {
     /**
      * @return 상태값 저장을 위한 키값
