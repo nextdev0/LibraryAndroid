@@ -3,14 +3,12 @@ package com.nextstory.sample.ui.activity;
 import android.os.Bundle;
 
 import com.nextstory.activity.BaseActivity;
+import com.nextstory.activity.SingleFragmentActivity;
 import com.nextstory.field.NonNullLiveData;
 import com.nextstory.field.OnDestroyDisposables;
-import com.nextstory.field.SafeData;
 import com.nextstory.sample.databinding.ActivityMainBinding;
-import com.nextstory.sample.ui.dialog.Test2Dialog;
-import com.nextstory.sample.ui.dialog.TestDialog;
+import com.nextstory.sample.ui.fragment.TestFragment;
 
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -22,14 +20,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @author troy
  * @since 1.0
  */
+@SuppressWarnings("deprecation")
 @AndroidEntryPoint
 public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     public final NonNullLiveData<Boolean> progress = new NonNullLiveData<>(false);
-    public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
-    public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
-
     private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
-    private final SafeData<Boolean> localeToggle = new SafeData<>(false);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +43,11 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
                 .subscribe(() -> progress.setValue(false)));
     }
 
-    public void onDialogTestClick() {
-        new TestDialog().show(this);
+    public void test1() {
+        startActivity(SingleFragmentActivity.portrait(this, TestFragment.class));
     }
 
-    public void onDialogTest2Click() {
-        new Test2Dialog().show(this);
-    }
-
-    public void onLocaleTestClick() {
-        if (localeToggle.getValue()) {
-            applyLocale(Locale.KOREAN);
-        } else {
-            applyLocale(Locale.ENGLISH);
-        }
-        localeToggle.setValue(!localeToggle.getValue());
-        recreate();
-    }
-
-    public void onSafeFieldTestClick() {
-        safeValue.setValue("second");
-        unsafeValue.setValue("second");
+    public void test2() {
+        startActivity(SingleFragmentActivity.portrait(this, TestFragment.class));
     }
 }

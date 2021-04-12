@@ -46,76 +46,21 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> activity.onDialogTestClick()}"
-                android:text="다이얼로그 테스트"
+                android:onClick="@{v -> activity.test1()}"
+                android:text="여러 테스트"
+                android:textAllCaps="false"
                 tools:ignore="HardcodedText" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{v -> activity.onDialogTest2Click()}"
-                android:text="다이얼로그 테스트 2"
+                android:onClick="@{v -> activity.test2()}"
+                android:text="DataBindingFlowLayout 테스트"
+                android:textAllCaps="false"
                 tools:ignore="HardcodedText" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="@{v -> activity.onLocaleTestClick()}"
-                android:text="로케일 테스트"
-                tools:ignore="HardcodedText" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                tools:ignore="LabelFor" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@{activity.safeValue}"
-                    tools:text="value" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@{activity.unsafeValue}"
-                    tools:text="value" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{v -> activity.onSafeFieldTestClick()}"
-                    android:text="변경 (회전시 값 유지 테스트)"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/test" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_test"
-                android:name="com.nextstory.sample.ui.fragment.TestFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout="@layout/fragment_test" />
 
         </LinearLayout>
 
     </com.nextstory.widget.LoadingLayout>
-
 
 </layout>
