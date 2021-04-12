@@ -19,7 +19,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -28,7 +27,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @author troy
  * @since 1.0
  */
-@AndroidEntryPoint
 public final class TestFragment extends BaseFragment<FragmentTestBinding> {
     public final ListLiveData<String> testList = new ListLiveData<>();
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);

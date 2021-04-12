@@ -66,4 +66,19 @@
         <attr name="onItemCallback" />
     </declare-styleable>
 
+    <declare-styleable name="DataBindingFlowLayout">
+        <attr name="android:gravity" />
+        <attr name="maxItemsPerLine" format="integer" />
+        <attr name="onBottomScrollReached" />
+    </declare-styleable>
+
+    <declare-styleable name="DataBindingFlowLayoutItem">
+        <attr name="itemBindingName" />
+        <attr name="positionBindingName" />
+        <attr name="callbackBindingName" />
+        <attr name="layout" />
+        <attr name="items" />
+        <attr name="onItemCallback" />
+    </declare-styleable>
+
 </resources>

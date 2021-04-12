@@ -7,11 +7,11 @@ import com.nextstory.activity.SingleFragmentActivity;
 import com.nextstory.field.NonNullLiveData;
 import com.nextstory.field.OnDestroyDisposables;
 import com.nextstory.sample.databinding.ActivityMainBinding;
+import com.nextstory.sample.ui.fragment.Test2Fragment;
 import com.nextstory.sample.ui.fragment.TestFragment;
 
 import java.util.concurrent.TimeUnit;
 
-import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -21,7 +21,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @since 1.0
  */
 @SuppressWarnings("deprecation")
-@AndroidEntryPoint
 public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     public final NonNullLiveData<Boolean> progress = new NonNullLiveData<>(false);
     private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
@@ -48,6 +47,6 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void test2() {
-        startActivity(SingleFragmentActivity.portrait(this, TestFragment.class));
+        startActivity(SingleFragmentActivity.portrait(this, Test2Fragment.class));
     }
 }
