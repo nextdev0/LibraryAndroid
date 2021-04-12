@@ -43,7 +43,6 @@
         <attr name="itemBindingName" />
         <attr name="positionBindingName" />
         <attr name="callbackBindingName" />
-        <attr name="bindItems" />
         <attr name="layout" />
         <attr name="items" />
         <attr name="onItemCallback" />
