@@ -161,6 +161,18 @@ public final class Convert {
     }
 
     /**
+     * unsafe 타입 캐스팅
+     *
+     * @param o   캐스팅할 객체
+     * @param <T> 변환 타입
+     * @return 변환된 인스턴스
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object o) {
+        return (T) o;
+    }
+
+    /**
      * 문자열이 boolean 형식인지 체크
      *
      * @param s 문자열
