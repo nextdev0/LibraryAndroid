@@ -224,6 +224,23 @@ public abstract class AbstractBaseFragment extends Fragment {
     }
 
     /**
+     * 전체화면 테마 적용
+     */
+    public void applyFullscreenTheme() {
+        Window window = requireActivity().getWindow();
+        if (window != null) {
+            View decorView = window.getDecorView();
+            decorView.postDelayed(() -> decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION), 250L);
+        }
+    }
+
+    /**
      * 상태바 높이를 반환
      *
      * @param window 윈도우 인스턴스

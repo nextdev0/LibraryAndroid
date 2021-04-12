@@ -46,6 +46,9 @@
     <!-- 하단 알림창 스타일 -->
     <style name="Theme.Dialog.Base.BottomDialog.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
         <item name="android:background">@color/transparent</item>
+        <item name="shapeAppearance">@null</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="backgroundTint">@null</item>
     </style>
 
 </resources>
