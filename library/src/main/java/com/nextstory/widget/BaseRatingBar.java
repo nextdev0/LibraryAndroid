@@ -21,10 +21,10 @@ import androidx.databinding.InverseBindingAdapter;
 import androidx.databinding.InverseBindingListener;
 
 import com.nextstory.R;
-import com.nextstory.widget.util.PartialView;
-import com.nextstory.widget.util.RatingBarUtils;
-import com.nextstory.widget.util.SimpleRatingBar;
-import com.nextstory.widget.util.SimpleRatingBarSavedState;
+import com.nextstory.widget.util.ratingbar.PartialView;
+import com.nextstory.widget.util.ratingbar.RatingBarUtils;
+import com.nextstory.widget.util.ratingbar.SimpleRatingBar;
+import com.nextstory.widget.util.ratingbar.SimpleRatingBarSavedState;
 
 import java.util.ArrayList;
 import java.util.List;

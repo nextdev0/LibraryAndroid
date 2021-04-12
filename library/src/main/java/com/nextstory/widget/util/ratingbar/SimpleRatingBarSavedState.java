@@ -1,4 +1,4 @@
-package com.nextstory.widget.util;
+package com.nextstory.widget.util.ratingbar;
 
 import android.os.Parcel;
 import android.os.Parcelable;

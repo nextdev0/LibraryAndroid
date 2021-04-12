@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nextstory.R;
-import com.nextstory.widget.util.PartialView;
+import com.nextstory.widget.util.ratingbar.PartialView;
 
 /**
  * 회전 효과 레이팅바
