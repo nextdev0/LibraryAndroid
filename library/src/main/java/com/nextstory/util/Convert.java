@@ -166,7 +166,7 @@ public final class Convert {
      * @param s 문자열
      * @return boolean 유무
      */
-    public static boolean isBoolean(@Nullable String s, boolean defaultValue) {
+    public static boolean isBoolean(@Nullable String s) {
         if (s == null || s.trim().isEmpty()) {
             return false;
         }
