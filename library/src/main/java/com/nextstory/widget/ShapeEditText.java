@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.nextstory.R;
-import com.nextstory.widget.util.ForegroundHelper;
+import com.nextstory.widget.util.ForegroundDrawableHelper;
 import com.nextstory.widget.util.ShapeDrawableHelper;
 
 /**
@@ -24,7 +24,7 @@ import com.nextstory.widget.util.ShapeDrawableHelper;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class ShapeEditText extends AppCompatEditText {
-    private final ForegroundHelper foregroundHelper = new ForegroundHelper(this);
+    private final ForegroundDrawableHelper foregroundDrawableHelper = new ForegroundDrawableHelper(this);
     private final ShapeDrawableHelper shapeDrawableHelper;
 
     public ShapeEditText(@NonNull Context context) {
@@ -37,7 +37,7 @@ public final class ShapeEditText extends AppCompatEditText {
 
     public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        foregroundHelper.resolveAttribute(context, attrs, defStyleAttr);
+        foregroundDrawableHelper.resolveAttribute(context, attrs, defStyleAttr);
         shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, getBackground());
         setBackgroundDrawable(shapeDrawableHelper.getDrawable());
         setClipToOutline(true);
@@ -55,25 +55,25 @@ public final class ShapeEditText extends AppCompatEditText {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         shapeDrawableHelper.getShapeDrawable().draw(canvas);
-        foregroundHelper.draw(canvas);
+        foregroundDrawableHelper.draw(canvas);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        foregroundHelper.onSizeChanged(w, h, oldw, oldh);
+        foregroundDrawableHelper.onSizeChanged(w, h, oldw, oldh);
     }
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
         super.drawableHotspotChanged(x, y);
-        foregroundHelper.drawableHotspotChanged(x, y);
+        foregroundDrawableHelper.drawableHotspotChanged(x, y);
     }
 
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        foregroundHelper.drawableStateChanged();
+        foregroundDrawableHelper.drawableStateChanged();
     }
 
     @Override
@@ -84,20 +84,20 @@ public final class ShapeEditText extends AppCompatEditText {
     @Override
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
-        foregroundHelper.jumpDrawablesToCurrentState();
+        foregroundDrawableHelper.jumpDrawablesToCurrentState();
     }
 
     @Override
     protected boolean verifyDrawable(@NonNull Drawable who) {
-        return super.verifyDrawable(who) || (who == foregroundHelper.getForeground());
+        return super.verifyDrawable(who) || (who == foregroundDrawableHelper.getForeground());
     }
 
     public Drawable getForeground() {
-        return foregroundHelper.getForeground();
+        return foregroundDrawableHelper.getForeground();
     }
 
     public void setForeground(Drawable drawable) {
-        foregroundHelper.setForeground(drawable);
+        foregroundDrawableHelper.setForeground(drawable);
     }
 
     public int getCornerRadius() {

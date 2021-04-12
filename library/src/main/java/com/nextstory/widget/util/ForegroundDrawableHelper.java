@@ -24,11 +24,11 @@ import java.util.Objects;
  */
 @SuppressWarnings("UnusedDeclaration")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-public final class ForegroundHelper {
+public final class ForegroundDrawableHelper {
     final View view;
     Drawable foregroundDrawable = null;
 
-    public ForegroundHelper(View view) {
+    public ForegroundDrawableHelper(View view) {
         this.view = view;
     }
 
