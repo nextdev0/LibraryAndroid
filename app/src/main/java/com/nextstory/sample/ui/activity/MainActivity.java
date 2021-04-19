@@ -49,4 +49,10 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     public void test2() {
         startActivity(SingleFragmentActivity.portrait(this, Test2Fragment.class));
     }
+
+    public void test3() {
+        startActivity(new TestActivityIntentBuilder(this)
+                .setMessage("test")
+                .build());
+    }
 }
