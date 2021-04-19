@@ -24,7 +24,8 @@ import java.util.Set;
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")
-public final class LifecycleCallbacks implements SimpleActivityLifecycleCallbacks {
+public final class LifecycleCallbacks
+        implements LibraryInitializer, SimpleActivityLifecycleCallbacks {
     /**
      * 프래그먼트 콜백
      */
@@ -272,6 +273,12 @@ public final class LifecycleCallbacks implements SimpleActivityLifecycleCallback
             @NonNull SimpleFragmentLifecycleCallbacks callbacks
     ) {
         simpleFragmentCallbacks.remove(callbacks);
+    }
+
+    @Override
+    public void onInitialized(Context context, String argument) {
+        sApplication = (Application) context;
+        sApplication.registerActivityLifecycleCallbacks(this);
     }
 
     @Override

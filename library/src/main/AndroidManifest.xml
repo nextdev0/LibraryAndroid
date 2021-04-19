@@ -10,16 +10,18 @@
         tools:targetApi="n">
 
         <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
+            android:name=".util.UtilitiesInitializationProvider"
+            android:authorities="${applicationId}.utils-initializer"
+            android:exported="false">
             <meta-data
                 android:name="com.nextstory.field.SaveInstanceStateFieldHelper"
-                android:value="androidx.startup" />
+                android:value="empty" />
             <meta-data
-                android:name="com.nextstory.util.LifecycleCallbacksInitializer"
-                android:value="androidx.startup" />
+                android:name="com.nextstory.util.LifecycleCallbacks"
+                android:value="empty" />
+            <meta-data
+                android:name="com.nextstory.util.IntentBuilderInitializer"
+                android:value="empty" />
         </provider>
 
         <provider

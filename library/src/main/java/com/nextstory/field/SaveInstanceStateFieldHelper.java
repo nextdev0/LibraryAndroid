@@ -12,13 +12,12 @@ import androidx.annotation.RestrictTo;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.startup.Initializer;
 
+import com.nextstory.util.LibraryInitializer;
 import com.nextstory.util.SimpleActivityLifecycleCallbacks;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class SaveInstanceStateFieldHelper
-        implements Initializer<Object>, SimpleActivityLifecycleCallbacks {
+        implements LibraryInitializer, SimpleActivityLifecycleCallbacks {
     private final FragmentManager.FragmentLifecycleCallbacks fragmentLifecycleCallbacks
             = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
@@ -58,18 +57,10 @@ public final class SaveInstanceStateFieldHelper
         }
     };
 
-    @NonNull
     @Override
-    public Object create(@NonNull Context context) {
+    public void onInitialized(Context context, String argument) {
         Application application = (Application) context.getApplicationContext();
         application.registerActivityLifecycleCallbacks(this);
-        return new Object();
-    }
-
-    @NonNull
-    @Override
-    public List<Class<? extends Initializer<?>>> dependencies() {
-        return Collections.emptyList();
     }
 
     @Override
