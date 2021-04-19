@@ -1,4 +1,4 @@
-package com.nextstory.util;
+package com.nextstory.annotationprocessor.util;
 
 import javax.lang.model.element.Element;
 

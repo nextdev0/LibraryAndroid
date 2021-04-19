@@ -1,16 +1,10 @@
 package com.nextstory.annotationprocessor;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-
+import com.nextstory.annotationprocessor.util.Android;
+import com.nextstory.annotationprocessor.util.ElementNames;
 import com.nextstory.annotations.IntentBuilder;
 import com.nextstory.annotations.IntentExtra;
-import com.nextstory.util.ElementNames;
 import com.nextstory.util.LibraryInitializer;
-import com.nextstory.util.SimpleActivityCallback;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -80,9 +74,15 @@ public final class IntentProcessor extends AbstractProcessor {
             JavaFile.builder("com.nextstory.util", TypeSpec.classBuilder("IntentBuilderInitializer")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     .addSuperinterface(LibraryInitializer.class)
-                    .addSuperinterface(SimpleActivityCallback.class)
+                    .addSuperinterface(Android.ActivityLifecycleCallbacks)
                     .addMethod(createInitializerMethodSpec())
-                    .addMethod(createOnActivityCreatedMethodSpec(intentBuilderSet, intentExtraMap))
+                    .addMethod(createOnActivityCreatedMethodSpec(intentBuilderSet))
+                    .addMethod(createEtcCallbacksMethodSpec("onActivityStarted", false))
+                    .addMethod(createEtcCallbacksMethodSpec("onActivityResumed", false))
+                    .addMethod(createEtcCallbacksMethodSpec("onActivityPaused", false))
+                    .addMethod(createEtcCallbacksMethodSpec("onActivityStopped", false))
+                    .addMethod(createEtcCallbacksMethodSpec("onActivitySaveInstanceState", true))
+                    .addMethod(createEtcCallbacksMethodSpec("onActivityDestroyed", false))
                     .build())
                     .build()
                     .writeTo(processingEnv.getFiler());
@@ -111,10 +111,10 @@ public final class IntentProcessor extends AbstractProcessor {
                 TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
                         .addJavadoc("@see $T", activityClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                        .addField(Intent.class, "intent", Modifier.PRIVATE, Modifier.FINAL)
+                        .addField(Android.Intent, "intent", Modifier.PRIVATE, Modifier.FINAL)
                         .addMethod(MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PUBLIC)
-                                .addParameter(Context.class, "context")
+                                .addParameter(Android.Context, "context")
                                 .addStatement("this.intent = new Intent(context, $T.class)",
                                         activityClassName)
                                 .build())
@@ -126,12 +126,12 @@ public final class IntentProcessor extends AbstractProcessor {
                     typeSpecBuilder.addMethod(methodSpec);
                 }
                 typeSpecBuilder.addMethod(MethodSpec.methodBuilder("create")
-                        .returns(Intent.class)
+                        .returns(Android.Intent)
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return this.intent")
                         .build());
                 typeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
-                        .returns(Intent.class)
+                        .returns(Android.Intent)
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return this.intent")
                         .build());
@@ -148,7 +148,7 @@ public final class IntentProcessor extends AbstractProcessor {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("inject")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addParameter(activityClassName, "activity");
-        builder.addStatement("$T intent = activity.getIntent()", Intent.class);
+        builder.addStatement("$T intent = activity.getIntent()", Android.Intent);
         for (Element element : elements) {
             builder.beginControlFlow("if (intent.hasExtra(\"extra_$N\"))", element.toString())
                     .addStatement("activity.$N = ($T) intent.getSerializableExtra(\"extra_$N\")",
@@ -180,10 +180,10 @@ public final class IntentProcessor extends AbstractProcessor {
         return MethodSpec.methodBuilder("onInitialized")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(Context.class, "context")
+                .addParameter(Android.Context, "context")
                 .addParameter(String.class, "argument")
                 .addStatement("$T application = ($T) context",
-                        Application.class, Application.class)
+                        Android.Application, Android.Application)
                 .addStatement("application.registerActivityLifecycleCallbacks(this)")
                 .build();
     }
@@ -193,15 +193,12 @@ public final class IntentProcessor extends AbstractProcessor {
      *
      * @return MethodSpec
      */
-    private MethodSpec createOnActivityCreatedMethodSpec(
-            Set<ElementNames> intentBuilderSet,
-            Map<ElementNames, List<Element>> intentExtraMap
-    ) {
+    private MethodSpec createOnActivityCreatedMethodSpec(Set<ElementNames> intentBuilderSet) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("onActivityCreated")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(Activity.class, "activity")
-                .addParameter(Bundle.class, "savedInstanceState");
+                .addParameter(Android.Activity, "activity")
+                .addParameter(Android.Bundle, "savedInstanceState");
 
         for (ElementNames elementNames : intentBuilderSet) {
             String builderName = getIntentBuilderName(elementNames);
@@ -214,5 +211,23 @@ public final class IntentProcessor extends AbstractProcessor {
         }
 
         return builder.build();
+    }
+
+    /**
+     * 미사용 액티비티 콜백 메서드 생성
+     *
+     * @return MethodSpec
+     */
+    private MethodSpec createEtcCallbacksMethodSpec(String name, boolean hasBundle) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder(name)
+                .addAnnotation(Override.class)
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(Android.Activity, "activity");
+        if (hasBundle) {
+            builder.addParameter(Android.Bundle, "savedInstanceState");
+        }
+        return builder
+                .addComment("no-op")
+                .build();
     }
 }
