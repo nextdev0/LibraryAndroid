@@ -45,6 +45,8 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     implementation project(':library')
+    implementation project(':annotations')
+    annotationProcessor project(':annotationProcessor')
 
     // hilt
     implementation 'com.google.dagger:hilt-android:2.33-beta'
