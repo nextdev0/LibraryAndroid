@@ -6,7 +6,7 @@ import com.squareup.javapoet.ClassName;
  * @author troy
  * @since 1.0
  */
-public final class Android {
+public final class ClassNames {
     public static final ClassName Activity = ClassName.bestGuess("android.app.Activity");
     public static final ClassName Application = ClassName.bestGuess("android.app.Application");
     public static final ClassName ActivityLifecycleCallbacks =

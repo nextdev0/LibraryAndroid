@@ -1,7 +1,7 @@
 package com.nextstory.annotationprocessor;
 
-import com.nextstory.annotationprocessor.util.Android;
-import com.nextstory.annotationprocessor.util.ElementNames;
+import com.nextstory.annotationprocessor.util.ClassNames;
+import com.nextstory.annotationprocessor.util.ElementHelper;
 import com.nextstory.annotations.IntentBuilder;
 import com.nextstory.annotations.IntentExtra;
 import com.nextstory.util.LibraryInitializer;
@@ -50,31 +50,31 @@ public final class IntentProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        Set<ElementNames> intentBuilderSet = new LinkedHashSet<>();
-        Map<ElementNames, List<Element>> intentExtraMap = new LinkedHashMap<>();
+        Set<ElementHelper> intentBuilderSet = new LinkedHashSet<>();
+        Map<ElementHelper, List<Element>> intentExtraMap = new LinkedHashMap<>();
         for (Element element : roundEnvironment.getElementsAnnotatedWith(IntentBuilder.class)) {
-            ElementNames elementNames = ElementNames.fromElement(element);
-            intentBuilderSet.add(elementNames);
+            ElementHelper elementHelper = ElementHelper.fromElement(element);
+            intentBuilderSet.add(elementHelper);
         }
         for (Element element : roundEnvironment.getElementsAnnotatedWith(IntentExtra.class)) {
             String parentName = element.getEnclosingElement().toString();
-            for (ElementNames elementNames : intentBuilderSet) {
-                if (elementNames.getFullName().equals(parentName)) {
-                    if (!intentExtraMap.containsKey(elementNames)) {
-                        intentExtraMap.put(elementNames, new ArrayList<>());
+            for (ElementHelper elementHelper : intentBuilderSet) {
+                if (elementHelper.getFullName().equals(parentName)) {
+                    if (!intentExtraMap.containsKey(elementHelper)) {
+                        intentExtraMap.put(elementHelper, new ArrayList<>());
                     }
-                    List<Element> elements = intentExtraMap.get(elementNames);
+                    List<Element> elements = intentExtraMap.get(elementHelper);
                     elements.add(element);
                 }
             }
         }
 
         try {
-            generateIntents(intentExtraMap);
+            generateIntents(intentBuilderSet, intentExtraMap);
             JavaFile.builder("com.nextstory.util", TypeSpec.classBuilder("IntentBuilderInitializer")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     .addSuperinterface(LibraryInitializer.class)
-                    .addSuperinterface(Android.ActivityLifecycleCallbacks)
+                    .addSuperinterface(ClassNames.ActivityLifecycleCallbacks)
                     .addMethod(createInitializerMethodSpec())
                     .addMethod(createOnActivityCreatedMethodSpec(intentBuilderSet))
                     .addMethod(createEtcCallbacksMethodSpec("onActivityStarted", false))
@@ -92,8 +92,8 @@ public final class IntentProcessor extends AbstractProcessor {
         return true;
     }
 
-    private String getIntentBuilderName(ElementNames elementNames) {
-        return elementNames.getSimpleName() + "IntentBuilder";
+    private String getIntentBuilderName(ElementHelper elementHelper) {
+        return elementHelper.getSimpleName() + "IntentBuilder";
     }
 
     /**
@@ -101,37 +101,40 @@ public final class IntentProcessor extends AbstractProcessor {
      *
      * @param intentExtraMap -
      */
-    private void generateIntents(Map<ElementNames, List<Element>> intentExtraMap) {
-        for (ElementNames elementNames : intentExtraMap.keySet()) {
+    private void generateIntents(Set<ElementHelper> intentBuilderSet,
+                                 Map<ElementHelper, List<Element>> intentExtraMap) {
+        for (ElementHelper elementHelper : intentBuilderSet) {
             try {
-                String packageName = elementNames.getPackageName();
-                String name = getIntentBuilderName(elementNames);
+                String packageName = elementHelper.getPackageName();
+                String name = getIntentBuilderName(elementHelper);
                 ClassName className = ClassName.bestGuess(packageName + "." + name);
-                ClassName activityClassName = ClassName.bestGuess(elementNames.getFullName());
+                ClassName activityClassName = ClassName.bestGuess(elementHelper.getFullName());
                 TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
                         .addJavadoc("@see $T", activityClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                        .addField(Android.Intent, "intent", Modifier.PRIVATE, Modifier.FINAL)
+                        .addField(ClassNames.Intent, "intent", Modifier.PRIVATE, Modifier.FINAL)
                         .addMethod(MethodSpec.constructorBuilder()
                                 .addModifiers(Modifier.PUBLIC)
-                                .addParameter(Android.Context, "context")
+                                .addParameter(ClassNames.Context, "context")
                                 .addStatement("this.intent = new Intent(context, $T.class)",
                                         activityClassName)
                                 .build())
                         .addMethod(createIntentInjectMethodSpec(
-                                activityClassName, intentExtraMap.get(elementNames)));
-                for (Element element : intentExtraMap.get(elementNames)) {
-                    MethodSpec methodSpec =
-                            createIntentMethodSpec(className, element);
-                    typeSpecBuilder.addMethod(methodSpec);
+                                activityClassName, elementHelper, intentExtraMap));
+                if (intentExtraMap.containsKey(elementHelper)) {
+                    for (Element element : intentExtraMap.get(elementHelper)) {
+                        MethodSpec methodSpec =
+                                createIntentMethodSpec(className, element);
+                        typeSpecBuilder.addMethod(methodSpec);
+                    }
                 }
                 typeSpecBuilder.addMethod(MethodSpec.methodBuilder("create")
-                        .returns(Android.Intent)
+                        .returns(ClassNames.Intent)
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return this.intent")
                         .build());
                 typeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
-                        .returns(Android.Intent)
+                        .returns(ClassNames.Intent)
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return this.intent")
                         .build());
@@ -143,17 +146,27 @@ public final class IntentProcessor extends AbstractProcessor {
         }
     }
 
-    private MethodSpec createIntentInjectMethodSpec(ClassName activityClassName,
-                                                    List<Element> elements) {
+    private MethodSpec createIntentInjectMethodSpec(
+            ClassName activityClassName,
+            ElementHelper intentBuilder,
+            Map<ElementHelper, List<Element>> intentExtraMap
+    ) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("inject")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addParameter(activityClassName, "activity");
-        builder.addStatement("$T intent = activity.getIntent()", Android.Intent);
-        for (Element element : elements) {
-            builder.beginControlFlow("if (intent.hasExtra(\"extra_$N\"))", element.toString())
-                    .addStatement("activity.$N = ($T) intent.getSerializableExtra(\"extra_$N\")",
-                            element.toString(), TypeName.get(element.asType()), element.toString())
-                    .endControlFlow();
+        if (intentExtraMap.containsKey(intentBuilder)) {
+            builder.addStatement("$T intent = activity.getIntent()", ClassNames.Intent);
+            for (Element element : intentExtraMap.get(intentBuilder)) {
+                builder.beginControlFlow("if (intent.hasExtra(\"extra_$N\"))", element.toString())
+                        .addStatement("activity.$N = " +
+                                        "($T) intent.getSerializableExtra(\"extra_$N\")",
+                                element.toString(),
+                                TypeName.get(element.asType()),
+                                element.toString())
+                        .endControlFlow();
+            }
+        } else {
+            builder.addComment("no has extra");
         }
         return builder.build();
     }
@@ -180,10 +193,10 @@ public final class IntentProcessor extends AbstractProcessor {
         return MethodSpec.methodBuilder("onInitialized")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(Android.Context, "context")
+                .addParameter(ClassNames.Context, "context")
                 .addParameter(String.class, "argument")
                 .addStatement("$T application = ($T) context",
-                        Android.Application, Android.Application)
+                        ClassNames.Application, ClassNames.Application)
                 .addStatement("application.registerActivityLifecycleCallbacks(this)")
                 .build();
     }
@@ -193,18 +206,18 @@ public final class IntentProcessor extends AbstractProcessor {
      *
      * @return MethodSpec
      */
-    private MethodSpec createOnActivityCreatedMethodSpec(Set<ElementNames> intentBuilderSet) {
+    private MethodSpec createOnActivityCreatedMethodSpec(Set<ElementHelper> intentBuilderSet) {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("onActivityCreated")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(Android.Activity, "activity")
-                .addParameter(Android.Bundle, "savedInstanceState");
+                .addParameter(ClassNames.Activity, "activity")
+                .addParameter(ClassNames.Bundle, "savedInstanceState");
 
-        for (ElementNames elementNames : intentBuilderSet) {
-            String builderName = getIntentBuilderName(elementNames);
-            ClassName className = ClassName.bestGuess(elementNames.getFullName());
+        for (ElementHelper elementHelper : intentBuilderSet) {
+            String builderName = getIntentBuilderName(elementHelper);
+            ClassName className = ClassName.bestGuess(elementHelper.getFullName());
             ClassName builderClassName =
-                    ClassName.bestGuess(elementNames.getPackageName() + "." + builderName);
+                    ClassName.bestGuess(elementHelper.getPackageName() + "." + builderName);
             builder.beginControlFlow("if (activity instanceof $T)", className)
                     .addStatement("$T.inject(($T) activity)", builderClassName, className)
                     .endControlFlow();
@@ -222,9 +235,9 @@ public final class IntentProcessor extends AbstractProcessor {
         MethodSpec.Builder builder = MethodSpec.methodBuilder(name)
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(Android.Activity, "activity");
+                .addParameter(ClassNames.Activity, "activity");
         if (hasBundle) {
-            builder.addParameter(Android.Bundle, "savedInstanceState");
+            builder.addParameter(ClassNames.Bundle, "savedInstanceState");
         }
         return builder
                 .addComment("no-op")
