@@ -2,10 +2,10 @@ package com.nextstory.sample.ui.activity;
 
 import android.os.Bundle;
 
-import com.nextstory.activity.BaseActivity;
-import com.nextstory.activity.SingleFragmentActivity;
+import com.nextstory.app.BaseActivity;
+import com.nextstory.app.SingleFragmentActivity;
 import com.nextstory.field.NonNullLiveData;
-import com.nextstory.field.OnDestroyDisposables;
+import com.nextstory.util.OnDestroyDisposables;
 import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.fragment.Test2Fragment;
 import com.nextstory.sample.ui.fragment.TestFragment;

@@ -1,4 +1,4 @@
-package com.nextstory.dialog;
+package com.nextstory.app;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -18,10 +18,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.nextstory.R;
-import com.nextstory.util.locale.LocaleManager;
-import com.nextstory.util.locale.LocaleManagerImpl;
-import com.nextstory.util.theme.ThemeHelpers;
-import com.nextstory.util.theme.ThemeType;
+import com.nextstory.app.locale.LocaleManager;
+import com.nextstory.app.locale.LocaleManagerImpl;
+import com.nextstory.app.theme.ThemeHelpers;
+import com.nextstory.app.theme.ThemeType;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;

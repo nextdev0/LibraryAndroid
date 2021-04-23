@@ -1,4 +1,4 @@
-package com.nextstory.field;
+package com.nextstory.util;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
@@ -11,21 +11,25 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 /**
  * {@link CompositeDisposable}
- * (수명주기가 onDestroy일 경우 해제)
+ * (수명주기가 onPause일 경우 해제)
  *
  * @author troy
  * @since 1.1
  */
 @SuppressWarnings("UnusedDeclaration")
-public final class OnDestroyDisposables {
+public final class OnPauseDisposables {
     private final CompositeDisposable compositeDisposable;
 
-    public OnDestroyDisposables(@NonNull LifecycleOwner lifecycleOwner) {
+    public OnPauseDisposables(@NonNull LifecycleOwner lifecycleOwner) {
         this.compositeDisposable = new CompositeDisposable();
         lifecycleOwner.getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+            void onPause() {
+                clear();
+            }
+
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             void onDestroy() {
-                clear();
                 lifecycleOwner.getLifecycle().removeObserver(this);
             }
         });

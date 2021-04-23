@@ -1,4 +1,4 @@
-package com.nextstory.activity;
+package com.nextstory.app;
 
 import android.content.Context;
 import android.content.Intent;

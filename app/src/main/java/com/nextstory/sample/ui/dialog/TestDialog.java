@@ -4,8 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.nextstory.dialog.BaseDialog;
-import com.nextstory.dialog.BaseDialogFragment;
+import com.nextstory.app.BaseDialog;
+import com.nextstory.app.BaseDialogFragment;
 import com.nextstory.sample.databinding.DialogTestBinding;
 
 /**

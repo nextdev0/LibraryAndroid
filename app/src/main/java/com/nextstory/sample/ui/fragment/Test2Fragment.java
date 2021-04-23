@@ -6,9 +6,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.nextstory.app.BaseFragment;
 import com.nextstory.field.ListLiveData;
-import com.nextstory.field.OnDestroyDisposables;
-import com.nextstory.fragment.BaseFragment;
+import com.nextstory.util.OnDestroyDisposables;
 import com.nextstory.sample.databinding.FragmentTest2Binding;
 
 import java.util.Random;

@@ -4,8 +4,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.nextstory.dialog.BaseBottomSheetDialog;
-import com.nextstory.dialog.BaseBottomSheetDialogFragment;
+import com.nextstory.app.BaseBottomSheetDialog;
+import com.nextstory.app.BaseBottomSheetDialogFragment;
 import com.nextstory.sample.databinding.DialogTest2Binding;
 
 /**

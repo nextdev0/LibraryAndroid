@@ -1,4 +1,4 @@
-package com.nextstory.dialog;
+package com.nextstory.app;
 
 import android.app.Dialog;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.nextstory.util.theme;
+package com.nextstory.app.theme;
 
 import android.os.Build;
 

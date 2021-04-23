@@ -1,4 +1,4 @@
-package com.nextstory.util.permission;
+package com.nextstory.app.permission;
 
 import java.util.List;
 

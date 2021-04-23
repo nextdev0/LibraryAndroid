@@ -6,11 +6,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.nextstory.app.BaseFragment;
 import com.nextstory.field.ListLiveData;
 import com.nextstory.field.NonNullLiveData;
-import com.nextstory.field.OnDestroyDisposables;
+import com.nextstory.util.OnDestroyDisposables;
 import com.nextstory.field.SafeData;
-import com.nextstory.fragment.BaseFragment;
 import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;

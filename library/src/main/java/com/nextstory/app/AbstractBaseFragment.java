@@ -1,4 +1,4 @@
-package com.nextstory.fragment;
+package com.nextstory.app;
 
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -20,12 +20,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 
 import com.nextstory.R;
-import com.nextstory.util.locale.LocaleManager;
-import com.nextstory.util.locale.LocaleManagerImpl;
-import com.nextstory.util.permission.PermissionHelpers;
-import com.nextstory.util.permission.PermissionListener;
-import com.nextstory.util.theme.ThemeHelpers;
-import com.nextstory.util.theme.ThemeType;
+import com.nextstory.app.locale.LocaleManager;
+import com.nextstory.app.locale.LocaleManagerImpl;
+import com.nextstory.app.permission.PermissionHelpers;
+import com.nextstory.app.permission.PermissionListener;
+import com.nextstory.app.theme.ThemeHelpers;
+import com.nextstory.app.theme.ThemeType;
 
 import java.util.Locale;
 import java.util.Objects;

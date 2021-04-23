@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
-import com.nextstory.activity.AbstractBaseActivity;
+import com.nextstory.app.AbstractBaseActivity;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.ByteArrayOutputStream;

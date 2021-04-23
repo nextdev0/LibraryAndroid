@@ -1,4 +1,4 @@
-package com.nextstory.util.locale;
+package com.nextstory.app.locale;
 
 import android.content.Context;
 import android.content.SharedPreferences;

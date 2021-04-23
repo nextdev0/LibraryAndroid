@@ -35,7 +35,7 @@
         </provider>
 
         <activity
-            android:name=".activity.SingleFragmentActivity"
+            android:name=".app.SingleFragmentActivity"
             android:configChanges="keyboard|keyboardHidden"
             android:screenOrientation="unspecified"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />

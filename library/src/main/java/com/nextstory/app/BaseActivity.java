@@ -1,4 +1,4 @@
-package com.nextstory.activity;
+package com.nextstory.app;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

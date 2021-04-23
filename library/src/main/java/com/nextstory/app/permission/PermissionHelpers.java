@@ -1,4 +1,4 @@
-package com.nextstory.util.permission;
+package com.nextstory.app.permission;
 
 import android.content.Context;
 import android.content.SharedPreferences;
