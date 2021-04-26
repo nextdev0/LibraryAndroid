@@ -5,31 +5,10 @@
         <attr name="itemBindingName" format="string" />
         <attr name="positionBindingName" format="string" />
         <attr name="callbackBindingName" format="string" />
-        <attr name="bindItems" format="reference" />
-        <attr name="onViewHolderCallback" format="reference" />
+        <attr name="layout" />
         <attr name="items" format="reference" />
         <attr name="onItemCallback" format="reference" />
-        <attr name="layout" />
-    </declare-styleable>
-
-    <declare-styleable name="DataBindingRecyclerView">
-        <attr name="android:orientation" />
-        <attr name="spanCount" />
-        <attr name="reverseLayout" />
         <attr name="onBottomScrollReached" format="reference" />
-    </declare-styleable>
-
-    <declare-styleable name="DataBindingRecyclerViewHolder">
-        <attr name="itemBindingName" />
-        <attr name="positionBindingName" />
-        <attr name="callbackBindingName" />
-        <attr name="bindItems" />
-        <attr name="layout" />
-        <attr name="onViewHolderCallback" />
-    </declare-styleable>
-
-    <declare-styleable name="DataBindingRecyclerView_Layout">
-        <attr name="spanCount" />
     </declare-styleable>
 
     <declare-styleable name="DataBindingGridLayout">
@@ -69,7 +48,6 @@
     <declare-styleable name="DataBindingFlowLayout">
         <attr name="android:gravity" />
         <attr name="maxItemsPerLine" format="integer" />
-        <attr name="onBottomScrollReached" />
     </declare-styleable>
 
     <declare-styleable name="DataBindingFlowLayoutItem">

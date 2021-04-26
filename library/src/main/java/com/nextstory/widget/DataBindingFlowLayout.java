@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,29 +56,6 @@ public final class DataBindingFlowLayout extends RecyclerView {
                                  int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context, attrs);
-    }
-
-    /**
-     * 하단 스크롤 도달 리스너
-     *
-     * @param view 뷰
-     * @param l    리스너
-     */
-    @BindingAdapter("onBottomScrollReached")
-    public static void addOnBottomScrollReachedListener(
-            @NonNull final DataBindingFlowLayout view,
-            @Nullable final OnBottomScrollReachedListener l
-    ) {
-        view.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView view, int newState) {
-                if (!view.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (l != null) {
-                        l.onBottomScrollReached();
-                    }
-                }
-            }
-        });
     }
 
     /**

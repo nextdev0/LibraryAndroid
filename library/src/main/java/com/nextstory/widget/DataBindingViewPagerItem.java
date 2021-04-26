@@ -105,20 +105,6 @@ public final class DataBindingViewPagerItem extends FrameLayout {
      * @param v        뷰
      * @param callback 콜백
      */
-    @SuppressWarnings("deprecation")
-    @BindingAdapter("onItemCallback")
-    public static void setOnItemCallback(DataBindingViewPagerItem v, Callback callback) {
-        if (v != null) {
-            v.setCallback(callback::onItemCallback);
-        }
-    }
-
-    /**
-     * 콜백 설정
-     *
-     * @param v        뷰
-     * @param callback 콜백
-     */
     @BindingAdapter("onItemCallback")
     public static void setOnItemCallback(DataBindingViewPagerItem v,
                                          DataBindingItemCallback callback) {
@@ -200,22 +186,5 @@ public final class DataBindingViewPagerItem extends FrameLayout {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     void setCallback(@NonNull DataBindingItemCallback callback) {
         this.callback = callback;
-    }
-
-    /**
-     * 콜백
-     *
-     * @deprecated {@link DataBindingItemCallback} 사용
-     */
-    @Deprecated
-    public interface Callback {
-        /**
-         * 콜백 시 호출
-         *
-         * @param view     참조 뷰
-         * @param item     항목
-         * @param position 항목의 인덱스
-         */
-        void onItemCallback(View view, Object item, int position);
     }
 }

@@ -41,7 +41,7 @@ import java.util.Objects;
  * @author troy
  * @since 1.0
  */
-@SuppressWarnings({"UnusedDeclaration", "deprecation"})
+@SuppressWarnings("UnusedDeclaration")
 public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
     private final LocaleManager localeManager =

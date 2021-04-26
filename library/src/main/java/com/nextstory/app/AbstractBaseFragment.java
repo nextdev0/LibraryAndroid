@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 
 import com.nextstory.R;
 import com.nextstory.app.locale.LocaleManager;
@@ -31,16 +30,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
-
 /**
  * 기본 프래그먼트
  *
  * @author troy
  * @since 1.0
  */
-@SuppressWarnings({"UnusedDeclaration", "deprecation", "DeprecatedIsStillUsed"})
+@SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractBaseFragment extends Fragment {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
@@ -54,13 +50,6 @@ public abstract class AbstractBaseFragment extends Fragment {
     private final LocaleManager localeManager =
             new LocaleManagerImpl(() -> requireContext().getApplicationContext());
     private final PermissionHelpers permissionHelpers = new PermissionHelpers(this);
-
-    @Deprecated
-    private final CompositeDisposable onPauseDisposables = new CompositeDisposable();
-    @Deprecated
-    private final CompositeDisposable onStopDisposables = new CompositeDisposable();
-    @Deprecated
-    private final CompositeDisposable onDestroyDisposables = new CompositeDisposable();
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -76,24 +65,6 @@ public abstract class AbstractBaseFragment extends Fragment {
         requireActivity()
                 .getOnBackPressedDispatcher()
                 .addCallback(getViewLifecycleOwner(), backPressedCallback);
-    }
-
-    @Override
-    public void onPause() {
-        onPauseDisposables.clear();
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        onStopDisposables.clear();
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        onDestroyDisposables.clear();
-        super.onDestroyView();
     }
 
     /**
@@ -340,37 +311,6 @@ public abstract class AbstractBaseFragment extends Fragment {
      */
     public void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 작업 추가, 기본으로 수명주기가 {@link Lifecycle.Event#ON_DESTROY} 해제됨.
-     *
-     * @param disposable 작업
-     * @deprecated {@link CompositeDisposable} 직접 생성해서 사용할것
-     */
-    @Deprecated
-    public void addDisposable(@NonNull Disposable disposable) {
-        addDisposable(Lifecycle.Event.ON_DESTROY, disposable);
-    }
-
-    /**
-     * 작업 추가
-     *
-     * @param lifecycleEvent 작업 해제될 수명주기 이벤트
-     * @param disposable     작업
-     * @deprecated {@link CompositeDisposable} 직접 생성해서 사용할것
-     */
-    @Deprecated
-    @SuppressWarnings("SameParameterValue")
-    public void addDisposable(@NonNull Lifecycle.Event lifecycleEvent,
-                              @NonNull Disposable disposable) {
-        if (lifecycleEvent == Lifecycle.Event.ON_PAUSE) {
-            onPauseDisposables.add(disposable);
-        } else if (lifecycleEvent == Lifecycle.Event.ON_STOP) {
-            onStopDisposables.add(disposable);
-        } else if (lifecycleEvent == Lifecycle.Event.ON_DESTROY) {
-            onDestroyDisposables.add(disposable);
-        }
     }
 
     /**
