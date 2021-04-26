@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="fragment"
-            type="com.nextstory.sample.ui.fragment.Test2Fragment" />
+            name="activity"
+            type="com.nextstory.sample.ui.activity.Test2Activity" />
 
     </data>
 
@@ -25,7 +25,7 @@
         <com.nextstory.widget.DataBindingGridLayoutItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:items="@{fragment.testList}"
+            app:items="@{activity.testList}"
             app:layout="@layout/adapter_test_2" />
 
         <com.nextstory.widget.DataBindingFlowLayout
@@ -51,7 +51,7 @@
             <com.nextstory.widget.DataBindingFlowLayoutItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:items="@{fragment.testList}"
+                app:items="@{activity.testList}"
                 app:layout="@layout/adapter_test_2" />
 
             <TextView

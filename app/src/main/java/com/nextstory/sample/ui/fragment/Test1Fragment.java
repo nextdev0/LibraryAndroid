@@ -9,11 +9,11 @@ import androidx.annotation.Nullable;
 import com.nextstory.app.BaseFragment;
 import com.nextstory.field.ListLiveData;
 import com.nextstory.field.NonNullLiveData;
-import com.nextstory.util.OnDestroyDisposables;
 import com.nextstory.field.SafeData;
 import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
+import com.nextstory.util.OnDestroyDisposables;
 
 import java.util.Locale;
 import java.util.Random;
@@ -27,7 +27,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @author troy
  * @since 1.0
  */
-public final class TestFragment extends BaseFragment<FragmentTestBinding> {
+public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     public final ListLiveData<String> testList = new ListLiveData<>();
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
     public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
@@ -61,7 +61,7 @@ public final class TestFragment extends BaseFragment<FragmentTestBinding> {
         if (localeToggle.getValue()) {
             applyLocale(Locale.KOREAN);
         } else {
-            applyLocale(Locale.ENGLISH);
+            applyLocale(Locale.CHINESE);
         }
         localeToggle.setValue(!localeToggle.getValue());
         requireActivity().recreate();

@@ -14,7 +14,7 @@ import com.nextstory.annotations.IntentExtra;
  * @since 1.0
  */
 @IntentBuilder
-public final class TestActivity extends AppCompatActivity {
+public final class IntentBuilderTestActivity extends AppCompatActivity {
     @IntentExtra
     String message;
     @IntentExtra

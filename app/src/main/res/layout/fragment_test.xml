@@ -7,7 +7,7 @@
 
         <variable
             name="fragment"
-            type="com.nextstory.sample.ui.fragment.TestFragment" />
+            type="com.nextstory.sample.ui.fragment.Test1Fragment" />
 
     </data>
 

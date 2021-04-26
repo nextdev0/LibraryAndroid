@@ -26,7 +26,19 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.TestActivity"
+            android:name=".ui.activity.Test1Activity"
+            android:configChanges="keyboard|keyboardHidden"
+            android:screenOrientation="unspecified"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+
+        <activity
+            android:name=".ui.activity.Test2Activity"
+            android:configChanges="keyboard|keyboardHidden"
+            android:screenOrientation="unspecified"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+
+        <activity
+            android:name=".ui.activity.IntentBuilderTestActivity"
             android:configChanges="keyboard|keyboardHidden"
             android:screenOrientation="unspecified"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />

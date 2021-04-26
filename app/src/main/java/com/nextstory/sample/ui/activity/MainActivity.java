@@ -1,30 +1,18 @@
 package com.nextstory.sample.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.nextstory.app.BaseActivity;
-import com.nextstory.app.SingleFragmentActivity;
-import com.nextstory.field.NonNullLiveData;
-import com.nextstory.util.OnDestroyDisposables;
 import com.nextstory.sample.databinding.ActivityMainBinding;
-import com.nextstory.sample.ui.fragment.Test2Fragment;
-import com.nextstory.sample.ui.fragment.TestFragment;
-
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import com.nextstory.sample.ui.popup.TestPopup;
 
 /**
  * @author troy
  * @since 1.0
  */
-@SuppressWarnings("deprecation")
 public final class MainActivity extends BaseActivity<ActivityMainBinding> {
-    public final NonNullLiveData<Boolean> progress = new NonNullLiveData<>(false);
-    private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,25 +22,24 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         getBinding().setActivity(this);
         getBinding().setLifecycleOwner(this);
-
-        progress.setValue(true);
-        disposables.add(Completable.timer(3000L, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(() -> progress.setValue(false)));
     }
 
     public void test1() {
-        startActivity(SingleFragmentActivity.portrait(this, TestFragment.class));
+        startActivity(new Intent(this, Test1Activity.class));
     }
 
     public void test2() {
-        startActivity(SingleFragmentActivity.portrait(this, Test2Fragment.class));
+        startActivity(new Intent(this, Test2Activity.class));
     }
 
     public void test3() {
-        startActivity(new TestActivityIntentBuilder(this)
+        startActivity(new IntentBuilderTestActivityIntentBuilder(this)
                 .setMessage("test")
                 .build());
+    }
+
+    public void test4(View v) {
+        new TestPopup()
+                .show(this, v);
     }
 }

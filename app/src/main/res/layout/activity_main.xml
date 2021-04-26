@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,32 +10,13 @@
 
     </data>
 
-    <com.nextstory.widget.LoadingLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:loading="@{activity.progress}"
-        app:loadingViewId="@id/loading">
-
-        <FrameLayout
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#f00">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="loading"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                tools:ignore="HardcodedText" />
-
-        </FrameLayout>
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.nextstory.widget.StatusBarView
@@ -69,6 +49,6 @@
 
         </LinearLayout>
 
-    </com.nextstory.widget.LoadingLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>
