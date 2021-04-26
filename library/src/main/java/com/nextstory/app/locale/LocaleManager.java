@@ -3,6 +3,7 @@ package com.nextstory.app.locale;
 import android.content.Context;
 import android.content.res.Resources;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -13,6 +14,15 @@ import java.util.Locale;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface LocaleManager {
+    /**
+     * 지원되는 로케일 목록 지정
+     * API 24 미만 버전에서 로케일별 리소스 로딩을 재대로 지원하기 위해 사용
+     *
+     * @param locales 로케일 목록
+     * @since 1.3
+     */
+    void registerSupportedLocales(List<Locale> locales);
+
     /**
      * @return 시스템 로케일
      */

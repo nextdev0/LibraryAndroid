@@ -9,6 +9,8 @@ import android.os.LocaleList;
 
 import androidx.annotation.RestrictTo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -21,6 +23,9 @@ import java.util.function.Supplier;
 public final class LocaleManagerImpl implements LocaleManager {
     private static final String LANGUAGE = "language";
     private static final String COUNTRY = "country";
+
+    private static List<Locale> supportedLocales = null;
+
     private final Supplier<Context> context;
     private SharedPreferences localePreferences = null;
 
@@ -30,6 +35,11 @@ public final class LocaleManagerImpl implements LocaleManager {
 
     public LocaleManagerImpl(Supplier<Context> context) {
         this.context = context;
+    }
+
+    @Override
+    public void registerSupportedLocales(List<Locale> locales) {
+        supportedLocales = locales;
     }
 
     @Override
@@ -95,6 +105,30 @@ public final class LocaleManagerImpl implements LocaleManager {
 
     @Override
     public void applyLocale(Locale locale) {
+        String language = locale.getLanguage();
+        String country = locale.getCountry();
+        if (supportedLocales != null) {
+            List<Locale> sameLanguages = new ArrayList<>();
+            boolean isSupportedLocale = false;
+            for (Locale supported : supportedLocales) {
+                if (supported.getLanguage().equals(language)) {
+                    sameLanguages.add(supported);
+                }
+                if (supported.getCountry().equals(language)) {
+                    isSupportedLocale = true;
+                    break;
+                }
+            }
+            if (!isSupportedLocale && sameLanguages.size() > 0) {
+                Locale firstSameLocale = sameLanguages.get(0);
+                getLocalePreferences(context.get())
+                        .edit()
+                        .putString(LANGUAGE, firstSameLocale.getLanguage())
+                        .putString(COUNTRY, firstSameLocale.getCountry())
+                        .apply();
+                return;
+            }
+        }
         getLocalePreferences(context.get())
                 .edit()
                 .putString(LANGUAGE, locale.getLanguage())

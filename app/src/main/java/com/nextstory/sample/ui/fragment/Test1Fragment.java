@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import com.nextstory.app.BaseFragment;
 import com.nextstory.field.ListLiveData;
 import com.nextstory.field.NonNullLiveData;
-import com.nextstory.field.SafeData;
 import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
@@ -32,7 +31,6 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
     public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
     private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
-    private final SafeData<Boolean> localeToggle = new SafeData<>(false);
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -57,13 +55,13 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
         new Test2Dialog().show(this);
     }
 
-    public void onLocaleTestClick() {
-        if (localeToggle.getValue()) {
-            applyLocale(Locale.KOREAN);
-        } else {
-            applyLocale(Locale.CHINESE);
-        }
-        localeToggle.setValue(!localeToggle.getValue());
+    public void onLocaleTestClick(int index) {
+        Locale[] locales = new Locale[]{
+                Locale.KOREAN,
+                Locale.ENGLISH,
+                Locale.CHINESE
+        };
+        applyLocale(locales[index]);
         requireActivity().recreate();
     }
 

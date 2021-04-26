@@ -42,8 +42,22 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.onLocaleTestClick()}"
-            android:text="로케일 테스트"
+            android:onClick="@{v -> fragment.onLocaleTestClick(0)}"
+            android:text="로케일 테스트 (한글)"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> fragment.onLocaleTestClick(1)}"
+            android:text="로케일 테스트 (영문)"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{v -> fragment.onLocaleTestClick(2)}"
+            android:text="로케일 테스트 (중문)"
             tools:ignore="HardcodedText" />
 
         <EditText

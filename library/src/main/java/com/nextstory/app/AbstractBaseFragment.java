@@ -27,6 +27,7 @@ import com.nextstory.app.permission.PermissionListener;
 import com.nextstory.app.theme.ThemeHelpers;
 import com.nextstory.app.theme.ThemeType;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -114,6 +115,16 @@ public abstract class AbstractBaseFragment extends Fragment {
      */
     public void applyApplicationTheme(@ThemeType int type) {
         themeHelpers.applyTheme(type);
+    }
+
+    /**
+     * 지원되는 로케일 목록 지정
+     *
+     * @param locales 로케일 목록
+     * @since 1.3
+     */
+    public void registerSupportedLocales(List<Locale> locales) {
+        localeManager.registerSupportedLocales(locales);
     }
 
     /**

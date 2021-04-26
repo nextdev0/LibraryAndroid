@@ -27,6 +27,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -151,6 +152,16 @@ public abstract class BaseDialogFragment<B extends ViewDataBinding> extends Dial
      */
     public void applyApplicationTheme(@ThemeType int type) {
         themeHelpers.applyTheme(type);
+    }
+
+    /**
+     * 지원되는 로케일 목록 지정
+     *
+     * @param locales 로케일 목록
+     * @since 1.3
+     */
+    public void registerSupportedLocales(List<Locale> locales) {
+        localeManager.registerSupportedLocales(locales);
     }
 
     /**

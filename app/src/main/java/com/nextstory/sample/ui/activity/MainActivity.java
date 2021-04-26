@@ -8,6 +8,9 @@ import com.nextstory.app.BaseActivity;
 import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.popup.TestPopup;
 
+import java.util.Arrays;
+import java.util.Locale;
+
 /**
  * @author troy
  * @since 1.0
@@ -16,6 +19,11 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        registerSupportedLocales(Arrays.asList(
+                Locale.KOREAN,
+                Locale.ENGLISH,
+                Locale.SIMPLIFIED_CHINESE));
 
         applyTransparentTheme();
         applyLightStatusBar(true);
