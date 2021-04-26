@@ -59,10 +59,12 @@
 ### (1) 메인 라이브러리
 
 1. 툴 우측 메뉴의 Gradle을 열어서 `library > Tasks > other > assembleRelease`를 실행.
-2. 빌드가 완료될 경우 `library > Tasks > publishing > publish`를 실행하면 완료.
+2. 1번 과정을 한 번 더 실행.
+3. 빌드가 완료될 경우 `library > Tasks > publishing > publish`를 실행하면 완료.
 
 ### (2) 어노테이션 라이브러리
 
 1. 툴 우측 메뉴의 Gradle을 열어서 `annotationProcessor > Tasks > build > jar`를 실행.
 2. 빌드 후 다음으로 `library > Tasks > other > sourceJar`를 실행.
-3. 빌드가 완료될 경우 `library > Tasks > publishing > publish`를 실행하면 완료.
+3. 1, 2번 과정을 한 번 더 실행.
+4. 빌드가 완료될 경우 `library > Tasks > publishing > publish`를 실행하면 완료.
