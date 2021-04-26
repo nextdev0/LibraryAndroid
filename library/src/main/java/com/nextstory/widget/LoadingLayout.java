@@ -107,6 +107,8 @@ public final class LoadingLayout extends FrameLayout {
 
     private void updateLoadingView() {
         if (loadingView != null) {
+            loadingView.setOnClickListener(null);
+            loadingView.setSoundEffectsEnabled(false);
             loadingView.setVisibility(isLoading ? VISIBLE : GONE);
             View progressView = loadingView.findViewById(R.id.progress_bar);
             if (progressView != null) {
