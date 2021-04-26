@@ -204,8 +204,7 @@ public final class RxImagePicker {
                             }
                         }
                         Intent intent = new Intent();
-                        intent.putExtra(EXTRA_IMAGES,
-                                (Serializable) Collections.singletonList(uris));
+                        intent.putExtra(EXTRA_IMAGES, (Serializable) uris);
                         setResult(RESULT_OK, intent);
                         finish();
                         return;
