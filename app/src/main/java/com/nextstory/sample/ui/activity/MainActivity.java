@@ -47,7 +47,7 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void test4(View v) {
-        new TestPopup()
-                .show(this, v);
+        new TestPopup(this)
+                .show(v);
     }
 }
