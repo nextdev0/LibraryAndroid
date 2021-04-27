@@ -25,8 +25,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.util.Objects;
-
 /**
  * 안드로이드 기본 알림창 프래그먼트
  *
@@ -42,7 +40,18 @@ public final class AlertDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return Objects.requireNonNull(dialog);
+        if (dialog == null) {
+            setShowsDialog(false);
+        }
+        return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        if (dialog == null) {
+            dismissAllowingStateLoss();
+        }
+        super.onStart();
     }
 
     public final void show(@NonNull FragmentActivity activity) {
