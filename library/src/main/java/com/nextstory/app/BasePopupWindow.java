@@ -48,6 +48,11 @@ public abstract class BasePopupWindow<B extends ViewDataBinding> {
         this.context = context;
     }
 
+    @CallSuper
+    protected void onCreate(PopupWindow popupWindow) {
+        // no-op
+    }
+
     /**
      * @return 컨텍스트
      */
@@ -92,23 +97,8 @@ public abstract class BasePopupWindow<B extends ViewDataBinding> {
             popupWindow.setContentView(binding.getRoot());
             popupWindow.setElevation(binding.getRoot().getElevation());
             popupWindow.setContentView(binding.getRoot());
-
-            // dim 설정
-            binding.getRoot().post(() -> {
-                View container = popupWindow.getContentView().getRootView();
-                WindowManager.LayoutParams params =
-                        (WindowManager.LayoutParams) container.getLayoutParams();
-                params.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-                params.dimAmount = getDimAmount();
-                WindowManager windowManager =
-                        (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-                if (windowManager != null) {
-                    windowManager.updateViewLayout(container, params);
-                }
-            });
-
-            // 창 표시
             popupWindow.showAsDropDown(anchorView, 0, 0, gravity);
+            onCreate(popupWindow);
         }
     }
 
@@ -125,17 +115,14 @@ public abstract class BasePopupWindow<B extends ViewDataBinding> {
     }
 
     /**
-     * @return 창 밖 배경 어두운 정도
-     */
-    protected float getDimAmount() {
-        return 0.f;
-    }
-
-    /**
      * 아무동작 없음 (데이터바인딩시 창 클릭시 닫기지 않도록 하기 위함)
      */
     public final void nothing() {
         // no-op
+    }
+
+    public PopupWindow getPopupWindow() {
+        return popupWindow;
     }
 
     /**
