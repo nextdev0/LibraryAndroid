@@ -37,7 +37,7 @@
         // ...
 
         // 추가
-        implementation 'com.nextstory:library:1.2.10'
+        implementation 'com.nextstory:library:1.3.3'
         annotationProcessor 'com.nextstory:annotations:1.0.0'
 
         // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
