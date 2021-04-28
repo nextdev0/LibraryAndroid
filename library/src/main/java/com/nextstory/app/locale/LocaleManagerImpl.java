@@ -74,7 +74,7 @@ public final class LocaleManagerImpl implements LocaleManager {
         }
     }
 
-    private Locale getLocale(Context context) {
+    private Locale getLocale(Context context, Resources resources) {
         String language = getLocalePreferences(context).getString(LANGUAGE, "");
         String country = getLocalePreferences(context).getString(COUNTRY, "");
         Locale locale = null;
@@ -91,15 +91,12 @@ public final class LocaleManagerImpl implements LocaleManager {
             return locale;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return context.getApplicationContext()
-                    .getResources()
+            return resources
                     .getConfiguration()
                     .getLocales()
                     .get(0);
         } else {
-            return context.getApplicationContext()
-                    .getResources()
-                    .getConfiguration().locale;
+            return resources.getConfiguration().locale;
         }
     }
 
@@ -144,7 +141,7 @@ public final class LocaleManagerImpl implements LocaleManager {
                 ? context.getResources()
                 : resources;
 
-        Locale locale = getLocale(context);
+        Locale locale = getLocale(context, realResources);
         Configuration configuration = realResources.getConfiguration();
         Locale.setDefault(locale);
         configuration.locale = locale;
