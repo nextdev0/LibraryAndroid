@@ -98,8 +98,9 @@ public final class PermissionHelpers {
     public boolean isNeedShowRequestPermissionRationale(String... permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StringBuilder key = new StringBuilder();
-            key.append("permission_");
+            key.append("runtime_permissions::");
             key.append(getClass().getSimpleName());
+            key.append(":");
             for (int i = 0; i < permissions.length; i++) {
                 key.append(permissions[i]);
                 if (i < permissions.length - 1) {
