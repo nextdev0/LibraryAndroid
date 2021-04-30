@@ -1,1 +1,1 @@
-com.nextstory.annotationprocessor.IntentProcessor
+com.nextstory.annotationprocessor.ActivityIntentBuilderProcessor

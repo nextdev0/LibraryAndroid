@@ -2,6 +2,8 @@ package com.nextstory.annotationprocessor;
 
 import com.nextstory.annotationprocessor.util.ClassNames;
 import com.nextstory.annotationprocessor.util.ElementHelper;
+import com.nextstory.annotations.ActivityIntentBuilder;
+import com.nextstory.annotations.ActivityIntentExtra;
 import com.nextstory.annotations.IntentBuilder;
 import com.nextstory.annotations.IntentExtra;
 import com.nextstory.util.LibraryInitializer;
@@ -33,12 +35,15 @@ import javax.lang.model.element.TypeElement;
  * @author troy
  * @author 1.0
  */
-public final class IntentProcessor extends AbstractProcessor {
+public final class ActivityIntentBuilderProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return new HashSet<String>() {
             {
                 add(IntentBuilder.class.getCanonicalName());
+                add(IntentExtra.class.getCanonicalName());
+                add(ActivityIntentBuilder.class.getCanonicalName());
+                add(ActivityIntentExtra.class.getCanonicalName());
             }
         };
     }
@@ -52,19 +57,41 @@ public final class IntentProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Set<ElementHelper> intentBuilderSet = new LinkedHashSet<>();
         Map<ElementHelper, List<Element>> intentExtraMap = new LinkedHashMap<>();
-        for (Element element : roundEnvironment.getElementsAnnotatedWith(IntentBuilder.class)) {
-            ElementHelper elementHelper = ElementHelper.fromElement(element);
+
+        // todo annotation 1.3 버전부터 삭제 (사유 : deprecated 처리)
+        for (Element e : roundEnvironment.getElementsAnnotatedWith(IntentBuilder.class)) {
+            ElementHelper elementHelper = ElementHelper.fromElement(e);
             intentBuilderSet.add(elementHelper);
         }
-        for (Element element : roundEnvironment.getElementsAnnotatedWith(IntentExtra.class)) {
-            String parentName = element.getEnclosingElement().toString();
+
+        // todo annotation 1.3 버전부터 삭제 (사유 : deprecated 처리)
+        for (Element e : roundEnvironment.getElementsAnnotatedWith(IntentExtra.class)) {
+            String parentName = e.getEnclosingElement().toString();
             for (ElementHelper elementHelper : intentBuilderSet) {
                 if (elementHelper.getFullName().equals(parentName)) {
                     if (!intentExtraMap.containsKey(elementHelper)) {
                         intentExtraMap.put(elementHelper, new ArrayList<>());
                     }
                     List<Element> elements = intentExtraMap.get(elementHelper);
-                    elements.add(element);
+                    elements.add(e);
+                }
+            }
+        }
+
+        for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentBuilder.class)) {
+            ElementHelper elementHelper = ElementHelper.fromElement(e);
+            intentBuilderSet.add(elementHelper);
+        }
+
+        for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentExtra.class)) {
+            String parentName = e.getEnclosingElement().toString();
+            for (ElementHelper elementHelper : intentBuilderSet) {
+                if (elementHelper.getFullName().equals(parentName)) {
+                    if (!intentExtraMap.containsKey(elementHelper)) {
+                        intentExtraMap.put(elementHelper, new ArrayList<>());
+                    }
+                    List<Element> elements = intentExtraMap.get(elementHelper);
+                    elements.add(e);
                 }
             }
         }

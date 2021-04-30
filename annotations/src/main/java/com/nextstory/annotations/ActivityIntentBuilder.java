@@ -6,14 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Intent extra 생성 어노테이션
+ * 액티비티 값 전달용 Intent 빌더 생성 어노테이션
  *
  * @author troy
  * @since 1.0
- * @deprecated {@link ActivityIntentExtra} 사용
  */
-@Deprecated
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface IntentExtra {
+public @interface ActivityIntentBuilder {
 }

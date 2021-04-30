@@ -6,18 +6,18 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.nextstory.annotations.IntentBuilder;
-import com.nextstory.annotations.IntentExtra;
+import com.nextstory.annotations.ActivityIntentBuilder;
+import com.nextstory.annotations.ActivityIntentExtra;
 
 /**
  * @author troy
  * @since 1.0
  */
-@IntentBuilder
+@ActivityIntentBuilder
 public final class IntentBuilderTestActivity extends AppCompatActivity {
-    @IntentExtra
+    @ActivityIntentExtra
     String message;
-    @IntentExtra
+    @ActivityIntentExtra
     String message2 = "empty";
 
     @Override

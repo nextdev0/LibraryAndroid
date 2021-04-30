@@ -10,10 +10,8 @@ import java.lang.annotation.Target;
  *
  * @author troy
  * @since 1.0
- * @deprecated {@link ActivityIntentExtra} 사용
  */
-@Deprecated
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
-public @interface IntentExtra {
+public @interface ActivityIntentExtra {
 }
