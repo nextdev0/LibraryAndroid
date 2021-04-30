@@ -23,7 +23,8 @@ import com.nextstory.widget.util.ShapeDrawableHelper;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class ShapeTextView extends AppCompatTextView {
-    private final ForegroundDrawableHelper foregroundDrawableHelper = new ForegroundDrawableHelper(this);
+    private final ForegroundDrawableHelper foregroundDrawableHelper =
+            new ForegroundDrawableHelper(this);
     private final ShapeDrawableHelper shapeDrawableHelper;
 
     public ShapeTextView(@NonNull Context context) {

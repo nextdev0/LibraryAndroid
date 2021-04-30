@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Layout manager for flow views. support different view height, support item add/removed notification
+ * Layout manager for flow views. support different view height, support item add/removed
+ * notification
  * support align to left/right edge. support scroll/smooth scroll.
  *
  * @author xhan

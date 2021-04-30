@@ -29,7 +29,9 @@ public class ForegroundRelativeLayout extends RelativeLayout {
         this(context, attrs, 0);
     }
 
-    public ForegroundRelativeLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ForegroundRelativeLayout(Context context,
+                                    @Nullable AttributeSet attrs,
+                                    int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         foregroundDrawableHelper.resolveAttribute(context, attrs, defStyleAttr);
     }

@@ -23,7 +23,8 @@ import com.nextstory.widget.util.ShapeDrawableHelper;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class ShapeImageView extends AppCompatImageView {
-    private final ForegroundDrawableHelper foregroundDrawableHelper = new ForegroundDrawableHelper(this);
+    private final ForegroundDrawableHelper foregroundDrawableHelper =
+            new ForegroundDrawableHelper(this);
     private final ShapeDrawableHelper shapeDrawableHelper;
 
     public ShapeImageView(@NonNull Context context) {
@@ -34,7 +35,8 @@ public final class ShapeImageView extends AppCompatImageView {
         this(context, attrs, 0);
     }
 
-    public ShapeImageView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ShapeImageView(@NonNull Context context, @Nullable AttributeSet attrs,
+                          int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         foregroundDrawableHelper.resolveAttribute(context, attrs, defStyleAttr);
         shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, getBackground());

@@ -24,7 +24,8 @@ import com.nextstory.widget.util.ShapeDrawableHelper;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class ShapeEditText extends AppCompatEditText {
-    private final ForegroundDrawableHelper foregroundDrawableHelper = new ForegroundDrawableHelper(this);
+    private final ForegroundDrawableHelper foregroundDrawableHelper =
+            new ForegroundDrawableHelper(this);
     private final ShapeDrawableHelper shapeDrawableHelper;
 
     public ShapeEditText(@NonNull Context context) {

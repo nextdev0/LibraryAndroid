@@ -121,7 +121,8 @@ public class CacheHelper {
     }
 
     /**
-     * Move items from one place to another. no check on parameter as invoker will make sure it is correct
+     * Move items from one place to another. no check on parameter as invoker will make sure it
+     * is correct
      */
     public void move(int from, int to, int count) {
         if (!valid()) {
@@ -275,7 +276,8 @@ public class CacheHelper {
     }
 
     /**
-     * Rebuild line map. and should stop if there is a hole (like item changed or item inserted but not measured)
+     * Rebuild line map. and should stop if there is a hole (like item changed or item inserted
+     * but not measured)
      */
     private void refreshLineMap() {
         if (!valid() || batchSetting) {
@@ -314,7 +316,8 @@ public class CacheHelper {
                 } else {
                     addToLine(currentLine, cachedSize, index);
                 }
-            } else { // too wide to add this item, put line item count to index and put this one to new line
+            } else { // too wide to add this item, put line item count to index and put this one
+                // to new line
                 lineMap.put(lineIndex, currentLine);
                 currentLine = new Line();
                 addToLine(currentLine, cachedSize, index);

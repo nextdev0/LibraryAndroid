@@ -40,7 +40,8 @@ public final class StreamLiveData<T> extends MediatorLiveData<T> {
         super.removeSource(toRemote);
     }
 
-    public <A> StreamLiveData<T> map(LiveData<A> liveData, StreamLiveDataFunction<T, T, A> function) {
+    public <A> StreamLiveData<T> map(LiveData<A> liveData,
+                                     StreamLiveDataFunction<T, T, A> function) {
         functions.put(liveData, (StreamLiveDataFunction<T, T, Object>) function);
         addSource(liveData, a -> onCombinedChanged());
         return this;
