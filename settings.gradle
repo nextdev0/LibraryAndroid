@@ -1,5 +1,5 @@
 include ':annotationProcessor'
 include ':annotations'
 include ':library'
-include ':app'
+include ':sample'
 rootProject.name = "Library"
