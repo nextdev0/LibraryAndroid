@@ -30,11 +30,12 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
 /**
- * {@link IntentBuilder} 어노테이션 프로세서
+ * 액티비티 Intent 빌더 어노테이션 프로세서
  *
  * @author troy
  * @author 1.0
  */
+@SuppressWarnings("deprecation")
 public final class ActivityIntentBuilderProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
