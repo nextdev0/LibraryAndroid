@@ -28,6 +28,13 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{v -> fragment.argumentsTest()}"
+            android:text="arguments 테스트"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="@{v -> fragment.onDialogTestClick()}"
             android:text="다이얼로그 테스트"
             tools:ignore="HardcodedText" />

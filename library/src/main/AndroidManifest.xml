@@ -22,6 +22,9 @@
             <meta-data
                 android:name="com.nextstory.util.IntentBuilderInitializer"
                 android:value="empty" />
+            <meta-data
+                android:name="com.nextstory.util.ArgumentsBuilderInitializer"
+                android:value="empty" />
         </provider>
 
         <provider

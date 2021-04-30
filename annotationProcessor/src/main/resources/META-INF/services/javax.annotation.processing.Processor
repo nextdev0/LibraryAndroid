@@ -1,1 +1,2 @@
 com.nextstory.annotationprocessor.ActivityIntentBuilderProcessor
+com.nextstory.annotationprocessor.FragmentArgumentsBuilderProcessor
