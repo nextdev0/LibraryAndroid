@@ -17,6 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:orientation="vertical">
 
             <com.nextstory.widget.StatusBarView
@@ -60,6 +61,14 @@
                 android:layout_height="wrap_content"
                 android:onClick="@{v -> activity.test5(v)}"
                 android:text="RxPermission 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test6(v)}"
+                android:text="Blur 테스트"
                 android:textAllCaps="false"
                 tools:ignore="HardcodedText" />
 

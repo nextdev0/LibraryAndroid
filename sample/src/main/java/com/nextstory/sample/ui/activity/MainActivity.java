@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.nextstory.app.BaseActivity;
 import com.nextstory.sample.databinding.ActivityMainBinding;
+import com.nextstory.sample.ui.dialog.BlurTestDialog;
 import com.nextstory.sample.ui.popup.TestPopup;
 import com.nextstory.util.OnDestroyDisposables;
 import com.nextstory.util.RxImagePicker;
@@ -78,5 +79,10 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
                 .subscribe(permissionResult -> {
                     // no-op
                 }));
+    }
+
+    public void test6(View v) {
+        new BlurTestDialog()
+                .show(this);
     }
 }
