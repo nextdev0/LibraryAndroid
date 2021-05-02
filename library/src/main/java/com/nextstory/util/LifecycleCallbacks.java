@@ -282,8 +282,7 @@ public final class LifecycleCallbacks
     }
 
     @Override
-    public void onActivityPreCreated(@NonNull Activity activity,
-                                     @Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         if (activity instanceof FragmentActivity) {
             FragmentActivity fragmentActivity = (FragmentActivity) activity;
             fragmentActivity.getSupportFragmentManager()
