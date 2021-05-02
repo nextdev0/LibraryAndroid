@@ -124,14 +124,12 @@ public final class Intents {
      * @param chooserTitle 앱 선택창 제목
      * @param content      공유할 내용
      * @return intent
+     * @deprecated {@link #shareText(String, String)} 사용
      */
+    @Deprecated
     @NonNull
     public static Intent share(String chooserTitle, String content) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "");
-        intent.putExtra(Intent.EXTRA_TEXT, content);
-        return Intent.createChooser(intent, chooserTitle);
+        return shareText(chooserTitle, content);
     }
 
     /**
@@ -141,8 +139,40 @@ public final class Intents {
      * @param chooserTitle 앱 선택창 제목
      * @param content      공유할 내용
      * @return intent
+     * @deprecated {@link #shareBitmap(Context, String, Bitmap)} 사용
      */
+    @Deprecated
     public static Intent share(Context context, String chooserTitle, Bitmap content) {
+        return shareBitmap(context, chooserTitle, content);
+    }
+
+    /**
+     * 텍스트 공유 연결
+     *
+     * @param chooserTitle 앱 선택창 제목
+     * @param content      공유할 내용
+     * @return intent
+     * @since 1.4
+     */
+    @NonNull
+    public static Intent shareText(String chooserTitle, String content) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+        return Intent.createChooser(intent, chooserTitle);
+    }
+
+    /**
+     * 비트맵 이미지 공유 연결
+     *
+     * @param context      컨텍스트
+     * @param chooserTitle 앱 선택창 제목
+     * @param content      공유할 내용
+     * @return intent
+     * @since 1.4
+     */
+    public static Intent shareBitmap(Context context, String chooserTitle, Bitmap content) {
         File path = context.getCacheDir();
         String strFileName = "share_cache.png";
         String filePath = path.toString() + "/" + strFileName;
