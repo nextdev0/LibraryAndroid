@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.core.Single;
  * @author troy
  * @since 1.1
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "UnusedReturnValue"})
 public interface HttpRequestBuilder {
     /**
      * 요청 URL 설정
