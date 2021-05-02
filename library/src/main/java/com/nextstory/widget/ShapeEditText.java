@@ -55,7 +55,6 @@ public final class ShapeEditText extends AppCompatEditText {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        shapeDrawableHelper.getShapeDrawable().draw(canvas);
         foregroundDrawableHelper.draw(canvas);
     }
 
