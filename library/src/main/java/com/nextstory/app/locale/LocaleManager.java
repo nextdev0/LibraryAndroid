@@ -16,7 +16,7 @@ import java.util.Locale;
 public interface LocaleManager {
     /**
      * 지원되는 로케일 목록 지정
-     * API 24 미만 버전에서 로케일별 리소스 로딩을 재대로 지원하기 위해 사용
+     * (API 24 이전 버전에서 로케일별 리소스 로딩을 개선하기 위하여 지정함)
      *
      * @param locales 로케일 목록
      * @since 1.3

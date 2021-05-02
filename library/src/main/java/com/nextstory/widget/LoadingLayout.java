@@ -65,7 +65,6 @@ public final class LoadingLayout extends FrameLayout {
      *
      * @param v     뷰
      * @param value 로딩 유무
-     * @see BaseRatingBar
      */
     @BindingAdapter("loading")
     public static void setRating(@NonNull LoadingLayout v, boolean value) {

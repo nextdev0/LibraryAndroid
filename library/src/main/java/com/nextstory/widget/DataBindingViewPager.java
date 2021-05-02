@@ -112,17 +112,17 @@ public final class DataBindingViewPager extends ViewPager {
     /**
      * 페이지 변경 리스너 설정
      *
-     * @param v                 뷰
-     * @param ratingAttrChanged inverse 어댑터, 값 변경 반환용으로 사용
+     * @param v           뷰
+     * @param attrChanged inverse 어댑터, 값 변경 반환용으로 사용
      */
     @BindingAdapter("currentPagePositionAttrChanged")
     public static void getCurrentPagePositionListener(@NonNull DataBindingViewPager v,
-                                                      InverseBindingListener ratingAttrChanged) {
-        if (ratingAttrChanged != null) {
+                                                      InverseBindingListener attrChanged) {
+        if (attrChanged != null) {
             v.addOnPageChangeListener(new SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
-                    ratingAttrChanged.onChange();
+                    attrChanged.onChange();
                 }
             });
         }

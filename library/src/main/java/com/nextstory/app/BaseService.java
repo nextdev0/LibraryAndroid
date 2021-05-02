@@ -57,7 +57,6 @@ public abstract class BaseService extends Service {
      * 지원되는 로케일 목록 지정
      *
      * @param locales 로케일 목록
-     * @since 1.3
      */
     public void registerSupportedLocales(List<Locale> locales) {
         localeManager.registerSupportedLocales(locales);

@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * Intent 모음
+ * 자주 사용하는 Intent 모음
  *
  * @author troy
  * @since 1.2

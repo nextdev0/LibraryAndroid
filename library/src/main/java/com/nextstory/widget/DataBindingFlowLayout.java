@@ -118,7 +118,7 @@ public final class DataBindingFlowLayout extends RecyclerView {
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params != null) {
             if (params.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-                throw new IllegalStateException("Height must be wrap_content");
+                throw new IllegalStateException("layout_height must be wrap_content");
             }
         }
 
