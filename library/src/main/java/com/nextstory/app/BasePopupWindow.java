@@ -15,10 +15,8 @@ import com.nextstory.app.locale.LocaleManager;
 import com.nextstory.app.locale.LocaleManagerImpl;
 import com.nextstory.app.theme.ThemeHelpers;
 import com.nextstory.app.theme.ThemeType;
+import com.nextstory.util.Unsafe;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -66,25 +64,14 @@ public abstract class BasePopupWindow<B extends ViewDataBinding> {
      * @param anchorView 창이 열릴 위치를 참조할 뷰
      */
     @CallSuper
-    @SuppressWarnings("unchecked")
     public void show(View anchorView) {
         if (!isShowing) {
             isShowing = true;
             if (binding == null) {
-                ParameterizedType parameterizedType =
-                        (ParameterizedType) getClass().getGenericSuperclass();
-                if (parameterizedType != null) {
-                    try {
-                        Method method = ((Class<?>) parameterizedType.getActualTypeArguments()[0])
-                                .getMethod("inflate", LayoutInflater.class);
-                        binding = (B) Objects.requireNonNull(method.invoke(
-                                null,
-                                LayoutInflater.from(context)));
-                    } catch (NoSuchMethodException
-                            | InvocationTargetException
-                            | IllegalAccessException e) {
-                        throw new IllegalStateException(e);
-                    }
+                Class<?> klass = Unsafe.getGenericClass(this, 0);
+                if (klass != null) {
+                    binding = Objects.requireNonNull(
+                            Unsafe.invoke(klass, "inflate", LayoutInflater.from(context)));
                 }
             }
             popupWindow = new PopupWindow();

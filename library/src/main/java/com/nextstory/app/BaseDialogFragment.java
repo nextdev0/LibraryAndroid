@@ -2,7 +2,6 @@ package com.nextstory.app;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -22,11 +21,9 @@ import com.nextstory.app.locale.LocaleManager;
 import com.nextstory.app.locale.LocaleManagerImpl;
 import com.nextstory.app.theme.ThemeHelpers;
 import com.nextstory.app.theme.ThemeType;
+import com.nextstory.util.Unsafe;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -60,24 +57,13 @@ public abstract class BaseDialogFragment<B extends ViewDataBinding> extends Dial
         return dialog;
     }
 
-    @SuppressWarnings("unchecked")
     @CallSuper
     @Override
     public void onStart() {
         if (dialog.binding == null) {
-            ParameterizedType parameterizedType =
-                    (ParameterizedType) getClass().getGenericSuperclass();
-            if (parameterizedType != null) {
-                try {
-                    Method method = ((Class<?>) parameterizedType.getActualTypeArguments()[0])
-                            .getMethod("inflate", LayoutInflater.class);
-                    dialog.binding = (B) Objects.requireNonNull(
-                            method.invoke(null, getLayoutInflater()));
-                } catch (NoSuchMethodException
-                        | InvocationTargetException
-                        | IllegalAccessException e) {
-                    throw new IllegalStateException(e);
-                }
+            Class<?> klass = Unsafe.getGenericClass(this, 0);
+            if (klass != null) {
+                dialog.binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
             }
         }
         super.onStart();

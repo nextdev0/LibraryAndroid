@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
+import com.nextstory.util.Unsafe;
+
 import java.util.Objects;
 
 /**
@@ -26,28 +25,18 @@ public abstract class BaseFragment<B extends ViewDataBinding> extends AbstractBa
     private B binding = null;
 
     @CallSuper
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         if (binding == null) {
-            ParameterizedType parameterizedType =
-                    (ParameterizedType) getClass().getGenericSuperclass();
-            if (parameterizedType != null) {
-                try {
-                    Method method = ((Class<?>) parameterizedType.getActualTypeArguments()[0])
-                            .getMethod("inflate", LayoutInflater.class);
-                    binding = (B) Objects.requireNonNull(method.invoke(null, getLayoutInflater()));
-                } catch (NoSuchMethodException
-                        | InvocationTargetException
-                        | IllegalAccessException e) {
-                    throw new IllegalStateException(e);
-                }
+            Class<?> klass = Unsafe.getGenericClass(this, 0);
+            if (klass != null) {
+                binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
             }
         }
-        return binding.getRoot();
+        return Objects.requireNonNull(binding).getRoot();
     }
 
     @CallSuper

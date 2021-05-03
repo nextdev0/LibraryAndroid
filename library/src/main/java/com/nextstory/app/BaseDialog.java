@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -27,10 +26,8 @@ import com.nextstory.app.locale.LocaleManager;
 import com.nextstory.app.locale.LocaleManagerImpl;
 import com.nextstory.app.theme.ThemeHelpers;
 import com.nextstory.app.theme.ThemeType;
+import com.nextstory.util.Unsafe;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -58,24 +55,14 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
         super(context, themeRes);
     }
 
-    @SuppressWarnings("unchecked")
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (binding == null && savedInstanceState == null) {
-            ParameterizedType parameterizedType =
-                    (ParameterizedType) getClass().getGenericSuperclass();
-            if (parameterizedType != null) {
-                try {
-                    Method method = ((Class<?>) parameterizedType.getActualTypeArguments()[0])
-                            .getMethod("inflate", LayoutInflater.class);
-                    binding = (B) Objects.requireNonNull(method.invoke(null, getLayoutInflater()));
-                } catch (NoSuchMethodException
-                        | InvocationTargetException
-                        | IllegalAccessException e) {
-                    throw new IllegalStateException(e);
-                }
+            Class<?> klass = Unsafe.getGenericClass(this, 0);
+            if (klass != null) {
+                binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
             }
         }
         applyTransparentTheme();

@@ -166,7 +166,9 @@ public final class Convert {
      * @param o   캐스팅할 객체
      * @param <T> 변환 타입
      * @return 변환된 인스턴스
+     * @deprecated {@link Unsafe#cast(Object)} 사용
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public static <T> T cast(Object o) {
         return (T) o;

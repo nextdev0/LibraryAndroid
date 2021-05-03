@@ -22,10 +22,8 @@ import com.nextstory.app.locale.LocaleManager;
 import com.nextstory.app.locale.LocaleManagerImpl;
 import com.nextstory.app.theme.ThemeHelpers;
 import com.nextstory.app.theme.ThemeType;
+import com.nextstory.util.Unsafe;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -55,28 +53,15 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
         super(context, themeRes);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.dialog_bottom_sheet_base);
         viewContainer = findViewById(R.id.view_container);
         if (binding == null && savedInstanceState == null) {
-            ParameterizedType parameterizedType =
-                    (ParameterizedType) getClass().getGenericSuperclass();
-            if (parameterizedType != null) {
-                try {
-                    Method method = ((Class<?>) parameterizedType.getActualTypeArguments()[0])
-                            .getMethod("inflate", LayoutInflater.class);
-                    binding = (B) method.invoke(null, LayoutInflater.from(getContext()));
-                    if (binding == null) {
-                        throw new NullPointerException();
-                    }
-                } catch (NoSuchMethodException
-                        | InvocationTargetException
-                        | IllegalAccessException e) {
-                    throw new IllegalStateException(e);
-                }
+            Class<?> klass = Unsafe.getGenericClass(this, 0);
+            if (klass != null) {
+                binding = Unsafe.invoke(klass, "inflate", LayoutInflater.from(getContext()));
             }
         }
         if (binding != null) {

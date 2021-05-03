@@ -10,11 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.databinding.ViewDataBinding;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Objects;
+import com.nextstory.util.Unsafe;
 
 /**
  * 데이터바인딩 적용 기본 액티비티
@@ -27,23 +23,13 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AbstractBa
     private B binding = null;
 
     @CallSuper
-    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (binding == null) {
-            Type genericSuperclass = getClass().getGenericSuperclass();
-            if (genericSuperclass instanceof ParameterizedType) {
-                ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
-                try {
-                    Method method = ((Class<?>) parameterizedType.getActualTypeArguments()[0])
-                            .getMethod("inflate", LayoutInflater.class);
-                    binding = (B) Objects.requireNonNull(method.invoke(null, getLayoutInflater()));
-                } catch (NoSuchMethodException
-                        | InvocationTargetException
-                        | IllegalAccessException e) {
-                    throw new IllegalStateException(e);
-                }
+            Class<?> klass = Unsafe.getGenericClass(this, 0);
+            if (klass != null) {
+                binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
             }
         }
         if (binding != null) {
