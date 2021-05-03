@@ -9,14 +9,17 @@ import androidx.lifecycle.Observer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 여러 {@link LiveData}의 변경을 관찰하기 위한 클래스
  *
  * @author troy
  * @since 1.2
+ * @deprecated {@link CompositeLiveData} 사용
  */
-@SuppressWarnings({"UnusedDeclaration", "unchecked"})
+@Deprecated
+@SuppressWarnings({"UnusedDeclaration", "unchecked","deprecation"})
 public final class StreamLiveData<T> extends MediatorLiveData<T> {
     private final Map<LiveData<?>, StreamLiveDataFunction<T, T, Object>> functions
             = new LinkedHashMap<>();
@@ -52,7 +55,8 @@ public final class StreamLiveData<T> extends MediatorLiveData<T> {
         for (LiveData<?> liveData : functions.keySet()) {
             Object value = liveData.getValue();
             StreamLiveDataFunction<T, T, Object> function = functions.get(liveData);
-            currentValue = function.apply(currentValue, value);
+            currentValue = Objects.requireNonNull(function)
+                    .apply(currentValue, value);
         }
         setValue(currentValue);
     }
