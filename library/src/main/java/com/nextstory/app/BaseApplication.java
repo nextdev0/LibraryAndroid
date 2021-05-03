@@ -11,6 +11,9 @@ import com.nextstory.app.locale.LocaleManager;
 import com.nextstory.app.locale.LocaleManagerImpl;
 import com.nextstory.app.theme.ThemeHelpers;
 import com.nextstory.app.theme.ThemeType;
+import com.nextstory.util.LifecycleCallbacks;
+import com.nextstory.util.SimpleActivityLifecycleCallbacks;
+import com.nextstory.util.SimpleFragmentLifecycleCallbacks;
 
 import java.util.List;
 import java.util.Locale;
@@ -23,9 +26,17 @@ import java.util.Objects;
  * @since 1.3
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class BaseApplication extends Application {
+public abstract class BaseApplication extends Application
+        implements SimpleActivityLifecycleCallbacks, SimpleFragmentLifecycleCallbacks {
     private final ThemeHelpers themeHelpers = new ThemeHelpers();
     private final LocaleManager localeManager = new LocaleManagerImpl(this);
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        LifecycleCallbacks.registerActivityLifecycleCallbacks(this);
+        LifecycleCallbacks.registerFragmentLifecycleCallbacks(this);
+    }
 
     @Override
     public Resources getResources() {
