@@ -4,8 +4,6 @@ import com.nextstory.annotationprocessor.util.ClassNames;
 import com.nextstory.annotationprocessor.util.ElementHelper;
 import com.nextstory.annotations.ActivityIntentBuilder;
 import com.nextstory.annotations.ActivityIntentExtra;
-import com.nextstory.annotations.IntentBuilder;
-import com.nextstory.annotations.IntentExtra;
 import com.nextstory.util.LibraryInitializer;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -35,14 +33,11 @@ import javax.lang.model.element.TypeElement;
  * @author troy
  * @author 1.0
  */
-@SuppressWarnings("deprecation")
 public final class ActivityIntentBuilderProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return new HashSet<String>() {
             {
-                add(IntentBuilder.class.getCanonicalName());
-                add(IntentExtra.class.getCanonicalName());
                 add(ActivityIntentBuilder.class.getCanonicalName());
                 add(ActivityIntentExtra.class.getCanonicalName());
             }
@@ -58,26 +53,6 @@ public final class ActivityIntentBuilderProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Set<ElementHelper> intentBuilderSet = new LinkedHashSet<>();
         Map<ElementHelper, List<Element>> intentExtraMap = new LinkedHashMap<>();
-
-        // todo annotation 1.3 버전부터 삭제 (사유 : deprecated 처리)
-        for (Element e : roundEnvironment.getElementsAnnotatedWith(IntentBuilder.class)) {
-            ElementHelper elementHelper = ElementHelper.fromElement(e);
-            intentBuilderSet.add(elementHelper);
-        }
-
-        // todo annotation 1.3 버전부터 삭제 (사유 : deprecated 처리)
-        for (Element e : roundEnvironment.getElementsAnnotatedWith(IntentExtra.class)) {
-            String parentName = e.getEnclosingElement().toString();
-            for (ElementHelper elementHelper : intentBuilderSet) {
-                if (elementHelper.getFullName().equals(parentName)) {
-                    if (!intentExtraMap.containsKey(elementHelper)) {
-                        intentExtraMap.put(elementHelper, new ArrayList<>());
-                    }
-                    List<Element> elements = intentExtraMap.get(elementHelper);
-                    elements.add(e);
-                }
-            }
-        }
 
         for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentBuilder.class)) {
             ElementHelper elementHelper = ElementHelper.fromElement(e);
