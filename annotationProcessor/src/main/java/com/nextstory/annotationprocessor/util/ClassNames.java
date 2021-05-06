@@ -18,9 +18,13 @@ public final class ClassNames {
     public static final ClassName FragmentManager =
             ClassName.bestGuess("androidx.fragment.app.FragmentManager");
     public static final ClassName View = ClassName.bestGuess("android.view.View");
+    public static final ClassName SharedPreferences =
+            ClassName.bestGuess("android.content.SharedPreferences");
 
     public static final ClassName LifecycleCallbacks =
             ClassName.bestGuess("com.nextstory.util.LifecycleCallbacks");
     public static final ClassName SimpleFragmentLifecycleCallbacks =
             ClassName.bestGuess("com.nextstory.util.SimpleFragmentLifecycleCallbacks");
+    public static final ClassName AutoSharedPreferenceUtils =
+            ClassName.bestGuess("com.nextstory.util.AutoSharedPreferenceUtils");
 }

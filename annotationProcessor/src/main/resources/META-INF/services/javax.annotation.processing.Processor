@@ -1,2 +1,3 @@
 com.nextstory.annotationprocessor.ActivityIntentBuilderProcessor
 com.nextstory.annotationprocessor.FragmentArgumentsBuilderProcessor
+com.nextstory.annotationprocessor.AutoSharedPreferencesProcessor

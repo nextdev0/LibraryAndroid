@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.nextstory.app.BaseActivity;
+import com.nextstory.sample.data.TestSharedPreferences;
 import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.dialog.BlurTestDialog;
 import com.nextstory.sample.ui.popup.TestPopup;
@@ -25,6 +26,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @since 1.0
  */
 public final class MainActivity extends BaseActivity<ActivityMainBinding> {
+    TestSharedPreferences test;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,10 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         getBinding().setActivity(this);
         getBinding().setLifecycleOwner(this);
+
+        test = new TestSharedPreferences(this);
+        int test2 = test.getValue2();
+        test.setValue2(test2 + 1);
     }
 
     public void test1() {

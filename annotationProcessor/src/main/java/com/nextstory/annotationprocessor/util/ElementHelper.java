@@ -10,6 +10,7 @@ public final class ElementHelper {
     private final String fullName;
     private final String packageName;
     private final String simpleName;
+    private Object tag = null;
 
     public ElementHelper(String fullName, String packageName, String simpleName) {
         this.fullName = fullName;
@@ -34,5 +35,13 @@ public final class ElementHelper {
 
     public String getSimpleName() {
         return simpleName;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
+    public void setTag(Object tag) {
+        this.tag = tag;
     }
 }
