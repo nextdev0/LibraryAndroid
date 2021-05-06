@@ -19,7 +19,7 @@ import java.util.Objects;
  * @deprecated {@link CompositeLiveData} 사용
  */
 @Deprecated
-@SuppressWarnings({"UnusedDeclaration", "unchecked","deprecation"})
+@SuppressWarnings({"UnusedDeclaration", "unchecked", "deprecation"})
 public final class StreamLiveData<T> extends MediatorLiveData<T> {
     private final Map<LiveData<?>, StreamLiveDataFunction<T, T, Object>> functions
             = new LinkedHashMap<>();
