@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 액티비티 값 전달용 Intent 빌더 생성 어노테이션
  *
  * @author troy
- * @since 1.0
+ * @since 1.1
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)

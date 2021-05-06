@@ -33,7 +33,7 @@ import javax.lang.model.element.TypeElement;
  * @author troy
  * @author 1.1
  */
-public class FragmentArgumentsBuilderProcessor extends AbstractProcessor {
+public final class FragmentArgumentsBuilderProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return new HashSet<String>() {
