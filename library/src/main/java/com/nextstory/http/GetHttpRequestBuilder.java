@@ -72,6 +72,11 @@ final class GetHttpRequestBuilder implements HttpRequestBuilder {
     }
 
     @Override
+    public HttpRequestBuilder putRequestBodyObject(Object object) {
+        throw new UnsupportedOperationException("request body object is not supported.");
+    }
+
+    @Override
     public HttpRequestBuilder addMultipartByUri(@NonNull String body, @NonNull Uri uri) {
         throw new UnsupportedOperationException("Multipart request is not supported.");
     }

@@ -37,6 +37,8 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
     private final StringBuilder fields = new StringBuilder();
     private final Map<String, Uri> multipart = new HashMap<>();
     private final HttpClient httpClient;
+
+    private boolean isRequestBodyPut = false;
     private String url = "";
 
     PostHttpRequestBuilder(HttpClient httpClient) {
@@ -51,32 +53,64 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
 
     @Override
     public HttpRequestBuilder addField(String key, Object value) {
-        this.fields.append('&');
-        this.fields.append(key);
-        this.fields.append('=');
-        if (value instanceof String) {
-            try {
-                this.fields.append(URLEncoder.encode((String) value, "utf-8"));
-            } catch (UnsupportedEncodingException ignore) {
-                this.fields.append(value);
-            }
+        if (multipart.size() > 0) {
+            throw new IllegalStateException("could not add field with multipart.");
         } else {
-            this.fields.append(value);
+            if (!isRequestBodyPut) {
+                this.fields.append('&');
+                this.fields.append(key);
+                this.fields.append('=');
+                if (value instanceof String) {
+                    try {
+                        this.fields.append(URLEncoder.encode((String) value, "utf-8"));
+                    } catch (UnsupportedEncodingException ignore) {
+                        this.fields.append(value);
+                    }
+                } else {
+                    this.fields.append(value);
+                }
+            } else {
+                throw new IllegalStateException("could not add field with request body object.");
+            }
         }
         return this;
     }
 
     @Override
     public HttpRequestBuilder addField(Map<String, Object> map) {
-        for (String key : map.keySet()) {
-            addField(key, map.get(key));
+        if (multipart.size() > 0) {
+            throw new IllegalStateException("could not add field with multipart.");
+        } else {
+            if (!isRequestBodyPut) {
+                for (String key : map.keySet()) {
+                    addField(key, map.get(key));
+                }
+            } else {
+                throw new IllegalStateException("could not add field with request body object.");
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public HttpRequestBuilder putRequestBodyObject(Object object) {
+        if (fields.length() > 0) {
+            throw new IllegalStateException("could not add field with request body object.");
+        } else {
+            String data = httpClient.onRequest(object);
+            this.fields.append(data);
+            isRequestBodyPut = true;
         }
         return this;
     }
 
     @Override
     public HttpRequestBuilder addMultipartByUri(@NonNull String body, @NonNull Uri uri) {
-        multipart.put(body, uri);
+        if (fields.length() > 0) {
+            throw new IllegalStateException("could not add field with multipart.");
+        } else {
+            multipart.put(body, uri);
+        }
         return this;
     }
 
@@ -166,7 +200,11 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
             httpConnection.setRequestMethod("POST");
 
             // 필드 전송
-            Log.d(TAG, "Body " + fields.toString());
+            if (fields.charAt(0) == '&') {
+                Log.d(TAG, "Body ?" + fields.toString().substring(1));
+            } else {
+                Log.d(TAG, "Body " + fields.toString());
+            }
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
                     httpConnection.getOutputStream(), StandardCharsets.UTF_8);
             outputStreamWriter.write(fields.toString());

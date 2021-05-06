@@ -17,6 +17,7 @@ public final class HttpClient {
 
     private final Context context;
 
+    private RequestConverter requestConverter = null;
     private ResponseConverter responseConverter = null;
     private String baseUrl = "";
 
@@ -62,6 +63,16 @@ public final class HttpClient {
     }
 
     /**
+     * 요청 데이터 컨버터 등록
+     *
+     * @param requestConverter 컨버터
+     * @since 1.4
+     */
+    public void registerRequestConverter(@NonNull RequestConverter requestConverter) {
+        this.requestConverter = requestConverter;
+    }
+
+    /**
      * 응답 데이터 컨버터 등록
      *
      * @param responseConverter 컨버터
@@ -85,6 +96,20 @@ public final class HttpClient {
     }
 
     /**
+     * 요청 데이터 처리
+     *
+     * @param object 직렬화할 객체
+     * @return 직렬화된 문자열 데이터
+     */
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    String onRequest(@NonNull Object object) {
+        if (requestConverter == null) {
+            return "";
+        }
+        return requestConverter.convert(object);
+    }
+
+    /**
      * 응답 처리
      *
      * @param responseSource 응답 결과 문자열 소스
@@ -105,6 +130,7 @@ public final class HttpClient {
      */
     public static class Builder {
         private final Context context;
+        private RequestConverter requestConverter = null;
         private ResponseConverter responseConverter = null;
         private String baseUrl = "";
         private int connectionTimeout = 20000;
@@ -129,16 +155,40 @@ public final class HttpClient {
             return this;
         }
 
+        /**
+         * 요청 데이터 컨버터 등록
+         *
+         * @param requestConverter 컨버터
+         * @return 빌더 인스턴스
+         * @since 1.4
+         */
+        public Builder registerRequestConverter(@NonNull RequestConverter requestConverter) {
+            this.requestConverter = requestConverter;
+            return this;
+        }
+
+        /**
+         * 응답 데이터 컨버터 등록
+         *
+         * @param responseConverter 컨버터
+         * @return 빌더 인스턴스
+         */
         public Builder registerResponseConverter(@NonNull ResponseConverter responseConverter) {
             this.responseConverter = responseConverter;
             return this;
         }
 
+        /**
+         * 생성
+         *
+         * @return 인스턴스
+         */
         public HttpClient build() {
             HttpClient httpClient = new HttpClient(context);
             httpClient.setBaseUrl(baseUrl);
             httpClient.setConnectionTimeout(connectionTimeout);
             httpClient.setReadTimeout(readTimeout);
+            httpClient.registerRequestConverter(requestConverter);
             httpClient.registerResponseConverter(responseConverter);
             return httpClient;
         }
