@@ -1,10 +1,8 @@
 package com.nextstory.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,10 +20,8 @@ import com.esafirm.imagepicker.model.Image;
 import com.nextstory.app.AbstractBaseActivity;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -56,32 +52,6 @@ public final class RxImagePicker {
 
     public RxImagePicker(FragmentActivity activity) {
         this.activity = activity;
-    }
-
-    /**
-     * 파일 Uri에서 바이트 배열을 추출
-     *
-     * @param context 앱 컨텍스트
-     * @param fileUri 파일 Uri
-     * @return 바이트 배열
-     */
-    private static byte[] getBytesByFileUri(Context context, Uri fileUri) {
-        try {
-            InputStream inputStream = context.getContentResolver().openInputStream(fileUri);
-            if (inputStream == null) {
-                return null;
-            }
-            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteBuffer);
-            byte[] bytes = byteBuffer.toByteArray();
-            byteBuffer.close();
-            bitmap.recycle();
-            return bytes;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     /**
