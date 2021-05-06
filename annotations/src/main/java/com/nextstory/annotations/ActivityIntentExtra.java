@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Intent extra 생성 어노테이션
  *
  * @author troy
- * @since 1.0
+ * @since 1.1
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)

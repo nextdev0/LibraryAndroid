@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * {@link SharedPreferences} Getter, Setter 생성 어노테이션
  *
  * @author troy
- * @since 1.2
+ * @since 1.3
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)

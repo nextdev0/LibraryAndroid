@@ -30,7 +30,7 @@ import javax.lang.model.element.TypeElement;
  * SharedPreferences getter, setter 자동 생성용 어노테이션 프로세서
  *
  * @author troy
- * @since 1.2
+ * @since 1.3
  */
 public final class AutoSharedPreferencesProcessor extends AbstractProcessor {
     @Override
