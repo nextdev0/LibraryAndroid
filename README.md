@@ -2,7 +2,21 @@
 
 프로젝트별 사용되는 공용 라이브러리 프로젝트입니다.
 
-## 사용방법
+## 문서
+
+### 어노테이션
+
+- [AutoSharedPreferences](./docs/annotations/AutoSharedPreferences.md) : SharedPreference 코드 생성
+- [ActivityIntentBuilder](./docs/annotations/ActivityIntentBuilder.md) : 액티비티 Intent 빌더 생성
+- [FragmentArgumentsBuilder](./docs/annotations/FragmentArgumentsBuilder.md) : 프래그먼트 빌더 생성
+
+### 라이브러리
+
+```text
+내용 준비중
+```
+
+## 라이브러리 사용방법
 
 1. 프로젝트 루트의 build.gradle에 아래 코드를 추가합니다.
 
@@ -37,8 +51,8 @@
         // ...
 
         // 추가
-        implementation 'com.nextstory:library:1.3.4'
-        annotationProcessor 'com.nextstory:annotations:1.0.1'
+        implementation 'com.nextstory:library:1.5.1'
+        annotationProcessor 'com.nextstory:annotations:1.3.0'
 
         // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
         implementation 'androidx.appcompat:appcompat:1.2.0'
