@@ -1,8 +1,7 @@
 package com.nextstory.sample;
 
-import android.app.Application;
-
 import com.google.gson.Gson;
+import com.nextstory.app.BaseApplication;
 import com.nextstory.util.AutoSharedPreferenceUtils;
 
 /**
@@ -11,7 +10,7 @@ import com.nextstory.util.AutoSharedPreferenceUtils;
  * @author troy
  * @since 1.0
  */
-public final class SampleApplication extends Application {
+public final class SampleApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();

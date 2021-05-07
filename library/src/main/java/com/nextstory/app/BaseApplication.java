@@ -34,12 +34,26 @@ public abstract class BaseApplication extends Application
     @Override
     public void onCreate() {
         super.onCreate();
+
         LifecycleCallbacks.registerActivityLifecycleCallbacks(this);
         LifecycleCallbacks.registerFragmentLifecycleCallbacks(this);
     }
 
+    /**
+     * @return {@link Application#getResources()}
+     * @see #getLocaleResources() 로케일 설정이 적용된 리소스 반환 시 사용
+     */
     @Override
     public Resources getResources() {
+        return super.getResources();
+    }
+
+    /**
+     * 로케일 설정이 적용된 리소스
+     *
+     * @return 리소스
+     */
+    public Resources getLocaleResources() {
         return localeManager.wrapContext(this, super.getResources()).getResources();
     }
 
@@ -96,7 +110,7 @@ public abstract class BaseApplication extends Application
      * @param res 문자열 리소스
      */
     public void showToast(@StringRes int res) {
-        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getLocaleResources().getString(res), Toast.LENGTH_SHORT).show();
     }
 
     /**
