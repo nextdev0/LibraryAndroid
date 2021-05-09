@@ -50,7 +50,7 @@ public final class RxPermission {
     public RxPermission(@NonNull Fragment fragment) {
         this.activity = null;
         this.fragment = fragment;
-        this.lifecycleOwner = activity;
+        this.lifecycleOwner = fragment;
         this.permissionSharedPreferences = fragment.requireContext()
                 .getSharedPreferences("permissions", Context.MODE_PRIVATE);
     }
