@@ -44,6 +44,7 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     implementation project(':library')
+    implementation project(':libgdx')
     implementation project(':annotations')
     annotationProcessor project(':annotationProcessor')
 

@@ -1,0 +1,93 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion '30.0.3'
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName '1.0.0'
+    }
+    buildTypes {
+        debug {
+            debuggable true
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            debuggable false
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        dataBinding true
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+configurations {
+    include
+}
+
+project.afterEvaluate {
+    task copyDeps(type: Copy) {
+        from configurations.include {
+            include '**/*.jar'
+        }
+        into './build/intermediates/aar_libs_directory/release/libs'
+    }
+    mergeReleaseJniLibFolders.dependsOn copyDeps
+
+    task copyDebugDeps(type: Copy) {
+        from configurations.include {
+            include '**/*.jar'
+        }
+        into './build/intermediates/aar_libs_directory/debug/libs'
+    }
+    mergeDebugJniLibFolders.dependsOn copyDebugDeps
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation project(':library')
+
+    api files('libs/libgdx.jar')
+    include files('libs/libgdx.jar')
+
+    api files('libs/libgdx-android.jar')
+    include files('libs/libgdx-android.jar')
+}
+
+publishing {
+    task sourceJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier 'sources'
+    }
+    publications {
+        library(MavenPublication) {
+            artifact sourceJar
+            artifact "$buildDir/outputs/aar/libgdx-release.aar"
+            groupId 'com.nextstory'
+            artifactId 'libgdx'
+            version android.defaultConfig.versionName
+        }
+    }
+    repositories {
+        maven {
+            url "$rootDir/repository"
+        }
+    }
+}
