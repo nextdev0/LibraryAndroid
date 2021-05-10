@@ -54,7 +54,7 @@ public final class AutoSharedPreferenceUtils {
     public static void assertConverterIsNotNull() {
         if (converter == null) {
             throw new NullPointerException("converter is null, " +
-                    "use AutoSharedPreferenceUtils.registerConverter(Convertor) method.");
+                    "use AutoSharedPreferenceUtils.registerConverter(Converter) method.");
         }
     }
 
