@@ -49,7 +49,8 @@ public final class UtilitiesInitializationProvider extends ContentProvider {
                     }
                 }
             }
-        } catch (Throwable ignore) {
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
 
         return true;
