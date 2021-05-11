@@ -193,7 +193,7 @@ public final class Navigator implements
      *
      * @param activity 현재 액티비티
      */
-    public void pop(@NonNull Activity activity) {
+    public static void pop(@NonNull Activity activity) {
         Objects.requireNonNull(activity, "activity == null");
         activity.finish();
     }
@@ -203,7 +203,7 @@ public final class Navigator implements
      *
      * @param currentFragment 현재 프래그먼트
      */
-    public void pop(@NonNull Fragment currentFragment) {
+    public static void pop(@NonNull Fragment currentFragment) {
         Objects.requireNonNull(currentFragment, "currentFragment == null");
         currentFragment
                 .getParentFragmentManager()
