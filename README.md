@@ -61,7 +61,7 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:1.6.0'
+    implementation 'com.nextstory:library:1.6.1'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -88,7 +88,7 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:1.6.0'
+    implementation 'com.nextstory:library:1.6.1'
     annotationProcessor 'com.nextstory:annotations:1.4.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
@@ -116,7 +116,7 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:1.6.0'
+    implementation 'com.nextstory:library:1.6.1'
     implementation 'com.nextstory:libgdx:1.0.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
