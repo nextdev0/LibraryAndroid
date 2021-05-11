@@ -3,12 +3,12 @@ package com.nextstory.util;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RestrictTo;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -26,16 +26,12 @@ import java.util.Set;
 @SuppressWarnings("UnusedDeclaration")
 public final class LifecycleCallbacks
         implements LibraryInitializer, SimpleActivityLifecycleCallbacks {
-    /**
-     * 프래그먼트 콜백
-     */
+    private static final Set<Application.ActivityLifecycleCallbacks> activityCallbacks =
+            Collections.synchronizedSet(new HashSet<>());
     private static final Set<FragmentManager.FragmentLifecycleCallbacks> fragmentCallbacks =
             Collections.synchronizedSet(new HashSet<>());
     private static final Set<SimpleFragmentLifecycleCallbacks> simpleFragmentCallbacks =
             Collections.synchronizedSet(new HashSet<>());
-
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    static Application sApplication = null;
 
     /**
      * 프래그먼트 콜백 처리
@@ -213,9 +209,7 @@ public final class LifecycleCallbacks
     public static void registerActivityLifecycleCallbacks(
             @NonNull Application.ActivityLifecycleCallbacks callbacks
     ) {
-        if (sApplication != null) {
-            sApplication.registerActivityLifecycleCallbacks(callbacks);
-        }
+        activityCallbacks.add(callbacks);
     }
 
     /**
@@ -226,9 +220,7 @@ public final class LifecycleCallbacks
     public static void unregisterActivityLifecycleCallbacks(
             @NonNull Application.ActivityLifecycleCallbacks callbacks
     ) {
-        if (sApplication != null) {
-            sApplication.unregisterActivityLifecycleCallbacks(callbacks);
-        }
+        activityCallbacks.remove(callbacks);
     }
 
     /**
@@ -277,8 +269,8 @@ public final class LifecycleCallbacks
 
     @Override
     public void onInitialized(Context context, String argument) {
-        sApplication = (Application) context;
-        sApplication.registerActivityLifecycleCallbacks(this);
+        Application application = (Application) context;
+        application.registerActivityLifecycleCallbacks(this);
     }
 
     @Override
@@ -288,6 +280,37 @@ public final class LifecycleCallbacks
             fragmentActivity.getSupportFragmentManager()
                     .registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, true);
         }
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivityCreated(activity, savedInstanceState);
+        }
+    }
+
+    @Override
+    public void onActivityStarted(@NonNull Activity activity) {
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivityStarted(activity);
+        }
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivityResumed(activity);
+        }
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivityPaused(activity);
+        }
+    }
+
+    @Override
+    public void onActivityStopped(@NonNull Activity activity) {
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivityStopped(activity);
+        }
     }
 
     @Override
@@ -296,6 +319,146 @@ public final class LifecycleCallbacks
             FragmentActivity fragmentActivity = (FragmentActivity) activity;
             fragmentActivity.getSupportFragmentManager()
                     .unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks);
+        }
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivityDestroyed(activity);
+        }
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+        for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+            callback.onActivitySaveInstanceState(activity, outState);
+        }
+    }
+
+    @Override
+    public void onActivityPreCreated(@NonNull Activity activity,
+                                     @Nullable Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPreCreated(activity, savedInstanceState);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostCreated(@NonNull Activity activity,
+                                      @Nullable Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostCreated(activity, savedInstanceState);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPreStarted(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPreStarted(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostStarted(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostStarted(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPreResumed(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPreResumed(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostResumed(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostResumed(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPrePaused(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPrePaused(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostPaused(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostPaused(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPreStopped(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPreStopped(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostStopped(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostStopped(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPreSaveInstanceState(@NonNull Activity activity,
+                                               @NonNull Bundle outState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPreSaveInstanceState(activity, outState);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostSaveInstanceState(@NonNull Activity activity,
+                                                @NonNull Bundle outState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostSaveInstanceState(activity, outState);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPreDestroyed(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPreDestroyed(activity);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityPostDestroyed(@NonNull Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            for (Application.ActivityLifecycleCallbacks callback : activityCallbacks) {
+                callback.onActivityPostDestroyed(activity);
+            }
         }
     }
 }
