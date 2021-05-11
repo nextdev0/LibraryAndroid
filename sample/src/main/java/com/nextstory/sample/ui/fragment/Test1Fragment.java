@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nextstory.annotations.FragmentArgument;
-import com.nextstory.annotations.FragmentArgumentsBuilder;
+import com.nextstory.annotations.FragmentBuilder;
 import com.nextstory.app.BaseFragment;
 import com.nextstory.app.Navigator;
 import com.nextstory.field.ListLiveData;
@@ -29,7 +29,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @author troy
  * @since 1.0
  */
-@FragmentArgumentsBuilder
+@FragmentBuilder
 public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     public final ListLiveData<String> testList = new ListLiveData<>();
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
@@ -60,7 +60,7 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     }
 
     public void argumentsTest() {
-        Navigator.push(this, new Test1FragmentArgumentsBuilder()
+        Navigator.push(this, new Test1FragmentBuilder()
                 .setArg1("arguments set!")
                 .build());
     }

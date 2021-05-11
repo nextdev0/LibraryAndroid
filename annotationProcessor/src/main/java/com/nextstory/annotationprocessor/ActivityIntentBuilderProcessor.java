@@ -74,7 +74,8 @@ public final class ActivityIntentBuilderProcessor extends AbstractProcessor {
 
         try {
             generateIntents(intentBuilderSet, intentExtraMap);
-            JavaFile.builder("com.nextstory.util", TypeSpec.classBuilder("IntentBuilderInitializer")
+            JavaFile.builder("com.nextstory.util", TypeSpec.classBuilder(
+                    "ActivityIntentBuilderInitializer")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     .addSuperinterface(LibraryInitializer.class)
                     .addSuperinterface(ClassNames.ActivityLifecycleCallbacks)

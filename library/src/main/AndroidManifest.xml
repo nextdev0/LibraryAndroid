@@ -22,11 +22,19 @@
             <meta-data
                 android:name="com.nextstory.util.LifecycleCallbacks"
                 android:value="empty" />
+            <!-- todo annotation 1.5 부터 삭제 -->
             <meta-data
                 android:name="com.nextstory.util.IntentBuilderInitializer"
                 android:value="empty" />
+            <!-- todo annotation 1.5 부터 삭제 -->
             <meta-data
                 android:name="com.nextstory.util.ArgumentsBuilderInitializer"
+                android:value="empty" />
+            <meta-data
+                android:name="com.nextstory.util.ActivityIntentBuilderInitializer"
+                android:value="empty" />
+            <meta-data
+                android:name="com.nextstory.util.FragmentBuilderInitializer"
                 android:value="empty" />
         </provider>
 

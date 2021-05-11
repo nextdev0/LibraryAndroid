@@ -4,6 +4,7 @@ import com.nextstory.annotationprocessor.util.ClassNames;
 import com.nextstory.annotationprocessor.util.ElementHelper;
 import com.nextstory.annotations.FragmentArgument;
 import com.nextstory.annotations.FragmentArgumentsBuilder;
+import com.nextstory.annotations.FragmentBuilder;
 import com.nextstory.util.LibraryInitializer;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -33,12 +34,14 @@ import javax.lang.model.element.TypeElement;
  * @author troy
  * @author 1.1
  */
-public final class FragmentArgumentsBuilderProcessor extends AbstractProcessor {
+@SuppressWarnings("deprecation")
+public final class FragmentBuilderProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return new HashSet<String>() {
             {
                 add(FragmentArgumentsBuilder.class.getCanonicalName());
+                add(FragmentBuilder.class.getCanonicalName());
                 add(FragmentArgument.class.getCanonicalName());
             }
         };
@@ -59,6 +62,11 @@ public final class FragmentArgumentsBuilderProcessor extends AbstractProcessor {
             fragmentArgumentsBuilderSet.add(elementHelper);
         }
 
+        for (Element e : re.getElementsAnnotatedWith(FragmentBuilder.class)) {
+            ElementHelper elementHelper = ElementHelper.fromElement(e);
+            fragmentArgumentsBuilderSet.add(elementHelper);
+        }
+
         for (Element e : re.getElementsAnnotatedWith(FragmentArgument.class)) {
             String parentName = e.getEnclosingElement().toString();
             for (ElementHelper elementHelper : fragmentArgumentsBuilderSet) {
@@ -75,7 +83,7 @@ public final class FragmentArgumentsBuilderProcessor extends AbstractProcessor {
         try {
             generateBuilder(fragmentArgumentsBuilderSet, fragmentArgumentMap);
             JavaFile.builder("com.nextstory.util", TypeSpec
-                    .classBuilder("ArgumentsBuilderInitializer")
+                    .classBuilder("FragmentBuilderInitializer")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     .addSuperinterface(LibraryInitializer.class)
                     .addSuperinterface(ClassNames.SimpleFragmentLifecycleCallbacks)
@@ -91,7 +99,7 @@ public final class FragmentArgumentsBuilderProcessor extends AbstractProcessor {
     }
 
     private String getIntentBuilderName(ElementHelper elementHelper) {
-        return elementHelper.getSimpleName() + "ArgumentsBuilder";
+        return elementHelper.getSimpleName() + "Builder";
     }
 
     /**

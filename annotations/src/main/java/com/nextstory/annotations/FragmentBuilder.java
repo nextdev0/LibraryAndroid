@@ -6,14 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 프래그먼트 Argument 전달용 Bundle 빌더 생성 어노테이션
+ * Arguments 전달을 위한 프래그먼트 빌더 생성 어노테이션
  *
  * @author troy
- * @since 1.1
- * @deprecated {@link FragmentBuilder} 사용
+ * @since 1.4
  */
-@Deprecated
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface FragmentArgumentsBuilder {
+public @interface FragmentBuilder {
 }
