@@ -9,9 +9,9 @@ import androidx.annotation.Nullable;
 import com.nextstory.annotations.FragmentArgument;
 import com.nextstory.annotations.FragmentArgumentsBuilder;
 import com.nextstory.app.BaseFragment;
+import com.nextstory.app.Navigator;
 import com.nextstory.field.ListLiveData;
 import com.nextstory.field.NonNullLiveData;
-import com.nextstory.sample.R;
 import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
@@ -60,13 +60,9 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     }
 
     public void argumentsTest() {
-        requireFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment, new Test1FragmentArgumentsBuilder()
-                        .setArg1("arguments set!")
-                        .build())
-                .addToBackStack(null)
-                .commit();
+        Navigator.push(this, new Test1FragmentArgumentsBuilder()
+                .setArg1("arguments set!")
+                .build());
     }
 
     public void onDialogTestClick() {

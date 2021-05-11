@@ -14,6 +14,9 @@
             android:authorities="${applicationId}.utils-initializer"
             android:exported="false">
             <meta-data
+                android:name="com.nextstory.app.Navigator"
+                android:value="empty" />
+            <meta-data
                 android:name="com.nextstory.field.SaveInstanceStateFieldHelper"
                 android:value="empty" />
             <meta-data
