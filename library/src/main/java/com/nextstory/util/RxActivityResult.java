@@ -147,7 +147,7 @@ public final class RxActivityResult {
                 if (listener != null) {
                     listener.onActivityResult(resultCode, data);
                 }
-                requireFragmentManager()
+                getParentFragmentManager()
                         .beginTransaction()
                         .remove(this)
                         .commitAllowingStateLoss();
