@@ -61,7 +61,7 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:1.5.1'
+    implementation 'com.nextstory:library:1.6.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -88,8 +88,8 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:1.5.1'
-    annotationProcessor 'com.nextstory:annotations:1.3.0'
+    implementation 'com.nextstory:library:1.6.0'
+    annotationProcessor 'com.nextstory:annotations:1.4.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -116,7 +116,7 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:1.5.1'
+    implementation 'com.nextstory:library:1.6.0'
     implementation 'com.nextstory:libgdx:1.0.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
@@ -138,20 +138,24 @@ dependencies {
 
 - 메인 라이브러리
 
-1. 툴 우측 메뉴의 Gradle을 열어서 `library > Tasks > other > assembleRelease`를 실행.
-2. 1번 과정을 한 번 더 실행.
-3. 빌드가 완료될 경우 `library > Tasks > publishing > publish`를 실행하면 완료.
+1. 툴 우측 메뉴의 Gradle을 열어서 왼쪽 상단 `Execute Gradle Task` 실행.
+2. Run Anything 창이 뜬 상태에서 오른쪽 상단의 프로젝트를 `Library.library`를 선택.
+3. `gradle assembleRelease`를 입력하고 실행.
+4. `gradle assembleRelease`를 한 번 더 진행.
+5. `gradle publish`를 실행하면 배포가 완료됩니다.
 
 - 어노테이션 라이브러리
 
-1. 툴 우측 메뉴의 Gradle을 열어서 `annotationProcessor > Tasks > build > jar`를 실행.
-2. 빌드 후 다음으로 `annotationProcessor > Tasks > other > sourceJar`를 실행.
-3. 1, 2번 과정을 한 번 더 실행.
-4. 빌드가 완료될 경우 `annotationProcessor > Tasks > publishing > publish`를 실행하면 완료.
+1. 툴 우측 메뉴의 Gradle을 열어서 왼쪽 상단 `Execute Gradle Task` 실행.
+2. Run Anything 창이 뜬 상태에서 오른쪽 상단의 프로젝트를 `Library.annotationProcessor`를 선택.
+3. `gradle jar`를 입력하고 실행. (두 번 해줘야합니다.)
+4. `gradle sourceJar`를 입력하고 실행. (두 번 해줘야합니다.)
+5. `gradle publish`를 실행하면 배포가 완료됩니다.
 
 - libgdx 라이브러리
 
-1. 툴 우측 메뉴의 Gradle을 열어서 `libgdx > Tasks > build > jar`를 실행.
-2. 빌드 후 다음으로 `libgdx > Tasks > other > sourceJar`를 실행.
-3. 1, 2번 과정을 한 번 더 실행.
-4. 빌드가 완료될 경우 `libgdx > Tasks > publishing > publish`를 실행하면 완료.
+1. 툴 우측 메뉴의 Gradle을 열어서 왼쪽 상단 `Execute Gradle Task` 실행.
+2. Run Anything 창이 뜬 상태에서 오른쪽 상단의 프로젝트를 `Library.libgdx`를 선택.
+3. `gradle assembleRelease`를 입력하고 실행.
+4. `gradle assembleRelease`를 한 번 더 진행.
+5. `gradle publish`를 실행하면 배포가 완료됩니다.
