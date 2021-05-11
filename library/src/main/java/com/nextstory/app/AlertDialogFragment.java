@@ -63,7 +63,7 @@ public final class AlertDialogFragment extends DialogFragment {
     }
 
     public final void show(@NonNull Fragment fragment) {
-        show(fragment.getParentFragmentManager());
+        show(fragment.requireFragmentManager());
     }
 
     public final void show(@NonNull FragmentTransaction fragmentTransaction) {
@@ -343,7 +343,7 @@ public final class AlertDialogFragment extends DialogFragment {
 
         public void show(@NonNull Fragment fragment) {
             AlertDialogFragment dialogFragment = create();
-            dialogFragment.show(fragment.getParentFragmentManager());
+            dialogFragment.show(fragment.requireFragmentManager());
         }
 
         public void show(@NonNull FragmentTransaction fragmentTransaction) {
@@ -363,7 +363,7 @@ public final class AlertDialogFragment extends DialogFragment {
 
         public void show(@NonNull Fragment fragment, @NonNull String tag) {
             AlertDialogFragment dialogFragment = create();
-            dialogFragment.show(fragment.getParentFragmentManager(), tag);
+            dialogFragment.show(fragment.requireFragmentManager(), tag);
         }
 
         public void show(@NonNull FragmentTransaction fragmentTransaction,

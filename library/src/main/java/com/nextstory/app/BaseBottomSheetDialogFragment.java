@@ -93,7 +93,7 @@ public class BaseBottomSheetDialogFragment<B extends ViewDataBinding> extends Di
     }
 
     public final void show(@NonNull Fragment fragment) {
-        show(fragment.getParentFragmentManager());
+        show(fragment.requireFragmentManager());
     }
 
     public final void show(@NonNull FragmentTransaction fragmentTransaction) {

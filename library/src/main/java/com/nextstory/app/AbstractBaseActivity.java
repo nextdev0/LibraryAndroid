@@ -59,11 +59,6 @@ public abstract class AbstractBaseActivity
     private InputMethodManager inputMethodManager = null;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(localeManager.wrapContext(newBase, null));
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -76,11 +71,8 @@ public abstract class AbstractBaseActivity
         super.onCreate(savedInstanceState);
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
         decorView = getWindow().getDecorView();
         contentView = getWindow().findViewById(android.R.id.content);
-
-        localeManager.wrapContext(this, null);
         currentLocale = localeManager.getLocale();
     }
 

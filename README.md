@@ -65,7 +65,6 @@ dependencies {
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.fragment:fragment:1.3.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -93,7 +92,6 @@ dependencies {
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.fragment:fragment:1.3.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -121,7 +119,6 @@ dependencies {
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.fragment:fragment:1.3.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.google.code.gson:gson:2.8.6'
