@@ -29,23 +29,27 @@ public final class UtilitiesInitializationProvider extends ContentProvider {
     public boolean onCreate() {
         Context context = getContext();
 
+        ComponentName provider = new ComponentName(
+                context.getPackageName(),
+                UtilitiesInitializationProvider.class.getName());
         try {
-            ComponentName provider = new ComponentName(
-                    context.getPackageName(),
-                    UtilitiesInitializationProvider.class.getName());
             ProviderInfo providerInfo = context.getPackageManager()
                     .getProviderInfo(provider, PackageManager.GET_META_DATA);
             Bundle metadata = providerInfo.metaData;
             if (metadata != null) {
                 Set<String> keys = metadata.keySet();
                 for (String key : keys) {
-                    String value = metadata.getString(key, null);
-                    Class<?> clazz = Class.forName(key);
-                    if (LibraryInitializer.class.isAssignableFrom(clazz)) {
-                        Class<? extends LibraryInitializer> component =
-                                (Class<? extends LibraryInitializer>) clazz;
-                        LibraryInitializer newInstance = component.newInstance();
-                        newInstance.onInitialized(context, value);
+                    try {
+                        String value = metadata.getString(key, null);
+                        Class<?> clazz = Class.forName(key);
+                        if (LibraryInitializer.class.isAssignableFrom(clazz)) {
+                            Class<? extends LibraryInitializer> component =
+                                    (Class<? extends LibraryInitializer>) clazz;
+                            LibraryInitializer newInstance = component.newInstance();
+                            newInstance.onInitialized(context, value);
+                        }
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
                     }
                 }
             }
