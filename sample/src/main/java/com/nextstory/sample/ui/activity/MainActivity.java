@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.nextstory.app.BaseActivity;
-import com.nextstory.app.Navigator;
 import com.nextstory.sample.data.TestSharedPreferences;
 import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.dialog.BlurTestDialog;
@@ -50,15 +49,15 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void test1() {
-        Navigator.push(this, new Intent(this, Test1Activity.class));
+        startActivity(new Intent(this, Test1Activity.class));
     }
 
     public void test2() {
-        Navigator.push(this, new Intent(this, Test2Activity.class));
+        startActivity(new Intent(this, Test2Activity.class));
     }
 
     public void test3() {
-        Navigator.push(this, new IntentBuilderTestActivityIntentBuilder(this)
+        startActivity(new IntentBuilderTestActivityIntentBuilder(this)
                 .setMessage("test")
                 .build());
     }
