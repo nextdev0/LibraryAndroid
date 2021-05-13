@@ -138,7 +138,10 @@ public final class AutoSharedPreferencesProcessor extends AbstractProcessor {
                                 .addParameter(TypeName.get(element.asType()), fieldName)
                                 .addStatement("$T.assertConverterIsNotNull()",
                                         ClassNames.AutoSharedPreferenceUtils)
-                                .addStatement("String source = $T.serialize($N)",
+                                .addStatement("String source = $T.isNull($N) " +
+                                                "? \"\" " +
+                                                ": $T.serialize($N)",
+                                        ClassNames.AutoSharedPreferenceUtils,   fieldName,
                                         ClassNames.AutoSharedPreferenceUtils, fieldName)
                                 .addStatement("this.sharedPreferences\n" +
                                                 ".edit()\n" +

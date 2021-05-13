@@ -1,6 +1,7 @@
 package com.nextstory.util;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 
 import com.nextstory.annotations.AutoSharedPreferences;
 
@@ -10,6 +11,7 @@ import com.nextstory.annotations.AutoSharedPreferences;
  * @author troy
  * @since 1.5
  */
+@SuppressWarnings("UnusedDeclaration")
 public final class AutoSharedPreferenceUtils {
     private final static Object lockObject = new Object();
     private static Converter converter = null;
@@ -51,11 +53,21 @@ public final class AutoSharedPreferenceUtils {
      * {@link Converter}가 {@code null}로 설정되어 있으면 예외발생
      * {@link #registerConverter(Converter)}로 등록해야함.
      */
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     public static void assertConverterIsNotNull() {
         if (converter == null) {
             throw new NullPointerException("converter is null, " +
                     "use AutoSharedPreferenceUtils.registerConverter(Converter) method.");
         }
+    }
+
+    /**
+     * {@link Converter}가 {@code null}로 설정되어 있으면 예외발생
+     * {@link #registerConverter(Converter)}로 등록해야함.
+     */
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    public static boolean isNull(Object o) {
+        return o == null;
     }
 
     /**
