@@ -112,10 +112,12 @@ public final class BlurView extends View {
         try {
             ApplicationInfo applicationInfo =
                     packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            if (applicationInfo.metaData == null) {
-                isBlurEnabled = true;
-            } else {
-                isBlurEnabled = applicationInfo.metaData.getBoolean(META_DATA_ENABLED, true);
+            if (applicationInfo != null) {
+                if (applicationInfo.metaData == null) {
+                    isBlurEnabled = true;
+                } else {
+                    isBlurEnabled = applicationInfo.metaData.getBoolean(META_DATA_ENABLED, true);
+                }
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
