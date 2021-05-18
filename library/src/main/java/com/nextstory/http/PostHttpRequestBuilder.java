@@ -200,8 +200,8 @@ final class PostHttpRequestBuilder implements HttpRequestBuilder {
             httpConnection.setRequestMethod("POST");
 
             // 필드 전송
-            if (fields.charAt(0) == '&') {
-                Log.d(TAG, "Body ?" + fields.toString().substring(1));
+            if (fields.length() > 0 && fields.charAt(0) == '&') {
+                Log.d(TAG, "Body ?" + fields.substring(1));
             } else {
                 Log.d(TAG, "Body " + fields.toString());
             }
