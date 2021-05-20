@@ -115,13 +115,13 @@ public final class AutoSharedPreferencesProcessor extends AbstractProcessor {
                                 .addModifiers(Modifier.PUBLIC)
                                 .addStatement("$T.assertConverterIsNotNull()",
                                         ClassNames.AutoSharedPreferenceUtils)
+                                .beginControlFlow("try")
                                 .addStatement("String source = " +
                                                 "this.sharedPreferences.getString(\"$N\", \"\")",
                                         prefItemName)
                                 .beginControlFlow("if (source.trim().isEmpty())")
                                 .addStatement("return $T.$N", entityClassName, fieldName)
                                 .endControlFlow()
-                                .beginControlFlow("try")
                                 .addStatement("return $T.deserialize($N, $T.class)",
                                         ClassNames.AutoSharedPreferenceUtils,
                                         "source",
