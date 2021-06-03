@@ -37,6 +37,10 @@ allprojects {
         // 추가
         maven { url 'https://jitpack.io' }
         maven { url "https://oss.jfrog.org/libs-snapshot" }
+
+        // (1), (2) 중 하나를 선택해서 입력합니다.
+
+        // (1) 기존 저장소 주소입니다. (github 주소)
         maven {
             url 'https://raw.githubusercontent.com/nextdev0/LibraryAndroid/main/repository'
             credentials(HttpHeaderCredentials) {
@@ -47,6 +51,9 @@ allprojects {
                 header(HttpHeaderAuthentication)
             }
         }
+
+        // (2) 회사 내부 git
+        maven { url 'http://ec2-3-34-185-2.ap-northeast-2.compute.amazonaws.com:8889/troy/LibraryAndroid.git' }        
     }
 }
 ```
