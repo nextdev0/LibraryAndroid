@@ -53,7 +53,7 @@ allprojects {
         }
 
         // (2) 회사 내부 git
-        maven { url 'http://ec2-3-34-185-2.ap-northeast-2.compute.amazonaws.com:8889/troy/LibraryAndroid.git' }        
+        maven { url 'http://ec2-3-34-185-2.ap-northeast-2.compute.amazonaws.com:8889/troy/LibraryAndroid/-/raw/main/repository' }        
     }
 }
 ```
