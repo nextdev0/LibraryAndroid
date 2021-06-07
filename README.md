@@ -71,16 +71,16 @@ dependencies {
     implementation 'com.nextstory:library:1.6.1'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
     implementation 'com.github.esafirm.android-image-picker:imagepicker:2.4.5'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.13'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation 'net.danlew:android.joda:2.10.9'
+    implementation 'net.danlew:android.joda:2.10.9.1'
 }
 ```
 
@@ -98,16 +98,16 @@ dependencies {
     annotationProcessor 'com.nextstory:annotations:1.4.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
     implementation 'com.github.esafirm.android-image-picker:imagepicker:2.4.5'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.13'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation 'net.danlew:android.joda:2.10.9'
+    implementation 'net.danlew:android.joda:2.10.9.1'
 }
 ```
 
@@ -125,16 +125,16 @@ dependencies {
     implementation 'com.nextstory:libgdx:1.0.0'
 
     // 추가, 아래 의존성은 내부적으로 사용되고 있습니다.
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
     implementation 'com.github.esafirm.android-image-picker:imagepicker:2.4.5'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.13'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-    implementation 'net.danlew:android.joda:2.10.9'
+    implementation 'net.danlew:android.joda:2.10.9.1'
 }
 ```
 
