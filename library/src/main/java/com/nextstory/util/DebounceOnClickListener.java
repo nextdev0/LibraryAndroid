@@ -1,5 +1,7 @@
 package com.nextstory.util;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -26,6 +28,15 @@ public abstract class DebounceOnClickListener implements View.OnClickListener {
     private static final Map<View, AtomicBoolean> bouncings = new WeakHashMap<>();
 
     /**
+     * 기능 활성화 메타 데이터, 기본적으로 활성화
+     *
+     * @since 1.6
+     */
+    private static final String META_DATA_ENABLED = "com.nextstory.DEBOUNCE_CLICK_ENABLED";
+    private static final AtomicBoolean isDebounceClickEnabledInitialized = new AtomicBoolean(false);
+    private static boolean isDebounceClickEnabled = false;
+
+    /**
      * 클릭 리스너 바인딩 어댑터
      *
      * @param v 뷰
@@ -33,13 +44,36 @@ public abstract class DebounceOnClickListener implements View.OnClickListener {
      */
     @BindingAdapter("android:onClick")
     public static void setOnClickListener(@NonNull View v, @Nullable View.OnClickListener l) {
-        if (l != null) {
-            v.setOnClickListener(new DebounceOnClickListener() {
-                @Override
-                public void onDebounceClick(View v) {
-                    l.onClick(v);
+        if (!isDebounceClickEnabledInitialized.getAndSet(true)) {
+            PackageManager packageManager = v.getContext().getPackageManager();
+            String packageName = v.getContext().getPackageName();
+            try {
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(
+                        packageName, PackageManager.GET_META_DATA);
+                if (applicationInfo != null) {
+                    if (applicationInfo.metaData == null) {
+                        isDebounceClickEnabled = true;
+                    } else {
+                        isDebounceClickEnabled = applicationInfo.metaData.getBoolean(
+                                META_DATA_ENABLED, true);
+                    }
                 }
-            });
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                isDebounceClickEnabled = true;
+            }
+        }
+        if (l != null) {
+            if (isDebounceClickEnabled) {
+                v.setOnClickListener(new DebounceOnClickListener() {
+                    @Override
+                    public void onDebounceClick(View v) {
+                        l.onClick(v);
+                    }
+                });
+            } else {
+                v.setOnClickListener(l);
+            }
         }
     }
 
