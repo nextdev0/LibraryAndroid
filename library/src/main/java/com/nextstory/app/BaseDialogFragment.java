@@ -92,7 +92,7 @@ public abstract class BaseDialogFragment<B extends ViewDataBinding> extends Dial
     }
 
     public final void show(@NonNull Fragment fragment) {
-        show(fragment.requireFragmentManager());
+        show(fragment.getParentFragmentManager());
     }
 
     public final void show(@NonNull FragmentTransaction fragmentTransaction) {

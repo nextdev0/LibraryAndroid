@@ -123,6 +123,7 @@ public final class RxActivityResult {
     /**
      * 내부 프래그먼트 class
      */
+    @SuppressWarnings("deprecation")
     public static class ActivityResultFragment extends Fragment {
         private static final int REQUEST_CODE = 1000;
 
@@ -147,7 +148,7 @@ public final class RxActivityResult {
                 if (listener != null) {
                     listener.onActivityResult(resultCode, data);
                 }
-                requireFragmentManager()
+                getParentFragmentManager()
                         .beginTransaction()
                         .remove(this)
                         .commitAllowingStateLoss();

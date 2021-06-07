@@ -60,7 +60,7 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     }
 
     public void argumentsTest() {
-        requireFragmentManager()
+        getParentFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new Test1FragmentBuilder()
                         .setArg1("arguments set!")

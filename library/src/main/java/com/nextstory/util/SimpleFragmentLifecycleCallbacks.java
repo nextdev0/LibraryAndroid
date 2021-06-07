@@ -41,6 +41,7 @@ public interface SimpleFragmentLifecycleCallbacks {
         // no-op
     }
 
+    @Deprecated
     default void onFragmentActivityCreated(@NonNull FragmentManager fragmentManager,
                                            @NonNull Fragment fragment,
                                            @Nullable Bundle savedInstanceState) {

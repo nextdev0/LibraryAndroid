@@ -48,8 +48,7 @@ dependencies {
     implementation project(':annotations')
     annotationProcessor project(':annotationProcessor')
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.fragment:fragment:1.3.3'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.google.code.gson:gson:2.8.7'

@@ -1,5 +1,6 @@
 package com.nextstory.app.permission;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,7 +14,6 @@ import androidx.core.app.ComponentActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.OnLifecycleEvent;
 
 import java.util.ArrayList;
@@ -31,45 +31,28 @@ import java.util.Objects;
 public final class PermissionHelpers {
     private static final int REQUEST_PERMISSIONS = 10011;
     private final ComponentActivity activity;
-    private final Fragment fragment;
     private SharedPreferences permissionSharedPreferences = null;
     private PermissionListener permissionResult = null;
 
-    public PermissionHelpers(ComponentActivity activity) {
-        this(activity, null);
-    }
-
     public PermissionHelpers(Fragment fragment) {
-        this(null, fragment);
+        this(fragment.requireActivity());
     }
 
-    public PermissionHelpers(ComponentActivity activity, Fragment fragment) {
+    @SuppressLint("RestrictedApi")
+    public PermissionHelpers(ComponentActivity activity) {
         this.activity = activity;
-        this.fragment = fragment;
-        LifecycleOwner lifecycleOwner;
-        if (activity != null) {
-            lifecycleOwner = activity;
-        } else {
-            lifecycleOwner = fragment;
-        }
-        lifecycleOwner.getLifecycle().addObserver(new LifecycleObserver() {
+        activity.getLifecycle().addObserver(new LifecycleObserver() {
             @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
             void onCreate() {
                 permissionSharedPreferences = requireContext()
                         .getSharedPreferences("permissions", Context.MODE_PRIVATE);
-                lifecycleOwner.getLifecycle().removeObserver(this);
+                activity.getLifecycle().removeObserver(this);
             }
         });
     }
 
     private Context requireContext() {
-        Context context;
-        if (activity != null) {
-            context = activity;
-        } else {
-            context = fragment.requireContext();
-        }
-        return Objects.requireNonNull(context);
+        return Objects.requireNonNull(activity);
     }
 
     public void onRequestPermissionsResult(int requestCode,
@@ -153,11 +136,7 @@ public final class PermissionHelpers {
                                    @Nullable PermissionListener permissionResult) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.permissionResult = permissionResult;
-            if (activity != null) {
-                activity.requestPermissions(permissions, REQUEST_PERMISSIONS);
-            } else {
-                fragment.requestPermissions(permissions, REQUEST_PERMISSIONS);
-            }
+            activity.requestPermissions(permissions, REQUEST_PERMISSIONS);
             return;
         }
         if (permissionResult != null) {

@@ -3,8 +3,10 @@ package com.nextstory.util;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
@@ -117,6 +119,7 @@ public final class RxImagePicker {
         private boolean isCropMode;
         private int count;
 
+        @SuppressWarnings("deprecation")
         @Override
         protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
             if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
@@ -124,9 +127,18 @@ public final class RxImagePicker {
                 if (images != null) {
                     if (isCropMode) {
                         try {
-                            Bitmap bitmap = Objects.requireNonNull(
-                                    MediaStore.Images.Media.getBitmap(
-                                            getContentResolver(), images.get(0).getUri()));
+                            Bitmap bitmap;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                ImageDecoder.Source source = ImageDecoder.createSource(
+                                        getContentResolver(),
+                                        images.get(0).getUri());
+                                bitmap = ImageDecoder.decodeBitmap(source);
+                            } else {
+                                bitmap = MediaStore.Images.Media.getBitmap(
+                                        getContentResolver(),
+                                        images.get(0).getUri());
+                            }
+                            Objects.requireNonNull(bitmap);
                             ExifInterface ei = new ExifInterface(images.get(0).getPath());
                             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                                     ExifInterface.ORIENTATION_UNDEFINED);
@@ -150,10 +162,18 @@ public final class RxImagePicker {
                         List<Uri> uris = new ArrayList<>();
                         for (Image image : images) {
                             try {
-                                Bitmap bitmap = Objects.requireNonNull(
-                                        MediaStore.Images.Media.getBitmap(
-                                                getContentResolver(),
-                                                image.getUri()));
+                                Bitmap bitmap;
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                    ImageDecoder.Source source = ImageDecoder.createSource(
+                                            getContentResolver(),
+                                            image.getUri());
+                                    bitmap = ImageDecoder.decodeBitmap(source);
+                                } else {
+                                    bitmap = MediaStore.Images.Media.getBitmap(
+                                            getContentResolver(),
+                                            image.getUri());
+                                }
+                                Objects.requireNonNull(bitmap);
                                 ExifInterface ei = new ExifInterface(image.getPath());
                                 int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                                         ExifInterface.ORIENTATION_UNDEFINED);

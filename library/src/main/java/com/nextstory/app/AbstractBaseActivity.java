@@ -42,7 +42,7 @@ import java.util.Objects;
  * @author troy
  * @since 1.0
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class AbstractBaseActivity
         extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());

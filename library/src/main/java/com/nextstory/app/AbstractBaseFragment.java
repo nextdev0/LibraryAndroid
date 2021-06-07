@@ -36,7 +36,7 @@ import java.util.Objects;
  * @author troy
  * @since 1.0
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class AbstractBaseFragment extends Fragment {
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {

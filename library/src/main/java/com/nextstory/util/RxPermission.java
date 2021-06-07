@@ -34,22 +34,19 @@ import io.reactivex.rxjava3.core.Single;
 public final class RxPermission {
     private static final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final ComponentActivity activity;
-    private final Fragment fragment;
     private final LifecycleOwner lifecycleOwner;
     private final List<String> requestPermissions = new ArrayList<>();
     private final SharedPreferences permissionSharedPreferences;
 
     public RxPermission(@NonNull ComponentActivity activity) {
         this.activity = activity;
-        this.fragment = null;
         this.lifecycleOwner = activity;
         this.permissionSharedPreferences = activity
                 .getSharedPreferences("permissions", Context.MODE_PRIVATE);
     }
 
     public RxPermission(@NonNull Fragment fragment) {
-        this.activity = null;
-        this.fragment = fragment;
+        this.activity = fragment.requireActivity();
         this.lifecycleOwner = fragment;
         this.permissionSharedPreferences = fragment.requireContext()
                 .getSharedPreferences("permissions", Context.MODE_PRIVATE);
@@ -82,6 +79,10 @@ public final class RxPermission {
             CountDownLatch lock = new CountDownLatch(1);
             mainThreadHandler.post(() -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    String[] permissions = new String[requestPermissions.size()];
+                    for (int i = 0; i < requestPermissions.size(); i++) {
+                        permissions[i] = requestPermissions.get(i);
+                    }
                     AtomicBoolean firstResumed = new AtomicBoolean(false);
                     lifecycleOwner.getLifecycle().addObserver(new LifecycleObserver() {
                         @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -97,7 +98,7 @@ public final class RxPermission {
                             }
                         }
                     });
-                    requestPermissions();
+                    activity.requestPermissions(permissions, 0x1000);
                 } else {
                     result.getGrantedPermissions().addAll(requestPermissions);
                     lock.countDown();
@@ -111,31 +112,14 @@ public final class RxPermission {
     }
 
     /**
-     * 권한 요청
-     */
-    @RequiresApi(Build.VERSION_CODES.M)
-    private void requestPermissions() {
-        String[] permissions = new String[requestPermissions.size()];
-        for (int i = 0; i < requestPermissions.size(); i++) {
-            permissions[i] = requestPermissions.get(i);
-        }
-        if (activity != null) {
-            activity.requestPermissions(permissions, 0x1000);
-            return;
-        }
-        fragment.requestPermissions(permissions, 0x1000);
-    }
-
-    /**
      * 권한 요청 결과 검사
      *
      * @param result 결과를 지정할 모델
      */
     @RequiresApi(Build.VERSION_CODES.M)
     private void checkPermissions(PermissionResult result) {
-        Context context = activity == null ? fragment.requireContext() : activity;
         for (String permission : requestPermissions) {
-            int permissionResult = context.checkSelfPermission(permission);
+            int permissionResult = ((Context) activity).checkSelfPermission(permission);
             if (permissionResult == PackageManager.PERMISSION_GRANTED) {
                 result.getGrantedPermissions().add(permission);
             } else {

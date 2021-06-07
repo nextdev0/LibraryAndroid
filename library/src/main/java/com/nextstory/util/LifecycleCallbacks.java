@@ -23,7 +23,7 @@ import java.util.Set;
  * @author troy
  * @since 1.1
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public final class LifecycleCallbacks
         implements LibraryInitializer, SimpleActivityLifecycleCallbacks {
     private static final Set<Application.ActivityLifecycleCallbacks> activityCallbacks =
@@ -86,6 +86,7 @@ public final class LifecycleCallbacks
             }
         }
 
+        @Deprecated
         @Override
         public void onFragmentActivityCreated(@NonNull FragmentManager fragmentManager,
                                               @NonNull Fragment fragment,
