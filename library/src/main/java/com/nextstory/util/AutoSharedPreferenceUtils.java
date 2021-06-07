@@ -62,8 +62,7 @@ public final class AutoSharedPreferenceUtils {
     }
 
     /**
-     * {@link Converter}가 {@code null}로 설정되어 있으면 예외발생
-     * {@link #registerConverter(Converter)}로 등록해야함.
+     * @return 객체 Null 체크
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     public static boolean isNull(Object o) {
