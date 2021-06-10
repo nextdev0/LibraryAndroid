@@ -382,7 +382,7 @@ public final class Convert {
      * @return 16진수 숫자유무
      * @since 1.5
      */
-    private boolean isHexadecimal(String s) {
+    public static boolean isHexadecimal(String s) {
         final Matcher matcher = HEXADECIMAL_PATTERN.matcher(s);
         return matcher.matches();
     }
