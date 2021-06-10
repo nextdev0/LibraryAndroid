@@ -10,11 +10,9 @@
 - [ActivityIntentBuilder](./docs/annotations/ActivityIntentBuilder.md) : 액티비티 Intent 빌더 생성
 - [FragmentArgumentsBuilder](./docs/annotations/FragmentArgumentsBuilder.md) : 프래그먼트 빌더 생성
 
-### 메인
+### library
 
-```text
-내용 준비중
-```
+- [리소스](./docs/library/resources.md)
 
 ### libgdx
 
