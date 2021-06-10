@@ -1,10 +1,7 @@
 package com.nextstory.util;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.OnLifecycleEvent;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -15,79 +12,44 @@ import io.reactivex.rxjava3.disposables.Disposable;
  *
  * @author troy
  * @since 1.1
+ * @deprecated {@link Disposables#onDestroy(LifecycleOwner)} 사용
  */
+@Deprecated
 @SuppressWarnings("UnusedDeclaration")
-public final class OnPauseDisposables {
-    private final CompositeDisposable compositeDisposable;
+public final class OnPauseDisposables implements Disposables {
+    private final Disposables disposables;
 
     public OnPauseDisposables(@NonNull LifecycleOwner lifecycleOwner) {
-        this.compositeDisposable = new CompositeDisposable();
-        lifecycleOwner.getLifecycle().addObserver(new LifecycleObserver() {
-            @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-            void onPause() {
-                clear();
-            }
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            void onDestroy() {
-                lifecycleOwner.getLifecycle().removeObserver(this);
-            }
-        });
+        disposables = Disposables.onPause(lifecycleOwner);
     }
 
-    /**
-     * @see CompositeDisposable#dispose()
-     */
-    public void dispose() {
-        compositeDisposable.dispose();
-    }
-
-    /**
-     * @see CompositeDisposable#isDisposed()
-     */
-    public boolean isDisposed() {
-        return compositeDisposable.isDisposed();
-    }
-
-    /**
-     * @see CompositeDisposable#add(Disposable)
-     */
-    public boolean add(@NonNull Disposable disposable) {
-        return compositeDisposable.add(disposable);
-    }
-
-    /**
-     * @see CompositeDisposable#addAll(Disposable...)
-     */
-    public boolean addAll(@NonNull Disposable... disposables) {
-        return compositeDisposable.addAll(disposables);
-    }
-
-    /**
-     * @see CompositeDisposable#remove(Disposable)
-     */
-    public boolean remove(@NonNull Disposable disposable) {
-        return compositeDisposable.remove(disposable);
-    }
-
-    /**
-     * @see CompositeDisposable#delete(Disposable)
-     */
-    public boolean delete(@NonNull Disposable disposable) {
-        return compositeDisposable.delete(disposable);
-    }
-
-    /**
-     * @see CompositeDisposable#clear()
-     */
+    @Override
     public void clear() {
-        compositeDisposable.clear();
+        disposables.clear();
     }
 
-    /**
-     * @see CompositeDisposable#size()
-     */
-    public int size() {
-        return compositeDisposable.size();
+    @Override
+    public void dispose() {
+        disposables.dispose();
+    }
+
+    @Override
+    public boolean isDisposed() {
+        return disposables.isDisposed();
+    }
+
+    @Override
+    public boolean add(Disposable d) {
+        return disposables.add(d);
+    }
+
+    @Override
+    public boolean remove(Disposable d) {
+        return disposables.remove(d);
+    }
+
+    @Override
+    public boolean delete(Disposable d) {
+        return disposables.delete(d);
     }
 }

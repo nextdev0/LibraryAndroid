@@ -15,7 +15,7 @@ import com.nextstory.sample.R;
 import com.nextstory.sample.databinding.FragmentTestBinding;
 import com.nextstory.sample.ui.dialog.Test2Dialog;
 import com.nextstory.sample.ui.dialog.TestDialog;
-import com.nextstory.util.OnDestroyDisposables;
+import com.nextstory.util.Disposables;
 
 import java.util.Locale;
 import java.util.Random;
@@ -34,7 +34,7 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
     public final ListLiveData<String> testList = new ListLiveData<>();
     public final NonNullLiveData<String> safeValue = new NonNullLiveData<>("first", true);
     public final NonNullLiveData<String> unsafeValue = new NonNullLiveData<>("first");
-    private final OnDestroyDisposables disposables = new OnDestroyDisposables(this);
+    private final Disposables disposables = Disposables.onDestroy(this);
 
     @FragmentArgument
     String arg1 = "test";

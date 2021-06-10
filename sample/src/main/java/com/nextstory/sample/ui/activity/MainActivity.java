@@ -11,7 +11,7 @@ import com.nextstory.sample.data.TestSharedPreferences;
 import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.dialog.BlurTestDialog;
 import com.nextstory.sample.ui.popup.TestPopup;
-import com.nextstory.util.OnDestroyDisposables;
+import com.nextstory.util.Disposables;
 import com.nextstory.util.RxImagePicker;
 import com.nextstory.util.RxPermission;
 
@@ -68,7 +68,7 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void test5(View v) {
-        OnDestroyDisposables destroyDisposables = new OnDestroyDisposables(this);
+        Disposables destroyDisposables = Disposables.onDestroy(this);
         destroyDisposables.add(new RxPermission(this)
                 .add(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .add(Manifest.permission.CAMERA)
