@@ -19,6 +19,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * 권한 관련 도우미 클래스
@@ -30,17 +31,23 @@ import java.util.Objects;
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class PermissionHelpers {
     private static final int REQUEST_PERMISSIONS = 10011;
-    private final ComponentActivity activity;
+    private Supplier<ComponentActivity> activitySupplier;
     private SharedPreferences permissionSharedPreferences = null;
     private PermissionListener permissionResult = null;
 
     public PermissionHelpers(Fragment fragment) {
-        this(fragment.requireActivity());
+        fragment.getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+            void onCreate() {
+                activitySupplier = fragment::requireActivity;
+                fragment.getLifecycle().removeObserver(this);
+            }
+        });
     }
 
     @SuppressLint("RestrictedApi")
     public PermissionHelpers(ComponentActivity activity) {
-        this.activity = activity;
+        activitySupplier = () -> activity;
         activity.getLifecycle().addObserver(new LifecycleObserver() {
             @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
             void onCreate() {
@@ -52,7 +59,7 @@ public final class PermissionHelpers {
     }
 
     private Context requireContext() {
-        return Objects.requireNonNull(activity);
+        return Objects.requireNonNull(activitySupplier.get());
     }
 
     public void onRequestPermissionsResult(int requestCode,
@@ -136,7 +143,7 @@ public final class PermissionHelpers {
                                    @Nullable PermissionListener permissionResult) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.permissionResult = permissionResult;
-            activity.requestPermissions(permissions, REQUEST_PERMISSIONS);
+            activitySupplier.get().requestPermissions(permissions, REQUEST_PERMISSIONS);
             return;
         }
         if (permissionResult != null) {
