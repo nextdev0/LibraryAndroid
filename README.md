@@ -13,6 +13,7 @@
 ### 1.2. library
 
 - [app](./docs/library/app/app.md)
+- [widget](./docs/library/widget/widget.md)
 - [리소스](./docs/library/resources.md)
 
 ### 1.3. libgdx

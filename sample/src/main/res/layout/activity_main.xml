@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,33 +10,71 @@
 
     </data>
 
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="#f00" />
-
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="end"
-            android:background="#0f0" />
-
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="#00f" />
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|end"
-            android:background="#000" />
+            <com.nextstory.widget.StatusBarView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    </FrameLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test1()}"
+                android:text="여러 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test2()}"
+                android:text="DataBindingFlowLayout 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test3()}"
+                android:text="IntentBuilder 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test4(v)}"
+                android:text="팝업창 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test5(v)}"
+                android:text="RxPermission 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{v -> activity.test6(v)}"
+                android:text="Blur 테스트"
+                android:textAllCaps="false"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </layout>
+
