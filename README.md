@@ -15,6 +15,7 @@
 - [app](./docs/library/app/app.md)
 - [field](./docs/library/field.md)
 - [widget](./docs/library/widget/widget.md)
+- [util](./docs/library/util/util.md)
 - [리소스](./docs/library/resources.md)
 
 ### 1.3. libgdx
