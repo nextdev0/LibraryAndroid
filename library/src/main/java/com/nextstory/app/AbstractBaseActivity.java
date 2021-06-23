@@ -57,6 +57,7 @@ public abstract class AbstractBaseActivity
     private View contentView = null;
     private ViewTreeObserver viewTreeObserver = null;
     private InputMethodManager inputMethodManager = null;
+    private int realHeight = 0;
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -79,12 +80,16 @@ public abstract class AbstractBaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        int mode = getWindow().getAttributes().softInputMode;
-        if ((mode & WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE) != 0) {
-            if (viewTreeObserver == null || !viewTreeObserver.isAlive()) {
-                viewTreeObserver = contentView.getViewTreeObserver();
+        int flags = getWindow().getDecorView().getSystemUiVisibility();
+        if ((flags & View.SYSTEM_UI_FLAG_LAYOUT_STABLE) != 0
+                || (flags & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN) != 0) {
+            int mode = getWindow().getAttributes().softInputMode;
+            if ((mode & WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE) != 0) {
+                if (viewTreeObserver == null || !viewTreeObserver.isAlive()) {
+                    viewTreeObserver = contentView.getViewTreeObserver();
+                }
+                viewTreeObserver.addOnGlobalLayoutListener(this);
             }
-            viewTreeObserver.addOnGlobalLayoutListener(this);
         }
         if (currentLocale != localeManager.getLocale()) {
             recreate();
@@ -164,14 +169,15 @@ public abstract class AbstractBaseActivity
 
     @Override
     public void onGlobalLayout() {
+        View contentView = findViewById(android.R.id.content);
         Rect r = new Rect();
-        decorView.getWindowVisibleDisplayFrame(r);
-        int height = decorView.getContext().getResources().getDisplayMetrics().heightPixels;
-        int diff = height - r.bottom;
-        if (diff != 0) {
-            if (contentView.getPaddingBottom() != diff) {
-                contentView.setPadding(0, 0, 0, diff);
-            }
+        getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+        if (r.height() > realHeight) {
+            realHeight = r.height();
+        }
+        int diff = realHeight - r.bottom;
+        if (diff > 0) {
+            contentView.setPadding(0, 0, 0, diff + r.top);
         } else {
             if (contentView.getPaddingBottom() != 0) {
                 contentView.setPadding(0, 0, 0, 0);
