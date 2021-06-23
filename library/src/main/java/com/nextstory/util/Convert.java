@@ -185,7 +185,7 @@ public final class Convert {
      * @param defaultValue 변환 실패시 반환할 기본값
      * @return long 값, 예외시 지정한 기본값 반환
      */
-    public static long toLong(String s, int defaultValue) {
+    public static long toLong(String s, long defaultValue) {
         if (s == null || s.trim().isEmpty()) {
             return defaultValue;
         }
