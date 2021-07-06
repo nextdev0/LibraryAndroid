@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion '30.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 57
-        versionName '1.6.9'
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName rootProject.ext.libraryVersion
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -37,36 +37,14 @@ android {
     }
 }
 
-configurations {
-    include
-}
-
-project.afterEvaluate {
-    task copyDeps(type: Copy) {
-        from configurations.include {
-            include '**/*.jar'
-        }
-        into './build/intermediates/aar_libs_directory/release/libs'
-    }
-    mergeReleaseJniLibFolders.dependsOn copyDeps
-
-    task copyDebugDeps(type: Copy) {
-        from configurations.include {
-            include '**/*.jar'
-        }
-        into './build/intermediates/aar_libs_directory/debug/libs'
-    }
-    mergeDebugJniLibFolders.dependsOn copyDebugDeps
-}
-
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
-    implementation project(':annotations')
-    include project(':annotations')
+    api project(':annotations')
 
     api 'androidx.appcompat:appcompat:1.3.0'
     api 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -78,6 +56,7 @@ dependencies {
     api 'io.reactivex.rxjava3:rxjava:3.0.13'
     api 'io.reactivex.rxjava3:rxandroid:3.0.0'
     api 'net.danlew:android.joda:2.10.9.1'
+    api 'com.akexorcist:localization:1.2.10'
 }
 
 publishing {
@@ -85,30 +64,48 @@ publishing {
         from android.sourceSets.main.java.srcDirs
         classifier 'sources'
     }
-    publications {
-        library(MavenPublication) {
-            artifact sourceJar
-            artifact "$buildDir/outputs/aar/library-release.aar"
-            groupId 'com.nextstory'
-            artifactId 'library'
-            version android.defaultConfig.versionName
 
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                configurations.api.allDependencies.each {
-                    if (!it.group.contains('androidx.databinding')) {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
     repositories {
         maven {
             url "$rootDir/repository"
+        }
+    }
+
+    android.libraryVariants.all { variant ->
+        if (variant.buildType.name != 'debug') {
+            publications {
+                "${rootProject.ext.groupId}"(MavenPublication) {
+                    artifact sourceJar
+                    artifact(variant.packageLibraryProvider.get().archivePath) {
+                        builtBy variant.assembleProvider
+                    }
+
+                    groupId rootProject.ext.groupId
+                    artifactId rootProject.ext.libraryArtifactId
+                    version rootProject.ext.libraryVersion
+
+                    pom.withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+
+                        // api 의존성 연결
+                        // databinding, Library 그룹은 제외함
+                        configurations.api.allDependencies.each {
+                            if (!it.group.contains('androidx.databinding') && !it.group.contains('Library')) {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+                            }
+                        }
+
+                        // annotations 의존성은 내부 프로젝트이므로 임의로 추가함
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', rootProject.ext.groupId)
+                        dependencyNode.appendNode('artifactId', rootProject.ext.annotationsArtifactId)
+                        dependencyNode.appendNode('version', rootProject.ext.libraryVersion)
+                    }
+                }
+            }
         }
     }
 }

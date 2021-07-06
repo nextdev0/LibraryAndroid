@@ -141,7 +141,7 @@ public final class AutoSharedPreferencesProcessor extends AbstractProcessor {
                                 .addStatement("String source = $T.isNull($N) " +
                                                 "? \"\" " +
                                                 ": $T.serialize($N)",
-                                        ClassNames.AutoSharedPreferenceUtils,   fieldName,
+                                        ClassNames.AutoSharedPreferenceUtils, fieldName,
                                         ClassNames.AutoSharedPreferenceUtils, fieldName)
                                 .addStatement("this.sharedPreferences\n" +
                                                 ".edit()\n" +

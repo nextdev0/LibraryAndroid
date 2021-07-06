@@ -48,13 +48,11 @@ public final class UtilitiesInitializationProvider extends ContentProvider {
                             LibraryInitializer newInstance = component.newInstance();
                             newInstance.onInitialized(context, value);
                         }
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
+                    } catch (Throwable ignore) {
                     }
                 }
             }
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
+        } catch (Throwable ignore) {
         }
 
         return true;

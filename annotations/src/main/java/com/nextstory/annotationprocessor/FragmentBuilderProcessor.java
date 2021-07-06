@@ -3,7 +3,6 @@ package com.nextstory.annotationprocessor;
 import com.nextstory.annotationprocessor.util.ClassNames;
 import com.nextstory.annotationprocessor.util.ElementHelper;
 import com.nextstory.annotations.FragmentArgument;
-import com.nextstory.annotations.FragmentArgumentsBuilder;
 import com.nextstory.annotations.FragmentBuilder;
 import com.nextstory.util.LibraryInitializer;
 import com.squareup.javapoet.ClassName;
@@ -34,13 +33,11 @@ import javax.lang.model.element.TypeElement;
  * @author troy
  * @author 1.1
  */
-@SuppressWarnings("deprecation")
 public final class FragmentBuilderProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return new HashSet<String>() {
             {
-                add(FragmentArgumentsBuilder.class.getCanonicalName());
                 add(FragmentBuilder.class.getCanonicalName());
                 add(FragmentArgument.class.getCanonicalName());
             }
@@ -56,11 +53,6 @@ public final class FragmentBuilderProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment re) {
         Set<ElementHelper> fragmentArgumentsBuilderSet = new LinkedHashSet<>();
         Map<ElementHelper, List<Element>> fragmentArgumentMap = new LinkedHashMap<>();
-
-        for (Element e : re.getElementsAnnotatedWith(FragmentArgumentsBuilder.class)) {
-            ElementHelper elementHelper = ElementHelper.fromElement(e);
-            fragmentArgumentsBuilderSet.add(elementHelper);
-        }
 
         for (Element e : re.getElementsAnnotatedWith(FragmentBuilder.class)) {
             ElementHelper elementHelper = ElementHelper.fromElement(e);

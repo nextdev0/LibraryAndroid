@@ -1,6 +1,4 @@
-include ':annotationProcessor'
 include ':annotations'
-include ':libgdx'
 include ':library'
 include ':sample'
 rootProject.name = "Library"

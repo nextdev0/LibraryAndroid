@@ -44,9 +44,7 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     implementation project(':library')
-    implementation project(':libgdx')
-    implementation project(':annotations')
-    annotationProcessor project(':annotationProcessor')
+    annotationProcessor project(':annotations')
 
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'

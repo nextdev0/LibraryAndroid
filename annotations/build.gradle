@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
 java {
@@ -9,4 +10,27 @@ java {
 
 dependencies {
     compileOnly 'com.google.android:android:4.1.1.4'
+    implementation 'com.squareup:javapoet:1.13.0'
+}
+
+publishing {
+    task sourceJar(type: Jar) {
+        from sourceSets.main.java.srcDirs
+        classifier 'sources'
+    }
+
+    repositories {
+        maven {
+            url "$rootDir/repository"
+        }
+    }
+    publications {
+        "${rootProject.ext.groupId}"(MavenPublication) {
+            artifact jar
+            artifact sourceJar
+            groupId rootProject.ext.groupId
+            artifactId rootProject.ext.annotationsArtifactId
+            version rootProject.ext.libraryVersion
+        }
+    }
 }
