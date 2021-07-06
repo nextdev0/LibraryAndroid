@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SafeArea">
+        <attr name="android:padding" format="dimension" />
+        <attr name="android:paddingHorizontal" format="dimension" />
+        <attr name="android:paddingVertical" format="dimension" />
+        <attr name="android:paddingLeft" format="dimension" />
+        <attr name="android:paddingStart" format="dimension" />
+        <attr name="android:paddingTop" format="dimension" />
+        <attr name="android:paddingRight" format="dimension" />
+        <attr name="android:paddingEnd" format="dimension" />
+        <attr name="android:paddingBottom" format="dimension" />
+        <attr name="safe_leftInsetEnabled" format="boolean" />
+        <attr name="safe_topInsetEnabled" format="boolean" />
+        <attr name="safe_rightInsetEnabled" format="boolean" />
+        <attr name="safe_bottomInsetEnabled" format="boolean" />
+    </declare-styleable>
+
+</resources>

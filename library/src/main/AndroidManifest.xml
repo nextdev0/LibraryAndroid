@@ -25,6 +25,9 @@
             <meta-data
                 android:name="com.nextstory.util.FragmentBuilderInitializer"
                 android:value="empty" />
+            <meta-data
+                android:name="com.nextstory.widget.util.SafeAreaHelper"
+                android:value="empty" />
         </provider>
 
         <provider

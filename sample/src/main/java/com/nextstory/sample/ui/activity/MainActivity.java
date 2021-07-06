@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.nextstory.app.BaseActivity;
+import com.nextstory.app.WindowController;
 import com.nextstory.sample.data.TestSharedPreferences;
 import com.nextstory.sample.databinding.ActivityMainBinding;
 import com.nextstory.sample.ui.dialog.BlurTestDialog;
-import com.nextstory.sample.ui.popup.TestPopup;
 import com.nextstory.util.Disposables;
 import com.nextstory.util.RxImagePicker;
 import com.nextstory.util.RxPermission;
@@ -32,13 +32,15 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        registerSupportedLocales(Arrays.asList(
-                Locale.KOREAN,
-                Locale.ENGLISH,
-                Locale.SIMPLIFIED_CHINESE));
+        getResourcesController().
+                registerSupportedLocales(Arrays.asList(
+                        Locale.KOREAN,
+                        Locale.ENGLISH,
+                        Locale.SIMPLIFIED_CHINESE));
 
-        applyTransparentTheme();
-        applyLightStatusBar(true);
+        getWindowController()
+                .applyWindowType(WindowController.TYPE_OVERLAY_STATUS_BAR)
+                .applyStatusBarDarkIcon(true);
 
         getBinding().setActivity(this);
         getBinding().setLifecycleOwner(this);
@@ -63,11 +65,6 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void test4(View v) {
-        new TestPopup(this)
-                .show(v);
-    }
-
-    public void test5(View v) {
         Disposables destroyDisposables = Disposables.onDestroy(this);
         destroyDisposables.add(new RxPermission(this)
                 .add(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -88,7 +85,7 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
                 }));
     }
 
-    public void test6(View v) {
+    public void test5(View v) {
         new BlurTestDialog()
                 .show(this);
     }
