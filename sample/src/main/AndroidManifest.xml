@@ -29,7 +29,7 @@
             android:name=".ui.activity.Test1Activity"
             android:configChanges="keyboard|keyboardHidden"
             android:screenOrientation="unspecified"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
         <activity
             android:name=".ui.activity.Test2Activity"

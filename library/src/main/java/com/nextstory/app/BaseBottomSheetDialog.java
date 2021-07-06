@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -18,15 +17,7 @@ import androidx.databinding.ViewDataBinding;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.nextstory.R;
-import com.nextstory.app.locale.LocaleManager;
-import com.nextstory.app.locale.LocaleManagerImpl;
-import com.nextstory.app.theme.ThemeHelpers;
-import com.nextstory.app.theme.ThemeType;
 import com.nextstory.util.Unsafe;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * 기본 바텀시트 다이얼로그
@@ -36,10 +27,6 @@ import java.util.Objects;
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends BottomSheetDialog {
-    private final ThemeHelpers themeHelpers = new ThemeHelpers();
-    private final LocaleManager localeManager =
-            new LocaleManagerImpl(() -> getContext().getApplicationContext());
-
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     B binding = null;
 
@@ -67,16 +54,6 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
         if (binding != null) {
             setContentView(binding.getRoot());
         }
-    }
-
-    @CallSuper
-    @Override
-    protected void onStart() {
-        Window window = getWindow();
-        if (window != null) {
-            window.setDimAmount(getDimAmount());
-        }
-        super.onStart();
     }
 
     @Deprecated
@@ -116,65 +93,10 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     }
 
     /**
-     * @return 창 밖 배경 어두운 정도
-     */
-    protected float getDimAmount() {
-        return 0.6f;
-    }
-
-    /**
-     * 아무동작 없음 (데이터바인딩시 창 클릭시 닫기지 않도록 하기 위함)
+     * 아무동작 없음
      */
     public final void nothing() {
         // no-op
-    }
-
-    /**
-     * 현재 적용된 테마 반환
-     *
-     * @return 테마
-     * @see ThemeType
-     */
-    @ThemeType
-    public int getApplicationTheme() {
-        return themeHelpers.getCurrentTheme();
-    }
-
-    /**
-     * 앱 테마 적용
-     *
-     * @param type 테마
-     * @see ThemeType
-     */
-    public void applyApplicationTheme(@ThemeType int type) {
-        themeHelpers.applyTheme(type);
-    }
-
-    /**
-     * 지원되는 로케일 목록 지정
-     *
-     * @param locales 로케일 목록
-     * @since 1.3
-     */
-    public void registerSupportedLocales(List<Locale> locales) {
-        localeManager.registerSupportedLocales(locales);
-    }
-
-    /**
-     * @return 현재 로케일
-     */
-    @NonNull
-    public Locale getLocale() {
-        return localeManager.getLocale();
-    }
-
-    /**
-     * 로케일 적용
-     *
-     * @param locale 로케일
-     */
-    public void applyLocale(@NonNull Locale locale) {
-        localeManager.applyLocale(Objects.requireNonNull(locale));
     }
 
     /**

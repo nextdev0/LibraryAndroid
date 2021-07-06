@@ -2,9 +2,7 @@ package com.nextstory.app;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.databinding.ViewDataBinding;
 
 import com.nextstory.R;
-import com.nextstory.app.locale.LocaleManager;
-import com.nextstory.app.locale.LocaleManagerImpl;
-import com.nextstory.app.theme.ThemeHelpers;
-import com.nextstory.app.theme.ThemeType;
 import com.nextstory.util.Unsafe;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 /**
  * 기본 다이얼로그
@@ -40,10 +30,6 @@ import java.util.Objects;
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
-    private final ThemeHelpers themeHelpers = new ThemeHelpers();
-    private final LocaleManager localeManager =
-            new LocaleManagerImpl(() -> getContext().getApplicationContext());
-
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     B binding = null;
 
@@ -65,8 +51,6 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
                 binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
             }
         }
-        applyTransparentTheme();
-        applyLightStatusBar(false);
         if (binding != null) {
             super.setContentView(binding.getRoot());
         }
@@ -75,6 +59,16 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
             window.setLayout(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.MATCH_PARENT);
+            window.setStatusBarColor(Color.TRANSPARENT);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            View decorView = window.getDecorView();
+            int flags = decorView.getSystemUiVisibility();
+            flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+            decorView.setSystemUiVisibility(flags);
         }
         ViewGroup contentView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(contentView, (v, insets) -> {
@@ -87,16 +81,6 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
             }
             return insets.consumeSystemWindowInsets();
         });
-    }
-
-    @CallSuper
-    @Override
-    protected void onStart() {
-        Window window = getWindow();
-        if (window != null) {
-            window.setDimAmount(getDimAmount());
-        }
-        super.onStart();
     }
 
     @Deprecated
@@ -135,168 +119,10 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     }
 
     /**
-     * @return 창 밖 배경 어두운 정도
-     */
-    protected float getDimAmount() {
-        return 0.6f;
-    }
-
-    /**
-     * 아무동작 없음 (데이터바인딩시 창 클릭시 닫기지 않도록 하기 위함)
+     * 아무동작 없음
      */
     public final void nothing() {
         // no-op
-    }
-
-    /**
-     * 현재 적용된 테마 반환
-     *
-     * @return 테마
-     * @see ThemeType
-     */
-    @ThemeType
-    public int getApplicationTheme() {
-        return themeHelpers.getCurrentTheme();
-    }
-
-    /**
-     * 앱 테마 적용
-     *
-     * @param type 테마
-     * @see ThemeType
-     */
-    public void applyApplicationTheme(@ThemeType int type) {
-        themeHelpers.applyTheme(type);
-    }
-
-    /**
-     * 지원되는 로케일 목록 지정
-     *
-     * @param locales 로케일 목록
-     * @since 1.3
-     */
-    public void registerSupportedLocales(List<Locale> locales) {
-        localeManager.registerSupportedLocales(locales);
-    }
-
-    /**
-     * @return 현재 로케일
-     */
-    @NonNull
-    public Locale getLocale() {
-        return localeManager.getLocale();
-    }
-
-    /**
-     * 로케일 적용
-     *
-     * @param locale 로케일
-     */
-    public void applyLocale(@NonNull Locale locale) {
-        localeManager.applyLocale(Objects.requireNonNull(locale));
-    }
-
-    /**
-     * 반투명 테마 적용
-     */
-    public void applyTranslucentTheme() {
-        Window window = getWindow();
-        ViewGroup contentView = findViewById(android.R.id.content);
-        if (window != null && contentView != null) {
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            int flags = window.getDecorView().getSystemUiVisibility();
-            flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            window.getDecorView().setSystemUiVisibility(flags);
-            contentView.post(() -> {
-                if (contentView.findViewById(R.id.translucent_status_bar) == null) {
-                    View statusBarView = new View(contentView.getContext());
-                    statusBarView.setId(R.id.translucent_status_bar);
-                    statusBarView.setBackgroundColor(0x3f000000);
-                    contentView.addView(statusBarView,
-                            new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
-                }
-            });
-        }
-        applyLightStatusBar(false);
-    }
-
-    /**
-     * 투명 테마 적용
-     */
-    public void applyTransparentTheme() {
-        Window window = getWindow();
-        ViewGroup contentView = findViewById(android.R.id.content);
-        if (window != null && contentView != null) {
-            View statusBar = contentView.findViewById(R.id.translucent_status_bar);
-            if (statusBar != null) {
-                contentView.removeView(statusBar);
-            }
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            int flags = window.getDecorView().getSystemUiVisibility();
-            flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            window.getDecorView().setSystemUiVisibility(flags);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                if (contentView.findViewById(R.id.translucent_status_bar) == null) {
-                    contentView.post(() -> {
-                        View statusBarView = new View(contentView.getContext());
-                        statusBarView.setId(R.id.translucent_status_bar);
-                        statusBarView.setBackgroundColor(0x3f000000);
-                        contentView.addView(statusBarView,
-                                new ViewGroup.LayoutParams(-1, getStatusBarHeight(window)));
-                    });
-                }
-            }
-        }
-    }
-
-    /**
-     * 상태바 밝음 유무 상태를 설정함
-     *
-     * @param enabled 활성화 유무
-     */
-    @SuppressWarnings("SameParameterValue")
-    public void applyLightStatusBar(boolean enabled) {
-        Window window = getWindow();
-        ViewGroup contentView = findViewById(android.R.id.content);
-        if (window != null && contentView != null) {
-            View decorView = window.getDecorView();
-            decorView.postDelayed(() -> {
-                int flags = decorView.getSystemUiVisibility();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (enabled) {
-                        flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                    } else {
-                        flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-                    }
-                }
-                decorView.setSystemUiVisibility(flags);
-            }, 250L);
-        }
-    }
-
-    /**
-     * 상태바 높이를 반환
-     *
-     * @param window 윈도우 인스턴스
-     * @return 높이값, 윈도우가 {@code null}일 경우 {@code 0}을 반환
-     */
-    private int getStatusBarHeight(Window window) {
-        if (window == null) {
-            return 0;
-        }
-        Resources resources = window.getDecorView().getResources();
-        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
-        return (resourceId == 0) ? 0 : resources.getDimensionPixelSize(resourceId);
     }
 
     /**

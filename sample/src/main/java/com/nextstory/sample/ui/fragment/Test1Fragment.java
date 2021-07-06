@@ -83,8 +83,8 @@ public final class Test1Fragment extends BaseFragment<FragmentTestBinding> {
                 Locale.ENGLISH,
                 Locale.CHINESE
         };
-        applyLocale(locales[index]);
-        requireActivity().recreate();
+        getResourcesController()
+                .applyLocale(locales[index]);
     }
 
     public void onSafeFieldTestClick() {

@@ -39,7 +39,7 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
                         Locale.SIMPLIFIED_CHINESE));
 
         getWindowController()
-                .applyWindowType(WindowController.TYPE_OVERLAY_STATUS_BAR)
+                .applyWindowType(WindowController.TYPE_OVERLAY_SYSTEM_BARS)
                 .applyStatusBarDarkIcon(true);
 
         getBinding().setActivity(this);

@@ -8,8 +8,4 @@ import com.nextstory.sample.databinding.DialogBlurTestBinding;
  * @since 1.0
  */
 public final class BlurTestDialog extends BaseBottomSheetDialogFragment<DialogBlurTestBinding> {
-    @Override
-    protected float getDimAmount() {
-        return 0f;
-    }
 }
