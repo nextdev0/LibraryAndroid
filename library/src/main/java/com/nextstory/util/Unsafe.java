@@ -3,6 +3,7 @@ package com.nextstory.util;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -116,6 +117,36 @@ public final class Unsafe {
                 return (T) ret;
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 내부 필드값 반환
+     *
+     * @param o    객체
+     * @param name 필드명
+     * @param <T>  타입
+     * @return 값
+     * @since 2.0
+     */
+    public static <T> T getField(Object o, String name) {
+        try {
+            Field field = null;
+            Class<?> dialogClass = o.getClass();
+            while (field == null && dialogClass != null) {
+                try {
+                    field = dialogClass.getDeclaredField(name);
+                    field.setAccessible(true);
+                } catch (NoSuchFieldException e) {
+                    dialogClass = dialogClass.getSuperclass();
+                }
+            }
+            if (field != null) {
+                return (T) field.get(o);
+            }
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
