@@ -56,25 +56,37 @@ public final class ShapeImageView extends AppCompatImageView {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         shapeDrawableHelper.getShapeDrawable().draw(canvas);
-        foregroundDrawableHelper.draw(canvas);
+
+        if (foregroundDrawableHelper != null) {
+            foregroundDrawableHelper.draw(canvas);
+        }
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        foregroundDrawableHelper.onSizeChanged(w, h, oldw, oldh);
+
+        if (foregroundDrawableHelper != null) {
+            foregroundDrawableHelper.onSizeChanged(w, h, oldw, oldh);
+        }
     }
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
         super.drawableHotspotChanged(x, y);
-        foregroundDrawableHelper.drawableHotspotChanged(x, y);
+
+        if (foregroundDrawableHelper != null) {
+            foregroundDrawableHelper.drawableHotspotChanged(x, y);
+        }
     }
 
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        foregroundDrawableHelper.drawableStateChanged();
+
+        if (foregroundDrawableHelper != null) {
+            foregroundDrawableHelper.drawableStateChanged();
+        }
     }
 
     @Override
@@ -85,11 +97,17 @@ public final class ShapeImageView extends AppCompatImageView {
     @Override
     public void jumpDrawablesToCurrentState() {
         super.jumpDrawablesToCurrentState();
-        foregroundDrawableHelper.jumpDrawablesToCurrentState();
+
+        if (foregroundDrawableHelper != null) {
+            foregroundDrawableHelper.jumpDrawablesToCurrentState();
+        }
     }
 
     @Override
     protected boolean verifyDrawable(@NonNull Drawable who) {
+        if (foregroundDrawableHelper == null) {
+            return super.verifyDrawable(who);
+        }
         return super.verifyDrawable(who) || (who == foregroundDrawableHelper.getForeground());
     }
 
