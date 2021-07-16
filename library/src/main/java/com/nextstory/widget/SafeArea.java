@@ -20,9 +20,11 @@ import com.nextstory.widget.util.SafeAreaHelper;
  * @since 2.0
  */
 @SuppressLint("WrongConstant")
+@SuppressWarnings("UnusedDeclaration")
 public final class SafeArea extends FrameLayout implements SafeAreaHelper.Listener {
     private final Rect currentSystemInsets = new Rect();
     private final Rect realPaddingRect = new Rect();
+    private final Rect insetPaddingRect = new Rect();
 
     private boolean isLeftInsetEnabled;
     private boolean isTopInsetEnabled;
@@ -46,6 +48,12 @@ public final class SafeArea extends FrameLayout implements SafeAreaHelper.Listen
         isTopInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_topInsetEnabled, true);
         isRightInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_rightInsetEnabled, true);
         isBottomInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_bottomInsetEnabled, true);
+
+        insetPaddingRect.set(
+                a.getDimensionPixelSize(R.styleable.SafeArea_safe_leftInsetPadding, 0),
+                a.getDimensionPixelSize(R.styleable.SafeArea_safe_topInsetPadding, 0),
+                a.getDimensionPixelSize(R.styleable.SafeArea_safe_rightInsetPadding, 0),
+                a.getDimensionPixelSize(R.styleable.SafeArea_safe_bottomInsetPadding, 0));
 
         if (a.hasValue(R.styleable.SafeArea_android_padding)) {
             setPadding(
@@ -128,13 +136,22 @@ public final class SafeArea extends FrameLayout implements SafeAreaHelper.Listen
             super.setPadding(
                     (isLeftInsetEnabled ? currentSystemInsets.left : 0)
                             + ((getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                            ? realPaddingRect.right : realPaddingRect.left),
-                    (isTopInsetEnabled ? currentSystemInsets.top : 0) + realPaddingRect.top,
+                            ? realPaddingRect.right : realPaddingRect.left)
+                            + ((!isLeftInsetEnabled || currentSystemInsets.left == 0)
+                            ? 0 : insetPaddingRect.left),
+                    (isTopInsetEnabled ? currentSystemInsets.top : 0)
+                            + realPaddingRect.top
+                            + ((!isTopInsetEnabled || currentSystemInsets.top == 0)
+                            ? 0 : insetPaddingRect.top),
                     (isRightInsetEnabled ? currentSystemInsets.right : 0)
                             + ((getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                            ? realPaddingRect.left : realPaddingRect.right),
+                            ? realPaddingRect.left : realPaddingRect.right)
+                            + ((!isRightInsetEnabled || currentSystemInsets.right == 0)
+                            ? 0 : insetPaddingRect.right),
                     (isBottomInsetEnabled ? currentSystemInsets.bottom : 0)
-                            + realPaddingRect.bottom);
+                            + realPaddingRect.bottom
+                            + ((!isBottomInsetEnabled || currentSystemInsets.bottom == 0)
+                            ? 0 : insetPaddingRect.bottom));
         }
         super.requestLayout();
     }
@@ -212,6 +229,42 @@ public final class SafeArea extends FrameLayout implements SafeAreaHelper.Listen
 
     public void setBottomInsetEnabled(boolean bottomInsetEnabled) {
         isBottomInsetEnabled = bottomInsetEnabled;
+        requestLayout();
+    }
+
+    public int getLeftInsetPadding() {
+        return insetPaddingRect.left;
+    }
+
+    public void setLeftInsetPadding(int padding) {
+        insetPaddingRect.left = padding;
+        requestLayout();
+    }
+
+    public int getTopInsetPadding() {
+        return insetPaddingRect.top;
+    }
+
+    public void setTopInsetPadding(int padding) {
+        insetPaddingRect.top = padding;
+        requestLayout();
+    }
+
+    public int getRightInsetPadding() {
+        return insetPaddingRect.right;
+    }
+
+    public void setRightInsetPadding(int padding) {
+        insetPaddingRect.right = padding;
+        requestLayout();
+    }
+
+    public int getBottomInsetPadding() {
+        return insetPaddingRect.bottom;
+    }
+
+    public void setBottomInsetPadding(int padding) {
+        insetPaddingRect.bottom = padding;
         requestLayout();
     }
 }
