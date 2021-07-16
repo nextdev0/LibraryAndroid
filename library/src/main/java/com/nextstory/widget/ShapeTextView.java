@@ -3,6 +3,7 @@ package com.nextstory.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Outline;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewOutlineProvider;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 
 import com.nextstory.widget.util.ForegroundDrawableHelper;
 import com.nextstory.widget.util.ShapeDrawableHelper;
@@ -37,11 +39,13 @@ public final class ShapeTextView extends AppCompatTextView {
 
     public ShapeTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
         foregroundDrawableHelper.resolveAttribute(context, attrs, defStyleAttr);
-        shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, getBackground());
-        setBackgroundDrawable(shapeDrawableHelper.getDrawable());
-        setClipToOutline(true);
-        setOutlineProvider(new ViewOutlineProvider() {
+        shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, super.getBackground());
+
+        super.setBackgroundDrawable(shapeDrawableHelper.getDrawable());
+        super.setClipToOutline(true);
+        super.setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {
                 outline.setRoundRect(
@@ -108,6 +112,43 @@ public final class ShapeTextView extends AppCompatTextView {
             return super.verifyDrawable(who);
         }
         return super.verifyDrawable(who) || (who == foregroundDrawableHelper.getForeground());
+    }
+
+    @Override
+    public Drawable getBackground() {
+        if (shapeDrawableHelper != null) {
+            return shapeDrawableHelper.getBackground();
+        }
+        return super.getBackground();
+    }
+
+    @Override
+    public void setBackground(Drawable background) {
+        setBackgroundDrawable(background);
+    }
+
+    @Override
+    public void setBackgroundDrawable(@Nullable Drawable background) {
+        if (shapeDrawableHelper != null) {
+            shapeDrawableHelper.setBackground(background);
+            invalidate();
+            return;
+        }
+        super.setBackgroundDrawable(background);
+    }
+
+    @Override
+    public void setBackgroundResource(int resId) {
+        setBackgroundDrawable(ContextCompat.getDrawable(getContext(), resId));
+    }
+
+    @Override
+    public void setBackgroundColor(int color) {
+        setBackgroundDrawable(new ColorDrawable(color));
+    }
+
+    public Drawable getShapeDrawable() {
+        return shapeDrawableHelper.getShapeDrawable();
     }
 
     public Drawable getForeground() {

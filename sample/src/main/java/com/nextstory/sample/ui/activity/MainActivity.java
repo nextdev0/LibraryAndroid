@@ -51,8 +51,7 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     }
 
     public void test1() {
-        getBinding().test.setBackgroundColor(0xff00ff00);
-        // startActivity(new Intent(this, Test1Activity.class));
+        startActivity(new Intent(this, Test1Activity.class));
     }
 
     public void test2() {
