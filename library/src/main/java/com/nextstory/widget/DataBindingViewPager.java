@@ -309,6 +309,14 @@ public final class DataBindingViewPager extends ViewPager {
             int viewType = getItemViewType(position);
             View view = views.get(viewType);
             if (view instanceof DataBindingViewPagerItem) {
+                if (container.isInEditMode()) {
+                    DataBindingViewPagerViewItem newView =
+                            new DataBindingViewPagerViewItem(container.getContext());
+                    newView.addView(view);
+                    container.addView(newView);
+                    return newView;
+                }
+
                 DataBindingViewPagerItem v = (DataBindingViewPagerItem) view;
                 ViewDataBinding binding = DataBindingUtil.inflate(
                         LayoutInflater.from(container.getContext()),
