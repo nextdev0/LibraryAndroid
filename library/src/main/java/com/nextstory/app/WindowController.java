@@ -20,7 +20,6 @@ import androidx.annotation.RestrictTo;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
@@ -359,14 +358,21 @@ public final class WindowController implements ViewTreeObserver.OnGlobalLayoutLi
      * @param isEnabled 활성화 유무
      * @return 체이닝을 위한 인스턴스 반환
      */
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings({"UnusedReturnValue", "deprecation"})
     public WindowController applyStatusBarDarkIcon(boolean isEnabled) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return this;
+        }
         post(() -> {
             if (window != null) {
                 View decorView = window.getDecorView();
-                WindowInsetsControllerCompat windowInsetsController
-                        = new WindowInsetsControllerCompat(window, decorView);
-                windowInsetsController.setAppearanceLightStatusBars(isEnabled);
+                int flags = decorView.getSystemUiVisibility();
+                if (isEnabled) {
+                    flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                } else {
+                    flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                }
+                decorView.setSystemUiVisibility(flags);
             }
         });
         return this;
