@@ -56,7 +56,6 @@ dependencies {
     api 'io.reactivex.rxjava3:rxjava:3.0.13'
     api 'io.reactivex.rxjava3:rxandroid:3.0.0'
     api 'net.danlew:android.joda:2.10.9.1'
-    api 'com.akexorcist:localization:1.2.10'
 }
 
 publishing {

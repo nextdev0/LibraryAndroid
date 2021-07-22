@@ -1,22 +1,18 @@
 package com.nextstory.app;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
-import android.os.Bundle;
+import android.os.LocaleList;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,60 +36,17 @@ public final class ResourcesController {
     public static final int THEME_DARK = 1;
     public static final int THEME_SYSTEM = 2;
 
-    private static WeakReference<LocalizationActivityDelegate> localizationActivityDelegate;
+    private static final String LANGUAGE = "language";
+    private static final String COUNTRY = "country";
+
     private static List<Locale> supportedLocales = null;
     private final Context context;
+
+    private SharedPreferences localePreferences = null;
 
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     public ResourcesController(Context context) {
         this.context = context;
-    }
-
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    void initializeApplication() {
-        ((Application) context).registerActivityLifecycleCallbacks(
-                new Application.ActivityLifecycleCallbacks() {
-                    @Override
-                    public void onActivityCreated(@NonNull Activity activity,
-                                                  @Nullable Bundle savedInstanceState) {
-                        // no-op
-                    }
-
-                    @Override
-                    public void onActivityStarted(@NonNull Activity activity) {
-                        // no-op
-                    }
-
-                    @Override
-                    public void onActivityResumed(@NonNull Activity activity) {
-                        if (activity instanceof BaseActivity) {
-                            localizationActivityDelegate =
-                                    new WeakReference<>(((AbstractBaseActivity) activity)
-                                            .getLocalizationActivityDelegate());
-                        }
-                    }
-
-                    @Override
-                    public void onActivityPaused(@NonNull Activity activity) {
-                        // no-op
-                    }
-
-                    @Override
-                    public void onActivityStopped(@NonNull Activity activity) {
-                        // no-op
-                    }
-
-                    @Override
-                    public void onActivitySaveInstanceState(@NonNull Activity activity,
-                                                            @NonNull Bundle outState) {
-                        // no-op
-                    }
-
-                    @Override
-                    public void onActivityDestroyed(@NonNull Activity activity) {
-                        // no-op
-                    }
-                });
     }
 
     /**
@@ -170,11 +123,43 @@ public final class ResourcesController {
     /**
      * @return 로케일
      */
+    @SuppressWarnings("deprecation")
     public Locale getLocale() {
-        if (localizationActivityDelegate == null || localizationActivityDelegate.get() == null) {
-            return Locale.getDefault();
+        String language = getLocalePreferences(context).getString(LANGUAGE, "");
+        String country = getLocalePreferences(context).getString(COUNTRY, "");
+        Locale locale = null;
+        for (Locale item : Locale.getAvailableLocales()) {
+            if (item == null) {
+                continue;
+            }
+            if (item.getCountry().equals(country) && item.getLanguage().equals(language)) {
+                locale = item;
+                break;
+            }
         }
-        return localizationActivityDelegate.get().getLanguage(context);
+        if (locale != null) {
+            return locale;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return context
+                    .getApplicationContext()
+                    .getResources()
+                    .getConfiguration()
+                    .getLocales()
+                    .get(0);
+        } else {
+            return context
+                    .getApplicationContext()
+                    .getResources()
+                    .getConfiguration().locale;
+        }
+    }
+
+    private SharedPreferences getLocalePreferences(Context context) {
+        if (localePreferences == null) {
+            localePreferences = context.getSharedPreferences("app_locale", Context.MODE_PRIVATE);
+        }
+        return localePreferences;
     }
 
     /**
@@ -186,8 +171,8 @@ public final class ResourcesController {
     @SuppressWarnings("UnusedReturnValue")
     public ResourcesController applyLocale(Locale locale) {
         String language = locale.getLanguage();
+        String country = locale.getCountry();
 
-        // 미지원 로케일 적용
         if (supportedLocales != null) {
             List<Locale> sameLanguages = new ArrayList<>();
             boolean isSupportedLocale = false;
@@ -201,15 +186,91 @@ public final class ResourcesController {
                 }
             }
             if (!isSupportedLocale && sameLanguages.size() > 0) {
-                locale = sameLanguages.get(0);
+                Locale firstSameLocale = sameLanguages.get(0);
+                getLocalePreferences(context)
+                        .edit()
+                        .putString(LANGUAGE, firstSameLocale.getLanguage())
+                        .putString(COUNTRY, firstSameLocale.getCountry())
+                        .apply();
+                return this;
             }
         }
-
-        if (localizationActivityDelegate != null && localizationActivityDelegate.get() != null) {
-            localizationActivityDelegate.get().setLanguage(context, locale);
-        }
+        getLocalePreferences(context)
+                .edit()
+                .putString(LANGUAGE, locale.getLanguage())
+                .putString(COUNTRY, locale.getCountry())
+                .apply();
 
         return this;
+    }
+
+    /**
+     * @return 로케일이 적용된 컨텍스트
+     */
+    public Context getLocaleContext() {
+        return wrap(context, context.getApplicationContext().getResources());
+    }
+
+    /**
+     * @return 로케일이 적용된 Resources
+     */
+    public Resources getLocaleResources() {
+        return getLocaleContext().getResources();
+    }
+
+    /**
+     * @return 로케일이 적용된 Resources
+     */
+    public Resources getLocaleResources(Resources resources) {
+        return wrap(context, resources).getResources();
+    }
+
+    private Context wrap(Context context, Resources resources) {
+        Locale.getAvailableLocales();
+
+        Locale locale = getLocaleInternal(context, resources);
+        Configuration configuration = new Configuration(resources.getConfiguration());
+        Locale.setDefault(locale);
+        configuration.locale = locale;
+        configuration.setLocale(locale);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            LocaleList localeList = new LocaleList(locale);
+            LocaleList.setDefault(localeList);
+            configuration.setLocales(localeList);
+        } else {
+            configuration.locale = locale;
+            resources.updateConfiguration(configuration, null);
+        }
+
+        return context.createConfigurationContext(configuration);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Locale getLocaleInternal(Context context, Resources resources) {
+        String language = getLocalePreferences(context).getString(LANGUAGE, "");
+        String country = getLocalePreferences(context).getString(COUNTRY, "");
+        Locale locale = null;
+        for (Locale item : Locale.getAvailableLocales()) {
+            if (item == null) {
+                continue;
+            }
+            if (item.getCountry().equals(country) && item.getLanguage().equals(language)) {
+                locale = item;
+                break;
+            }
+        }
+        if (locale != null) {
+            return locale;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return resources
+                    .getConfiguration()
+                    .getLocales()
+                    .get(0);
+        } else {
+            return resources.getConfiguration().locale;
+        }
     }
 
     /**

@@ -1,14 +1,11 @@
 package com.nextstory.app;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.res.Resources;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-
-import com.akexorcist.localizationactivity.core.LocalizationServiceDelegate;
 
 /**
  * 기본 서비스
@@ -19,22 +16,10 @@ import com.akexorcist.localizationactivity.core.LocalizationServiceDelegate;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class BaseService extends Service {
     private final ResourcesController resourcesController = new ResourcesController(this);
-    private final LocalizationServiceDelegate localizationDelegate
-            = new LocalizationServiceDelegate(this);
-
-    @Override
-    public Context getBaseContext() {
-        return localizationDelegate.getBaseContext(super.getBaseContext());
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return localizationDelegate.getApplicationContext(super.getApplicationContext());
-    }
 
     @Override
     public Resources getResources() {
-        return localizationDelegate.getResources(super.getResources());
+        return resourcesController.getLocaleResources(super.getResources());
     }
 
     /**
@@ -52,7 +37,7 @@ public abstract class BaseService extends Service {
      * @param res 문자열 리소스
      */
     public void showToast(@StringRes int res) {
-        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(res), Toast.LENGTH_SHORT).show();
     }
 
     /**

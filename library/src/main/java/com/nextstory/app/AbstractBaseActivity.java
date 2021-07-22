@@ -1,6 +1,5 @@
 package com.nextstory.app;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -16,13 +15,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RestrictTo;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.akexorcist.localizationactivity.core.LocalizationActivityDelegate;
-
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -35,8 +32,6 @@ import java.util.Objects;
 public abstract class AbstractBaseActivity extends AppCompatActivity {
     private final WindowController windowController = new WindowController(this);
     private final ResourcesController resourcesController = new ResourcesController(this);
-    private final LocalizationActivityDelegate localizationActivityDelegate
-            = new LocalizationActivityDelegate(this);
 
     private final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     private final PointF touchPoint = new PointF(0f, 0f);
@@ -44,33 +39,29 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
 
     @ResourcesController.ThemeType
     private int currentAppTheme;
+    private Locale currentLocale;
 
     private InputMethodManager inputMethodManager = null;
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        applyOverrideConfiguration(localizationActivityDelegate.updateConfigurationLocale(newBase));
-        super.attachBaseContext(newBase);
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        localizationActivityDelegate.onCreate();
-
         super.onCreate(savedInstanceState);
 
         currentAppTheme = resourcesController.getAppTheme();
+        currentLocale = resourcesController.getLocale();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        // 로케일 변경 시 액티비티 재생성
-        localizationActivityDelegate.onResume(this);
-
         // 테마 변경 시 액티비티 재생성
         if (currentAppTheme != resourcesController.getAppTheme()) {
+            recreate();
+        }
+
+        // 로케일 변경 시 액티비티 재생성
+        if (currentLocale != resourcesController.getLocale()) {
             recreate();
         }
     }
@@ -79,16 +70,6 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         inputMethodManager = null;
         super.onDestroy();
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return localizationActivityDelegate.getApplicationContext(super.getApplicationContext());
-    }
-
-    @Override
-    public Resources getResources() {
-        return localizationActivityDelegate.getResources(super.getResources());
     }
 
     @Override
@@ -153,9 +134,9 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    LocalizationActivityDelegate getLocalizationActivityDelegate() {
-        return localizationActivityDelegate;
+    @Override
+    public Resources getResources() {
+        return resourcesController.getLocaleResources(super.getResources());
     }
 
     /**
@@ -182,7 +163,7 @@ public abstract class AbstractBaseActivity extends AppCompatActivity {
      * @param res 문자열 리소스
      */
     public void showToast(@StringRes int res) {
-        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(res), Toast.LENGTH_SHORT).show();
     }
 
     /**
