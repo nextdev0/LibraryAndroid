@@ -29,7 +29,7 @@ ext {
     buildToolsVersion = '30.0.3'
 
     groupId = 'com.nextstory'
-    libraryVersion = '2.0.0'
+    libraryVersion = '2.0.1'
     libraryArtifactId = 'library'
     annotationsArtifactId = 'annotations'
 }
