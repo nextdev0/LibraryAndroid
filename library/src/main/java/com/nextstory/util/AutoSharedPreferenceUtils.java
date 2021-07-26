@@ -3,6 +3,7 @@ package com.nextstory.util;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 
+import com.google.gson.Gson;
 import com.nextstory.annotations.AutoSharedPreferences;
 
 /**
@@ -14,7 +15,19 @@ import com.nextstory.annotations.AutoSharedPreferences;
 @SuppressWarnings("UnusedDeclaration")
 public final class AutoSharedPreferenceUtils {
     private final static Object lockObject = new Object();
-    private static Converter converter = null;
+    private static Converter converter = new Converter() {
+        final Gson gson = new Gson();
+
+        @Override
+        public String serialize(Object object) {
+            return gson.toJson(object);
+        }
+
+        @Override
+        public <T> T deserialize(String source, Class<T> klass) {
+            return gson.fromJson(source, klass);
+        }
+    };
 
     private AutoSharedPreferenceUtils() {
         // no-op
