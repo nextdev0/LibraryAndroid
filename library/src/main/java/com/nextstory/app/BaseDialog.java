@@ -22,6 +22,8 @@ import androidx.databinding.ViewDataBinding;
 import com.nextstory.R;
 import com.nextstory.util.Unsafe;
 
+import java.util.Objects;
+
 /**
  * 기본 다이얼로그
  *
@@ -32,6 +34,9 @@ import com.nextstory.util.Unsafe;
 public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     B binding = null;
+
+    private WindowController windowController;
+    private ResourcesController resourcesController;
 
     public BaseDialog(@NonNull Context context) {
         this(context, R.style.Theme_Dialog_Base);
@@ -45,15 +50,21 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        windowController = new WindowController(this);
+        resourcesController = new ResourcesController(getContext());
+
         if (binding == null && savedInstanceState == null) {
             Class<?> klass = Unsafe.getGenericClass(this, 0);
             if (klass != null) {
                 binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
             }
         }
+
         if (binding != null) {
             super.setContentView(binding.getRoot());
         }
+
         Window window = getWindow();
         if (window != null) {
             window.setLayout(
@@ -70,6 +81,7 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
             flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             decorView.setSystemUiVisibility(flags);
         }
+
         ViewGroup contentView = findViewById(android.R.id.content);
         ViewCompat.setOnApplyWindowInsetsListener(contentView, (v, insets) -> {
             if (binding != null) {
@@ -149,5 +161,23 @@ public abstract class BaseDialog<B extends ViewDataBinding> extends Dialog {
     @CallSuper
     protected B getBinding() {
         return binding;
+    }
+
+    /**
+     * @return 윈도우 설정
+     * @since 2.0
+     */
+    @NonNull
+    public final WindowController getWindowController() {
+        return Objects.requireNonNull(windowController);
+    }
+
+    /**
+     * @return 리소스 설정
+     * @since 2.0
+     */
+    @NonNull
+    public final ResourcesController getResourcesController() {
+        return Objects.requireNonNull(resourcesController);
     }
 }

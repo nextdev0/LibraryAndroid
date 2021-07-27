@@ -1,11 +1,13 @@
 package com.nextstory.app;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -48,15 +50,19 @@ public final class WindowController implements ViewTreeObserver.OnGlobalLayoutLi
      * 일반 윈도우
      */
     public static final int TYPE_NORMAL = 0;
+
     /**
      * 상태바 영역에 컨텐츠가 겹치도록 설정
      * 그리고 제스처바가 있을경우 겹치도록 설정
      */
     public static final int TYPE_OVERLAY_SYSTEM_BARS = 1;
+
     /**
      * 전체화면 설정
      */
     public static final int TYPE_FULLSCREEN = 2;
+
+    private static final String TAG = "WindowController";
 
     /**
      * 상태바 반투명 색상
@@ -69,20 +75,25 @@ public final class WindowController implements ViewTreeObserver.OnGlobalLayoutLi
     private static final Map<Window, PriorSettings> SETTINGS = new WeakHashMap<>();
 
     private final Set<Runnable> postRunnables = new HashSet<>();
+    private final boolean isDialogWindow;
     private Window window = null;
     private ViewGroup contentView = null;
     private InputMethodManager inputMethodManager = null;
     private SharedPreferences recentNavBarSharedPreferences = null;
     private int actualDeviceHeight = 0;
 
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     public WindowController(Fragment fragment) {
+        isDialogWindow = false;
         initialize(fragment, () -> {
             window = fragment.requireActivity().getWindow();
             contentView = fragment.requireActivity().findViewById(android.R.id.content);
         });
     }
 
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
     public WindowController(ComponentActivity activity) {
+        isDialogWindow = false;
         initialize(activity, () -> {
             window = activity.getWindow();
             contentView = activity.findViewById(android.R.id.content);
@@ -94,6 +105,13 @@ public final class WindowController implements ViewTreeObserver.OnGlobalLayoutLi
                     .getViewTreeObserver()
                     .addOnGlobalLayoutListener(this);
         });
+    }
+
+    @RestrictTo(RestrictTo.Scope.LIBRARY)
+    public WindowController(Dialog dialog) {
+        isDialogWindow = true;
+        window = Objects.requireNonNull(dialog.getWindow(), "dialog.mWindow == null");
+        contentView = dialog.findViewById(android.R.id.content);
     }
 
     private int getNavBarInteractionModeConfig() {
@@ -228,6 +246,11 @@ public final class WindowController implements ViewTreeObserver.OnGlobalLayoutLi
      */
     @SuppressWarnings("deprecation")
     public WindowController applyWindowType(@WindowType int type) {
+        if (isDialogWindow) {
+            Log.e(TAG, "can not be used in dialog.");
+            return this;
+        }
+
         actualDeviceHeight = 0;
         post(() -> {
             if (window != null && contentView != null) {
@@ -325,6 +348,11 @@ public final class WindowController implements ViewTreeObserver.OnGlobalLayoutLi
      */
     @SuppressWarnings("UnusedReturnValue")
     public WindowController applyTranslucentStatusBar(boolean isEnabled) {
+        if (isDialogWindow) {
+            Log.e(TAG, "can not be used in dialog.");
+            return this;
+        }
+
         post(() -> {
             if (window != null && contentView != null) {
                 contentView.postDelayed(() -> {

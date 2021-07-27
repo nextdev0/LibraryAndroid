@@ -19,6 +19,7 @@ import com.nextstory.R;
 import com.nextstory.util.Unsafe;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 /**
  * 기본 다이얼로그 프래그먼트
@@ -30,6 +31,8 @@ import java.lang.ref.WeakReference;
 public abstract class BaseDialogFragment<B extends ViewDataBinding> extends DialogFragment {
     private BaseDialog<B> dialog = null;
     private WeakReference<Bundle> savedInstanceState = null;
+    private WindowController windowController;
+    private ResourcesController resourcesController;
 
     @Override
     public int getTheme() {
@@ -61,6 +64,9 @@ public abstract class BaseDialogFragment<B extends ViewDataBinding> extends Dial
 
     @CallSuper
     public void onDialogCreated(BaseDialog<B> dialog, @Nullable Bundle savedInstanceState) {
+        windowController = new WindowController(dialog);
+        resourcesController = new ResourcesController(requireContext());
+
         if (savedInstanceState != null) {
             dialog.onCreate(null);
         }
@@ -113,7 +119,28 @@ public abstract class BaseDialogFragment<B extends ViewDataBinding> extends Dial
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * @return 바인딩 인스턴스
+     */
     protected B getBinding() {
         return dialog.getBinding();
+    }
+
+    /**
+     * @return 윈도우 설정
+     * @since 2.0
+     */
+    @NonNull
+    public final WindowController getWindowController() {
+        return Objects.requireNonNull(windowController);
+    }
+
+    /**
+     * @return 리소스 설정
+     * @since 2.0
+     */
+    @NonNull
+    public final ResourcesController getResourcesController() {
+        return Objects.requireNonNull(resourcesController);
     }
 }

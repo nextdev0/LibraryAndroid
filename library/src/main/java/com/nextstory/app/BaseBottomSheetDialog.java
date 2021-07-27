@@ -19,6 +19,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.nextstory.R;
 import com.nextstory.util.Unsafe;
 
+import java.util.Objects;
+
 /**
  * 기본 바텀시트 다이얼로그
  *
@@ -31,6 +33,7 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     B binding = null;
 
     private FrameLayout viewContainer;
+    private ResourcesController resourcesController;
 
     public BaseBottomSheetDialog(@NonNull Context context) {
         this(context, R.style.Theme_Dialog_Base_BottomDialog);
@@ -44,13 +47,17 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.dialog_bottom_sheet_base);
+
+        resourcesController = new ResourcesController(getContext());
         viewContainer = findViewById(R.id.view_container);
+
         if (binding == null && savedInstanceState == null) {
             Class<?> klass = Unsafe.getGenericClass(this, 0);
             if (klass != null) {
                 binding = Unsafe.invoke(klass, "inflate", LayoutInflater.from(getContext()));
             }
         }
+
         if (binding != null) {
             setContentView(binding.getRoot());
         }
@@ -123,5 +130,14 @@ public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends B
     @CallSuper
     protected B getBinding() {
         return binding;
+    }
+
+    /**
+     * @return 리소스 설정
+     * @since 2.0
+     */
+    @NonNull
+    public final ResourcesController getResourcesController() {
+        return Objects.requireNonNull(resourcesController);
     }
 }
