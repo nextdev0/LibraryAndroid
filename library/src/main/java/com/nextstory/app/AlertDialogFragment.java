@@ -31,8 +31,10 @@ import androidx.fragment.app.FragmentTransaction;
  * @author troy
  * @see AlertDialog
  * @since 1.3
+ * @deprecated {@link AlertDialog} 사용
  */
-@SuppressWarnings("UnusedDeclaration")
+@Deprecated
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public final class AlertDialogFragment extends DialogFragment {
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     private AlertDialog dialog = null;
@@ -74,7 +76,9 @@ public final class AlertDialogFragment extends DialogFragment {
      * 빌더 클래스
      *
      * @see AlertDialog.Builder
+     * @deprecated {@link AlertDialog.Builder} 사용
      */
+    @Deprecated
     public static final class Builder {
         private final AlertDialog.Builder internalBuilder;
 
