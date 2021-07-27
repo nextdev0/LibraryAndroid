@@ -35,6 +35,8 @@ import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 @SuppressWarnings("deprecation")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class SafeAreaHelper implements LibraryInitializer {
+    private static final Rect systemInsets = new Rect();
+    private static final Rect currentInsets = new Rect();
     private static final Set<Listener> listeners = new HashSet<>();
     private static final Consumer<Activity> updateConsumer = activity -> {
         Window window = activity.getWindow();
@@ -57,12 +59,12 @@ public final class SafeAreaHelper implements LibraryInitializer {
                         WindowInsetsCompat.Type.systemBars());
                 Insets displayCut = windowInsets.getInsets(
                         WindowInsetsCompat.Type.displayCutout());
-                Rect systemInsets = new Rect(
+                systemInsets.set(
                         Math.max(systemBar.left, displayCut.left),
                         Math.max(systemBar.top, displayCut.top),
                         Math.max(systemBar.right, displayCut.right),
                         Math.max(systemBar.bottom, displayCut.bottom));
-                Rect currentInsets = new Rect(
+                currentInsets.set(
                         isNavigationBarHide ? systemInsets.left : 0,
                         isStatusBarHide ? systemInsets.top : 0,
                         isNavigationBarHide ? systemInsets.right : 0,
@@ -78,6 +80,10 @@ public final class SafeAreaHelper implements LibraryInitializer {
 
     public static void addListener(Listener l) {
         listeners.add(l);
+
+        if (l != null) {
+            l.onSafeAreaChanged(currentInsets, systemInsets);
+        }
     }
 
     public static void removeListener(Listener l) {
