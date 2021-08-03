@@ -16,11 +16,11 @@ import androidx.exifinterface.media.ExifInterface;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.canhub.cropper.CropImage;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
 import com.nextstory.app.AbstractBaseActivity;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -204,7 +204,7 @@ public final class RxImagePicker {
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 if (resultCode == RESULT_OK && result != null) {
-                    Uri resultUri = result.getUri();
+                    Uri resultUri = result.getUriContent();
                     Intent intent = new Intent();
                     intent.putExtra(EXTRA_IMAGES,
                             (Serializable) Collections.singletonList(resultUri));
