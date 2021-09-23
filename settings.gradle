@@ -13,4 +13,5 @@ rootProject.name = 'Library'
 
 include ':annotations'
 include ':library'
+include ':libgdx'
 include ':sample'

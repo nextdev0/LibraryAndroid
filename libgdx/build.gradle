@@ -1,0 +1,108 @@
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
+
+android {
+    compileSdk rootProject.ext.targetSdk
+    defaultConfig {
+        minSdk rootProject.ext.minSdk
+        targetSdk rootProject.ext.targetSdk
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    buildTypes {
+        debug {
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            zipAlignEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        dataBinding true
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api fileTree(include: ['*.aar', '*.jar'], dir: 'libs')
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    api project(':annotations')
+
+    api 'androidx.appcompat:appcompat:1.3.1'
+    api 'androidx.exifinterface:exifinterface:1.3.3'
+    api 'androidx.constraintlayout:constraintlayout:2.1.0'
+    api 'com.google.android.material:material:1.4.0'
+    api 'com.google.code.gson:gson:2.8.7'
+    api 'com.wdullaer:materialdatetimepicker:4.2.3'
+    api 'com.github.esafirm.android-image-picker:imagepicker:2.4.5'
+    api 'com.github.CanHub:Android-Image-Cropper:3.2.2'
+    api 'io.reactivex.rxjava3:rxjava:3.0.13'
+    api 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    api 'net.danlew:android.joda:2.10.9.1'
+}
+
+publishing {
+    task sourceJar(type: Jar) {
+        from android.sourceSets.main.java.srcDirs
+        classifier 'sources'
+    }
+
+    repositories {
+        maven {
+            url "$rootDir/repository"
+        }
+    }
+
+    android.libraryVariants.all { variant ->
+        if (variant.buildType.name != 'debug') {
+            publications {
+                "${rootProject.ext.groupId}"(MavenPublication) {
+                    artifact sourceJar
+                    artifact(variant.packageLibraryProvider.get().archivePath) {
+                        builtBy variant.assembleProvider
+                    }
+
+                    groupId rootProject.ext.groupId
+                    artifactId rootProject.ext.libgdxArtifactId
+                    version rootProject.ext.libraryVersion
+
+                    pom.withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+
+                        // api 의존성 연결
+                        // databinding, Library 그룹은 제외함
+                        configurations.api.allDependencies.each {
+                            if (!it.group?.contains('androidx.databinding') && !it.group?.contains('Library')) {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+                            }
+                        }
+
+                        // annotations 의존성은 내부 프로젝트이므로 임의로 추가함
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', rootProject.ext.groupId)
+                        dependencyNode.appendNode('artifactId', rootProject.ext.annotationsArtifactId)
+                        dependencyNode.appendNode('version', rootProject.ext.libraryVersion)
+                    }
+                }
+            }
+        }
+    }
+}
