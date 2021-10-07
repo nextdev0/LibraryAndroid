@@ -8,8 +8,10 @@ import android.view.View;
 
 import com.nextstory.app.BaseActivity;
 import com.nextstory.app.WindowController;
+import com.nextstory.libgdx.Libgdx;
 import com.nextstory.sample.data.TestSharedPreferences;
 import com.nextstory.sample.databinding.ActivityMainBinding;
+import com.nextstory.sample.game.TestGame;
 import com.nextstory.sample.ui.dialog.BlurTestDialog;
 import com.nextstory.util.Disposables;
 import com.nextstory.util.RxImagePicker;
@@ -88,5 +90,9 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     public void test5(View v) {
         new BlurTestDialog()
                 .show(this);
+    }
+
+    public void test6(View v) {
+        startActivity(Libgdx.createIntent(this, TestGame.class));
     }
 }
