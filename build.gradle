@@ -17,7 +17,7 @@ ext {
     targetSdk = 31
 
     groupId = 'com.nextstory'
-    libraryVersion = '2.1.0'
+    libraryVersion = '2.1.1'
     libraryArtifactId = 'library'
     libgdxArtifactId = 'libgdx'
     annotationsArtifactId = 'annotations'
