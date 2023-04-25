@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.nextstory">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:networkSecurityConfig="@xml/network_security_config"
@@ -43,7 +42,7 @@
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:configChanges="keyboard|keyboardHidden"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar.Bridge"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
@@ -51,7 +50,7 @@
         <activity
             android:name=".util.RxImagePicker$InternalActivity"
             android:configChanges="keyboard|keyboardHidden"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="unspecified"
             android:theme="@style/Theme.Activity.Translucent"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />

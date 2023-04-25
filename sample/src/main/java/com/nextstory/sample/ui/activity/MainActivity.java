@@ -69,7 +69,6 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
     public void test4(View v) {
         Disposables destroyDisposables = Disposables.onDestroy(this);
         destroyDisposables.add(new RxPermission(this)
-                .add(Manifest.permission.READ_EXTERNAL_STORAGE)
                 .add(Manifest.permission.CAMERA)
                 .request()
                 .map(permissionResult -> {
@@ -94,5 +93,45 @@ public final class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     public void test6(View v) {
         startActivity(Libgdx.createIntent(this, TestGame.class));
+    }
+
+    public void test7(View v) {
+        Disposables destroyDisposables = Disposables.onDestroy(this);
+        destroyDisposables.add(new RxPermission(this)
+                .add(Manifest.permission.CAMERA)
+                .request()
+                .map(permissionResult -> {
+                    if (permissionResult.isPermissionAllGranted()) {
+                        return new RxImagePicker(this)
+                                .single()
+                                .blockingGet();
+                    }
+                    return Uri.EMPTY;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(result -> {
+                    // no-op
+                }));
+    }
+
+    public void test8(View v) {
+        Disposables destroyDisposables = Disposables.onDestroy(this);
+        destroyDisposables.add(new RxPermission(this)
+                .add(Manifest.permission.CAMERA)
+                .request()
+                .map(permissionResult -> {
+                    if (permissionResult.isPermissionAllGranted()) {
+                        return new RxImagePicker(this)
+                                .multiple()
+                                .blockingGet();
+                    }
+                    return Uri.EMPTY;
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(result -> {
+                    // no-op
+                }));
     }
 }

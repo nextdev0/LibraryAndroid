@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.ContextCompat;
 
-import com.nextstory.R;
 import com.nextstory.widget.util.ForegroundDrawableHelper;
 import com.nextstory.widget.util.ShapeDrawableHelper;
 
@@ -35,7 +34,7 @@ public final class ShapeEditText extends AppCompatEditText {
     }
 
     public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, R.attr.editTextStyle);
+        this(context, attrs, androidx.appcompat.R.attr.editTextStyle);
     }
 
     public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

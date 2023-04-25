@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nextstory.sample">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".SampleApplication"
         android:allowBackup="true"
@@ -43,7 +48,7 @@
         <activity
             android:name=".ui.activity.IntentBuilderTestActivity"
             android:configChanges="keyboard|keyboardHidden"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="unspecified"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 

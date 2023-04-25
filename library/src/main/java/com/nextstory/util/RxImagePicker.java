@@ -7,15 +7,23 @@ import android.graphics.ImageDecoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.canhub.cropper.CropImage;
-import com.esafirm.imagepicker.features.ImagePicker;
+import com.canhub.cropper.CropImageContract;
+import com.canhub.cropper.CropImageContractOptions;
+import com.canhub.cropper.CropImageOptions;
+import com.esafirm.imagepicker.features.ImagePickerConfig;
+import com.esafirm.imagepicker.features.ImagePickerLauncher;
+import com.esafirm.imagepicker.features.ImagePickerLauncherKt;
+import com.esafirm.imagepicker.features.ImagePickerMode;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
 import com.nextstory.app.AbstractBaseActivity;
@@ -26,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -40,6 +50,9 @@ public final class RxImagePicker {
     private static final String EXTRA_CROP_MODE = "extra_cropMode";
     private static final String EXTRA_COUNT = "extra_count";
     private static final String EXTRA_IMAGES = "extra_images";
+
+    private static final Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+
     private final FragmentActivity activity;
     private boolean singleOrMultiple = true;
     private int count = 1;
@@ -112,99 +125,106 @@ public final class RxImagePicker {
      * 내부 액티비티
      */
     public static class InternalActivity extends AbstractBaseActivity {
-        private boolean isCropMode;
-        private int count;
+        private final AtomicBoolean isCropMode = new AtomicBoolean(false);
+        private final AtomicInteger count = new AtomicInteger(0);
 
-        @SuppressWarnings("deprecation")
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-            if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-                List<Image> images = ImagePicker.getImages(data);
-                if (images != null) {
-                    if (isCropMode) {
-                        try {
-                            Bitmap bitmap;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                ImageDecoder.Source source = ImageDecoder.createSource(
-                                        getContentResolver(),
-                                        images.get(0).getUri());
-                                bitmap = ImageDecoder.decodeBitmap(source);
-                            } else {
-                                bitmap = MediaStore.Images.Media.getBitmap(
-                                        getContentResolver(),
-                                        images.get(0).getUri());
-                            }
-                            Objects.requireNonNull(bitmap);
-                            CropImage.activity(images.get(0).getUri()).start(this);
-                            return;
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        List<Uri> uris = new ArrayList<>();
-                        for (Image image : images) {
+        private final ImagePickerLauncher pickerLauncher =
+                ImagePickerLauncherKt.registerImagePicker(this, () -> this, images -> {
+                    if (images != null) {
+                        if (isCropMode.get()) {
                             try {
                                 Bitmap bitmap;
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                                     ImageDecoder.Source source = ImageDecoder.createSource(
                                             getContentResolver(),
-                                            image.getUri());
+                                            images.get(0).getUri());
                                     bitmap = ImageDecoder.decodeBitmap(source);
                                 } else {
                                     bitmap = MediaStore.Images.Media.getBitmap(
                                             getContentResolver(),
-                                            image.getUri());
+                                            images.get(0).getUri());
                                 }
                                 Objects.requireNonNull(bitmap);
-                                uris.add(image.getUri());
+                                startCrop(images.get(0).getUri());
+                                return null;
                             } catch (IOException e) {
                                 e.printStackTrace();
+                                finish();
                             }
+                        } else {
+                            List<Uri> uris = new ArrayList<>();
+                            for (Image image : images) {
+                                try {
+                                    Bitmap bitmap;
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                        ImageDecoder.Source source = ImageDecoder.createSource(
+                                                getContentResolver(),
+                                                image.getUri());
+                                        bitmap = ImageDecoder.decodeBitmap(source);
+                                    } else {
+                                        bitmap = MediaStore.Images.Media.getBitmap(
+                                                getContentResolver(),
+                                                image.getUri());
+                                    }
+                                    Objects.requireNonNull(bitmap);
+                                    uris.add(image.getUri());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra(EXTRA_IMAGES, (Serializable) uris);
+                            setResult(RESULT_OK, resultIntent);
+                            finish();
+                            return null;
                         }
-                        Intent intent = new Intent();
-                        intent.putExtra(EXTRA_IMAGES, (Serializable) uris);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                        return;
                     }
-                }
-            }
-            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if (resultCode == RESULT_OK && result != null) {
-                    Uri resultUri = result.getUriContent();
-                    Intent intent = new Intent();
-                    intent.putExtra(EXTRA_IMAGES,
-                            (Serializable) Collections.singletonList(resultUri));
-                    setResult(RESULT_OK, intent);
+                    return null;
+                });
+
+        private final ActivityResultLauncher<CropImageContractOptions> cropImage =
+                registerForActivityResult(new CropImageContract(), result -> {
+                    if (result.isSuccessful()) {
+                        Uri resultUri = result.getUriContent();
+                        Intent intent = new Intent();
+                        intent.putExtra(EXTRA_IMAGES,
+                                (Serializable) Collections.singletonList(resultUri));
+                        setResult(RESULT_OK, intent);
+                    }
                     finish();
-                    return;
-                }
-            }
-            finish();
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+                });
 
         @Override
         protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            count = getIntent().getIntExtra(EXTRA_COUNT, 1);
-            isCropMode = getIntent().getBooleanExtra(EXTRA_CROP_MODE, false);
+
+            count.set(getIntent().getIntExtra(EXTRA_COUNT, 1));
+            isCropMode.set(getIntent().getBooleanExtra(EXTRA_CROP_MODE, false));
+
             start();
         }
 
         private void start() {
-            ImagePicker imagePicker = ImagePicker.create(this)
-                    .showCamera(true)
-                    .folderMode(false);
-            if (isCropMode) {
-                imagePicker.returnMode(ReturnMode.ALL);
-                imagePicker.single();
+            ImagePickerConfig config = new ImagePickerConfig();
+            config.setShowCamera(true);
+            config.setFolderMode(false);
+
+            if (isCropMode.get()) {
+                config.setReturnMode(ReturnMode.ALL);
+                config.setMode(ImagePickerMode.SINGLE);
+                config.setLimit(1);
             } else {
-                imagePicker.multi();
-                imagePicker.limit(count);
+                config.setMode(ImagePickerMode.MULTIPLE);
+                config.setLimit(count.get());
             }
-            imagePicker.start();
+
+            pickerLauncher.launch(config);
+        }
+
+        private void startCrop(Uri imageUri) {
+            CropImageOptions options = new CropImageOptions();
+            CropImageContractOptions config = new CropImageContractOptions(imageUri, options);
+            cropImage.launch(config);
         }
     }
 }

@@ -16,7 +16,7 @@ dependencies {
 publishing {
     task sourceJar(type: Jar) {
         from sourceSets.main.java.srcDirs
-        classifier 'sources'
+        archiveClassifier.set('sources')
     }
 
     repositories {

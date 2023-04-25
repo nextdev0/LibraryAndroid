@@ -71,6 +71,22 @@
                     android:textAllCaps="false"
                     tools:ignore="HardcodedText" />
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> activity.test7(v)}"
+                    android:text="imagepicker single 테스트"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{v -> activity.test8(v)}"
+                    android:text="imagepicker multiple 테스트"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText" />
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
