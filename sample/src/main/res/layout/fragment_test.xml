@@ -1,121 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+  <data>
 
-        <variable
-            name="fragment"
-            type="com.nextstory.sample.ui.fragment.Test1Fragment" />
+    <variable
+      name="fragment"
+      type="com.nextstory.sample.ui.fragment.Test1Fragment" />
 
-    </data>
+  </data>
 
-    <com.nextstory.widget.DataBindingGridLayout
-        android:id="@+id/scroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light"
-        android:orientation="vertical">
+  <com.nextstory.widget.DataBindingGridLayout
+    android:id="@+id/scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light"
+    android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="14dp"
-            android:text="프래그먼트 영역"
-            tools:ignore="HardcodedText" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="14dp"
+      android:text="프래그먼트 영역"
+      tools:ignore="HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.argumentsTest()}"
-            android:text="arguments 테스트"
-            tools:ignore="HardcodedText" />
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{v -> fragment.argumentsTest()}"
+      android:text="arguments 테스트"
+      tools:ignore="HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.onDialogTestClick()}"
-            android:text="다이얼로그 테스트"
-            tools:ignore="HardcodedText" />
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{v -> fragment.onDialogTestClick()}"
+      android:text="다이얼로그 테스트"
+      tools:ignore="HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.onDialogTest2Click()}"
-            android:text="다이얼로그 테스트 2"
-            tools:ignore="HardcodedText" />
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{v -> fragment.onDialogTest2Click()}"
+      android:text="다이얼로그 테스트 2"
+      tools:ignore="HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.onLocaleTestClick(0)}"
-            android:text="로케일 테스트 (한글)"
-            tools:ignore="HardcodedText" />
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{v -> fragment.onLocaleTestClick(0)}"
+      android:text="로케일 테스트 (한글)"
+      tools:ignore="HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.onLocaleTestClick(1)}"
-            android:text="로케일 테스트 (영문)"
-            tools:ignore="HardcodedText" />
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{v -> fragment.onLocaleTestClick(1)}"
+      android:text="로케일 테스트 (영문)"
+      tools:ignore="HardcodedText" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{v -> fragment.onLocaleTestClick(2)}"
-            android:text="로케일 테스트 (중문)"
-            tools:ignore="HardcodedText" />
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{v -> fragment.onLocaleTestClick(2)}"
+      android:text="로케일 테스트 (중문)"
+      tools:ignore="HardcodedText" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            tools:ignore="LabelFor" />
+    <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:importantForAutofill="no"
+      android:inputType="text"
+      tools:ignore="LabelFor" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@{fragment.safeValue}"
-                tools:text="value" />
+      <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@{fragment.safeValue}"
+        tools:text="value" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@{fragment.unsafeValue}"
-                tools:text="value" />
+      <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@{fragment.unsafeValue}"
+        tools:text="value" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{v -> fragment.onSafeFieldTestClick()}"
-                android:text="변경 (회전시 값 유지 테스트)"
-                tools:ignore="HardcodedText" />
+      <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{v -> fragment.onSafeFieldTestClick()}"
+        android:text="변경 (회전시 값 유지 테스트)"
+        tools:ignore="HardcodedText" />
 
-        </LinearLayout>
+    </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/test" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/test" />
 
-        <com.nextstory.widget.DataBindingGridLayoutItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:itemBindingName="string"
-            app:items="@{fragment.testList}"
-            app:layout="@layout/adapter_test" />
+    <com.nextstory.widget.DataBindingGridLayoutItem
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:itemBindingName="string"
+      app:items="@{fragment.testList}"
+      app:layout="@layout/adapter_test" />
 
-    </com.nextstory.widget.DataBindingGridLayout>
+  </com.nextstory.widget.DataBindingGridLayout>
 
 </layout>

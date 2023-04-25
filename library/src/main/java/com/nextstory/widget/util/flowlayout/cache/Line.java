@@ -10,62 +10,62 @@ import androidx.annotation.RestrictTo;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public class Line {
-    public static final Line EMPTY_LINE = new Line();
-    public int itemCount;
-    public int totalWidth;
-    public int maxHeight;
-    public int maxHeightIndex;
+  public static final Line EMPTY_LINE = new Line();
+  public int itemCount;
+  public int totalWidth;
+  public int maxHeight;
+  public int maxHeightIndex;
 
-    public Line() {
-        itemCount = 0;
-        totalWidth = 0;
-        maxHeight = 0;
-        maxHeightIndex = -1;
+  public Line() {
+    itemCount = 0;
+    totalWidth = 0;
+    maxHeight = 0;
+    maxHeightIndex = -1;
 
-    }
+  }
 
-    @NonNull
-    @SuppressWarnings("all")
-    public Line clone() {
-        Line clone = new Line();
-        clone.itemCount = itemCount;
-        clone.totalWidth = totalWidth;
-        clone.maxHeight = maxHeight;
-        clone.maxHeightIndex = maxHeightIndex;
-        return clone;
-    }
+  @NonNull
+  @SuppressWarnings("all")
+  public Line clone() {
+    Line clone = new Line();
+    clone.itemCount = itemCount;
+    clone.totalWidth = totalWidth;
+    clone.maxHeight = maxHeight;
+    clone.maxHeightIndex = maxHeightIndex;
+    return clone;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        Line line = (Line) o;
+    Line line = (Line) o;
 
-        if (itemCount != line.itemCount) return false;
-        if (totalWidth != line.totalWidth) return false;
-        if (maxHeight != line.maxHeight) return false;
-        return maxHeightIndex == line.maxHeightIndex;
+    if (itemCount != line.itemCount) return false;
+    if (totalWidth != line.totalWidth) return false;
+    if (maxHeight != line.maxHeight) return false;
+    return maxHeightIndex == line.maxHeightIndex;
 
-    }
+  }
 
-    @Override
-    public int hashCode() {
-        int result = itemCount;
-        result = 31 * result + totalWidth;
-        result = 31 * result + maxHeight;
-        result = 31 * result + maxHeightIndex;
-        return result;
-    }
+  @Override
+  public int hashCode() {
+    int result = itemCount;
+    result = 31 * result + totalWidth;
+    result = 31 * result + maxHeight;
+    result = 31 * result + maxHeightIndex;
+    return result;
+  }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "Line{" +
-                "itemCount=" + itemCount +
-                ", totalWidth=" + totalWidth +
-                ", maxHeight=" + maxHeight +
-                ", maxHeightIndex=" + maxHeightIndex +
-                '}';
-    }
+  @NonNull
+  @Override
+  public String toString() {
+    return "Line{" +
+      "itemCount=" + itemCount +
+      ", totalWidth=" + totalWidth +
+      ", maxHeight=" + maxHeight +
+      ", maxHeightIndex=" + maxHeightIndex +
+      '}';
+  }
 }

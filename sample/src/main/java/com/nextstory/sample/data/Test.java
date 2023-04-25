@@ -9,12 +9,12 @@ import com.nextstory.annotations.AutoSharedPreferencesItem;
  */
 @AutoSharedPreferences("test_settings")
 interface Test {
-    @AutoSharedPreferencesItem("value_1")
-    int value1 = 3;
+  @AutoSharedPreferencesItem("value_1")
+  int value1 = 3;
 
-    @AutoSharedPreferencesItem("value_2")
-    int value2 = 0;
+  @AutoSharedPreferencesItem("value_2")
+  int value2 = 0;
 
-    // @AutoSharedPreferencesItem(저장될 키 이름)
-    // int 변수명 = 기본값;
+  // @AutoSharedPreferencesItem(저장될 키 이름)
+  // int 변수명 = 기본값;
 }

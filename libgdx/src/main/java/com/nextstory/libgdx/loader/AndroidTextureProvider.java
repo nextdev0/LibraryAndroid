@@ -9,35 +9,35 @@ import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
  * @since 2.1
  */
 public class AndroidTextureProvider implements TextureProvider {
-    private final Texture.TextureFilter minFilter;
-    private final Texture.TextureFilter magFilter;
-    private final Texture.TextureWrap uWrap;
-    private final Texture.TextureWrap vWrap;
-    private final boolean useMipMaps;
+  private final Texture.TextureFilter minFilter;
+  private final Texture.TextureFilter magFilter;
+  private final Texture.TextureWrap uWrap;
+  private final Texture.TextureWrap vWrap;
+  private final boolean useMipMaps;
 
-    public AndroidTextureProvider() {
-        minFilter = magFilter = Texture.TextureFilter.Linear;
-        uWrap = vWrap = Texture.TextureWrap.Repeat;
-        useMipMaps = false;
-    }
+  public AndroidTextureProvider() {
+    minFilter = magFilter = Texture.TextureFilter.Linear;
+    uWrap = vWrap = Texture.TextureWrap.Repeat;
+    useMipMaps = false;
+  }
 
-    public AndroidTextureProvider(Texture.TextureFilter minFilter,
-                                  Texture.TextureFilter magFilter,
-                                  Texture.TextureWrap uWrap,
-                                  Texture.TextureWrap vWrap,
-                                  boolean useMipMaps) {
-        this.minFilter = minFilter;
-        this.magFilter = magFilter;
-        this.uWrap = uWrap;
-        this.vWrap = vWrap;
-        this.useMipMaps = useMipMaps;
-    }
+  public AndroidTextureProvider(Texture.TextureFilter minFilter,
+                                Texture.TextureFilter magFilter,
+                                Texture.TextureWrap uWrap,
+                                Texture.TextureWrap vWrap,
+                                boolean useMipMaps) {
+    this.minFilter = minFilter;
+    this.magFilter = magFilter;
+    this.uWrap = uWrap;
+    this.vWrap = vWrap;
+    this.useMipMaps = useMipMaps;
+  }
 
-    @Override
-    public Texture load(String fileName) {
-        Texture result = new Texture(Gdx.files.absolute(fileName), useMipMaps);
-        result.setFilter(minFilter, magFilter);
-        result.setWrap(uWrap, vWrap);
-        return result;
-    }
+  @Override
+  public Texture load(String fileName) {
+    Texture result = new Texture(Gdx.files.absolute(fileName), useMipMaps);
+    result.setFilter(minFilter, magFilter);
+    result.setWrap(uWrap, vWrap);
+    return result;
+  }
 }

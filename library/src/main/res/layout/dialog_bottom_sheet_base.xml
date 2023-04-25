@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/layout"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="bottom"
+  android:orientation="vertical"
+  tools:background="@color/dark_50"
+  tools:layout_height="match_parent">
+
+  <!-- 레이아웃 -->
+  <FrameLayout
+    android:id="@+id/view_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    tools:background="@color/dark_50"
-    tools:layout_height="match_parent">
-
-    <!-- 레이아웃 -->
-    <FrameLayout
-        android:id="@+id/view_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:minHeight="128dp" />
+    tools:minHeight="128dp" />
 
 </LinearLayout>

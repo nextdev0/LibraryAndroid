@@ -11,18 +11,18 @@ import android.text.TextWatcher;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface SimpleTextWatcher extends TextWatcher {
-    @Override
-    default void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // no-op
-    }
+  @Override
+  default void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    // no-op
+  }
 
-    @Override
-    default void onTextChanged(CharSequence s, int start, int before, int count) {
-        // no-op
-    }
+  @Override
+  default void onTextChanged(CharSequence s, int start, int before, int count) {
+    // no-op
+  }
 
-    @Override
-    default void afterTextChanged(Editable s) {
-        // no-op
-    }
+  @Override
+  default void afterTextChanged(Editable s) {
+    // no-op
+  }
 }

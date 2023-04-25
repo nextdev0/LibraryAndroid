@@ -13,64 +13,64 @@ import androidx.recyclerview.widget.RecyclerView;
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 @SuppressWarnings("UnusedDeclaration")
 public class LayoutHelper {
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerView recyclerView;
+  RecyclerView.LayoutManager layoutManager;
+  RecyclerView recyclerView;
 
-    public LayoutHelper(RecyclerView.LayoutManager layoutManager, RecyclerView recyclerView) {
-        this.layoutManager = layoutManager;
-        this.recyclerView = recyclerView;
-    }
+  public LayoutHelper(RecyclerView.LayoutManager layoutManager, RecyclerView recyclerView) {
+    this.layoutManager = layoutManager;
+    this.recyclerView = recyclerView;
+  }
 
-    public static boolean hasItemsPerLineLimit(FlowLayoutOptions layoutOptions) {
-        return layoutOptions.itemsPerLine > 0;
-    }
+  public static boolean hasItemsPerLineLimit(FlowLayoutOptions layoutOptions) {
+    return layoutOptions.itemsPerLine > 0;
+  }
 
-    public static boolean shouldStartNewline(int x,
-                                             int childWidth,
-                                             int leftEdge, int rightEdge,
-                                             LayoutContext layoutContext) {
-        if (hasItemsPerLineLimit(layoutContext.layoutOptions)
-                && layoutContext.currentLineItemCount == layoutContext.layoutOptions.itemsPerLine) {
-            return true;
-        }
-        switch (layoutContext.layoutOptions.alignment) {
-            case RIGHT:
-                return x - childWidth < leftEdge;
-            case LEFT:
-            case CENTER:
-            default:
-                return x + childWidth > rightEdge;
-        }
+  public static boolean shouldStartNewline(int x,
+                                           int childWidth,
+                                           int leftEdge, int rightEdge,
+                                           LayoutContext layoutContext) {
+    if (hasItemsPerLineLimit(layoutContext.layoutOptions)
+      && layoutContext.currentLineItemCount == layoutContext.layoutOptions.itemsPerLine) {
+      return true;
     }
+    switch (layoutContext.layoutOptions.alignment) {
+      case RIGHT:
+        return x - childWidth < leftEdge;
+      case LEFT:
+      case CENTER:
+      default:
+        return x + childWidth > rightEdge;
+    }
+  }
 
-    public int leftVisibleEdge() {
-        return recyclerView.getPaddingLeft();
-    }
+  public int leftVisibleEdge() {
+    return recyclerView.getPaddingLeft();
+  }
 
-    public int rightVisibleEdge() {
-        return layoutManager.getWidth() - layoutManager.getPaddingRight();
-    }
+  public int rightVisibleEdge() {
+    return layoutManager.getWidth() - layoutManager.getPaddingRight();
+  }
 
-    public int visibleAreaWidth() {
-        return rightVisibleEdge() - leftVisibleEdge();
-    }
+  public int visibleAreaWidth() {
+    return rightVisibleEdge() - leftVisibleEdge();
+  }
 
-    public int topVisibleEdge() {
-        return layoutManager.getPaddingTop();
-    }
+  public int topVisibleEdge() {
+    return layoutManager.getPaddingTop();
+  }
 
-    public int bottomVisibleEdge() {
-        return layoutManager.getHeight() - layoutManager.getPaddingBottom();
-    }
+  public int bottomVisibleEdge() {
+    return layoutManager.getHeight() - layoutManager.getPaddingBottom();
+  }
 
-    public Point layoutStartPoint(LayoutContext layoutContext) {
-        switch (layoutContext.layoutOptions.alignment) {
-            case RIGHT:
-                return new Point(rightVisibleEdge(), topVisibleEdge());
-            case LEFT:
-            case CENTER:
-            default:
-                return new Point(leftVisibleEdge(), topVisibleEdge());
-        }
+  public Point layoutStartPoint(LayoutContext layoutContext) {
+    switch (layoutContext.layoutOptions.alignment) {
+      case RIGHT:
+        return new Point(rightVisibleEdge(), topVisibleEdge());
+      case LEFT:
+      case CENTER:
+      default:
+        return new Point(leftVisibleEdge(), topVisibleEdge());
     }
+  }
 }

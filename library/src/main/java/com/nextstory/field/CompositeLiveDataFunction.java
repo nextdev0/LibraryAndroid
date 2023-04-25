@@ -8,5 +8,5 @@ package com.nextstory.field;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface CompositeLiveDataFunction<R, A1, A2> {
-    R apply(A1 currentValue, A2 data);
+  R apply(A1 currentValue, A2 data);
 }

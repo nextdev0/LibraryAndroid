@@ -10,19 +10,19 @@ import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
  * @since 2.1
  */
 public class AndroidObjLoader extends ObjLoader {
-    public AndroidObjLoader() {
-        super();
-    }
+  public AndroidObjLoader() {
+    super();
+  }
 
-    public AndroidObjLoader(FileHandleResolver resolver) {
-        super(resolver);
-    }
+  public AndroidObjLoader(FileHandleResolver resolver) {
+    super(resolver);
+  }
 
-    @Override
-    public Model loadModel(FileHandle fileHandle, boolean flipV) {
-        return loadModel(
-                fileHandle,
-                new AndroidTextureProvider(),
-                new ObjLoader.ObjLoaderParameters(flipV));
-    }
+  @Override
+  public Model loadModel(FileHandle fileHandle, boolean flipV) {
+    return loadModel(
+      fileHandle,
+      new AndroidTextureProvider(),
+      new ObjLoader.ObjLoaderParameters(flipV));
+  }
 }

@@ -1,36 +1,36 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
+  id 'java-library'
+  id 'maven-publish'
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
-    compileOnly 'com.google.android:android:4.1.1.4'
-    implementation 'com.squareup:javapoet:1.13.0'
+  compileOnly 'com.google.android:android:4.1.1.4'
+  implementation 'com.squareup:javapoet:1.13.0'
 }
 
 publishing {
-    task sourceJar(type: Jar) {
-        from sourceSets.main.java.srcDirs
-        archiveClassifier.set('sources')
-    }
+  task sourceJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    archiveClassifier.set('sources')
+  }
 
-    repositories {
-        maven {
-            url "$rootDir/repository"
-        }
+  repositories {
+    maven {
+      url "$rootDir/repository"
     }
-    publications {
-        "${rootProject.ext.groupId}"(MavenPublication) {
-            artifact jar
-            artifact sourceJar
-            groupId rootProject.ext.groupId
-            artifactId rootProject.ext.annotationsArtifactId
-            version rootProject.ext.libraryVersion
-        }
+  }
+  publications {
+    "${rootProject.ext.groupId}"(MavenPublication) {
+      artifact jar
+      artifact sourceJar
+      groupId rootProject.ext.groupId
+      artifactId rootProject.ext.annotationsArtifactId
+      version rootProject.ext.libraryVersion
     }
+  }
 }

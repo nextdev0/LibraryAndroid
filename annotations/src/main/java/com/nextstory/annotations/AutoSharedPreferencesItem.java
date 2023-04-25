@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.SOURCE)
 public @interface AutoSharedPreferencesItem {
-    String value() default "";
+  String value() default "";
 }

@@ -29,115 +29,115 @@ import java.util.Objects;
  */
 @SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class BaseBottomSheetDialog<B extends ViewDataBinding> extends BottomSheetDialog {
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    B binding = null;
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  B binding = null;
 
-    private FrameLayout viewContainer;
-    private ResourcesController resourcesController;
+  private FrameLayout viewContainer;
+  private ResourcesController resourcesController;
 
-    public BaseBottomSheetDialog(@NonNull Context context) {
-        this(context, R.style.Theme_Dialog_Base_BottomDialog);
+  public BaseBottomSheetDialog(@NonNull Context context) {
+    this(context, R.style.Theme_Dialog_Base_BottomDialog);
+  }
+
+  public BaseBottomSheetDialog(@NonNull Context context, @StyleRes int themeRes) {
+    super(context, themeRes);
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    super.setContentView(R.layout.dialog_bottom_sheet_base);
+
+    resourcesController = new ResourcesController(getContext());
+    viewContainer = findViewById(R.id.view_container);
+
+    if (binding == null && savedInstanceState == null) {
+      Class<?> klass = Unsafe.getGenericClass(this, 0);
+      if (klass != null) {
+        binding = Unsafe.invoke(klass, "inflate", LayoutInflater.from(getContext()));
+      }
     }
 
-    public BaseBottomSheetDialog(@NonNull Context context, @StyleRes int themeRes) {
-        super(context, themeRes);
+    if (binding != null) {
+      setContentView(binding.getRoot());
     }
+  }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        super.setContentView(R.layout.dialog_bottom_sheet_base);
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void setContentView(int layoutResId) {
+    View view = View.inflate(getContext(), layoutResId, null);
+    setContentView(view);
+  }
 
-        resourcesController = new ResourcesController(getContext());
-        viewContainer = findViewById(R.id.view_container);
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void setContentView(View view) {
+    setContentView(view, null);
+  }
 
-        if (binding == null && savedInstanceState == null) {
-            Class<?> klass = Unsafe.getGenericClass(this, 0);
-            if (klass != null) {
-                binding = Unsafe.invoke(klass, "inflate", LayoutInflater.from(getContext()));
-            }
-        }
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void setContentView(View view, ViewGroup.LayoutParams params) {
+    viewContainer.removeAllViews();
+    viewContainer.addView(view, new FrameLayout.LayoutParams(-1, -2));
+  }
 
-        if (binding != null) {
-            setContentView(binding.getRoot());
-        }
-    }
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void addContentView(View view, ViewGroup.LayoutParams params) {
+    super.addContentView(view, params);
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void setContentView(int layoutResId) {
-        View view = View.inflate(getContext(), layoutResId, null);
-        setContentView(view);
-    }
+  @Override
+  public void dismiss() {
+    binding = null;
+    super.dismiss();
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void setContentView(View view) {
-        setContentView(view, null);
-    }
+  /**
+   * 아무동작 없음
+   */
+  public final void nothing() {
+    // no-op
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void setContentView(View view, ViewGroup.LayoutParams params) {
-        viewContainer.removeAllViews();
-        viewContainer.addView(view, new FrameLayout.LayoutParams(-1, -2));
-    }
+  /**
+   * 토스트 표시
+   *
+   * @param res 문자열 리소스
+   */
+  public void showToast(@StringRes int res) {
+    Toast.makeText(getContext(), res, Toast.LENGTH_SHORT).show();
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void addContentView(View view, ViewGroup.LayoutParams params) {
-        super.addContentView(view, params);
-    }
+  /**
+   * 토스트 표시
+   *
+   * @param message 문자열
+   */
+  public void showToast(String message) {
+    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+  }
 
-    @Override
-    public void dismiss() {
-        binding = null;
-        super.dismiss();
-    }
+  /**
+   * @return 뷰 바인딩 인스턴스
+   */
+  @CallSuper
+  protected B getBinding() {
+    return binding;
+  }
 
-    /**
-     * 아무동작 없음
-     */
-    public final void nothing() {
-        // no-op
-    }
-
-    /**
-     * 토스트 표시
-     *
-     * @param res 문자열 리소스
-     */
-    public void showToast(@StringRes int res) {
-        Toast.makeText(getContext(), res, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 토스트 표시
-     *
-     * @param message 문자열
-     */
-    public void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * @return 뷰 바인딩 인스턴스
-     */
-    @CallSuper
-    protected B getBinding() {
-        return binding;
-    }
-
-    /**
-     * @return 리소스 설정
-     * @since 2.0
-     */
-    @NonNull
-    public final ResourcesController getResourcesController() {
-        return Objects.requireNonNull(resourcesController);
-    }
+  /**
+   * @return 리소스 설정
+   * @since 2.0
+   */
+  @NonNull
+  public final ResourcesController getResourcesController() {
+    return Objects.requireNonNull(resourcesController);
+  }
 }

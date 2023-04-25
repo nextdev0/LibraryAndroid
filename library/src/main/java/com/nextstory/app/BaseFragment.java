@@ -22,35 +22,35 @@ import java.util.Objects;
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class BaseFragment<B extends ViewDataBinding> extends AbstractBaseFragment {
-    private B binding = null;
+  private B binding = null;
 
-    @CallSuper
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        if (binding == null) {
-            Class<?> klass = Unsafe.getGenericClass(this, 0);
-            if (klass != null) {
-                binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
-            }
-        }
-        return Objects.requireNonNull(binding).getRoot();
+  @CallSuper
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater,
+                           @Nullable ViewGroup container,
+                           @Nullable Bundle savedInstanceState) {
+    if (binding == null) {
+      Class<?> klass = Unsafe.getGenericClass(this, 0);
+      if (klass != null) {
+        binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
+      }
     }
+    return Objects.requireNonNull(binding).getRoot();
+  }
 
-    @CallSuper
-    @Override
-    public void onDestroyView() {
-        binding = null;
-        super.onDestroyView();
-    }
+  @CallSuper
+  @Override
+  public void onDestroyView() {
+    binding = null;
+    super.onDestroyView();
+  }
 
-    /**
-     * @return 바인딩 인스턴스
-     */
-    @CallSuper
-    protected B getBinding() {
-        return binding;
-    }
+  /**
+   * @return 바인딩 인스턴스
+   */
+  @CallSuper
+  protected B getBinding() {
+    return binding;
+  }
 }

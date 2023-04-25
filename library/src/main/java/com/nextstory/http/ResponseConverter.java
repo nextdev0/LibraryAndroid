@@ -10,13 +10,13 @@ import androidx.annotation.NonNull;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface ResponseConverter {
-    /**
-     * 응답 데이터 변환
-     *
-     * @param response 응답 문자열 소스
-     * @param clazz    모델 타입 클래스
-     * @param <T>      모델 타입
-     * @return 모델 데이터
-     */
-    <T> T convert(@NonNull String response, @NonNull Class<T> clazz);
+  /**
+   * 응답 데이터 변환
+   *
+   * @param response 응답 문자열 소스
+   * @param clazz    모델 타입 클래스
+   * @param <T>      모델 타입
+   * @return 모델 데이터
+   */
+  <T> T convert(@NonNull String response, @NonNull Class<T> clazz);
 }

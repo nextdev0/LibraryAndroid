@@ -28,166 +28,166 @@ import java.util.Objects;
  * @author troy
  * @since 2.1
  */
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "deprecation"})
 public abstract class Libgdx implements ApplicationListener, LifecycleOwner, LifecycleObserver {
-    private FragmentActivity activity = null;
+  private FragmentActivity activity = null;
 
-    /**
-     * libgdx 액티비티 Intent 생성
-     *
-     * @param context     컨텍스트
-     * @param libgdxClass 게임 클래스
-     * @return Intent
-     */
-    @NonNull
-    public static Intent createIntent(@NonNull Context context,
-                                      @NonNull Class<? extends Libgdx> libgdxClass) {
-        return LibgdxActivity.createIntent(context, libgdxClass);
+  /**
+   * libgdx 액티비티 Intent 생성
+   *
+   * @param context     컨텍스트
+   * @param libgdxClass 게임 클래스
+   * @return Intent
+   */
+  @NonNull
+  public static Intent createIntent(@NonNull Context context,
+                                    @NonNull Class<? extends Libgdx> libgdxClass) {
+    return LibgdxActivity.createIntent(context, libgdxClass);
+  }
+
+  @NonNull
+  @Override
+  public final Lifecycle getLifecycle() {
+    return Objects.requireNonNull(activity.getLifecycle());
+  }
+
+  /**
+   * @return 화면 방향 수직 유무
+   */
+  public abstract boolean isScreenOrientationPortrait();
+
+  /**
+   * @return 전체화면 유무
+   */
+  public abstract boolean isFullscreen();
+
+  /**
+   * libgdx가 지원하지 않는 경우 호출
+   */
+  public abstract void onLibgdxNotSupported();
+
+  /**
+   * @return 필요 권한 목록
+   */
+  @CallSuper
+  public List<String> getRequirePermissions() {
+    return new ArrayList<>();
+  }
+
+  /**
+   * 필요 권한 거부 시 호출
+   *
+   * @param deniedPermissions 거부된 권한
+   */
+  @CallSuper
+  public void onRequirePermissionDenied(List<String> deniedPermissions) {
+    // no-op
+  }
+
+  @SuppressLint("SourceLockedOrientationActivity")
+  @CallSuper
+  public void attachActivity(@NonNull FragmentActivity activity) {
+    this.activity = Objects.requireNonNull(activity);
+    this.getLifecycle().addObserver(this);
+
+    if (isFullscreen()) {
+      WindowUtils.applyFullscreenMode(activity.getWindow());
+    } else {
+      WindowUtils.applyTranslucentTheme(activity.getWindow());
     }
 
-    @NonNull
-    @Override
-    public final Lifecycle getLifecycle() {
-        return Objects.requireNonNull(activity.getLifecycle());
+    this.activity.setRequestedOrientation(isScreenOrientationPortrait()
+      ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+      : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+  }
+
+  /**
+   * @return AR 뷰 위에 표시할 뷰 생성
+   */
+  public View onCreateSurfaceUIView() {
+    return null;
+  }
+
+  @CallSuper
+  @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+  protected void onCreate() {
+    // no-op
+  }
+
+  @CallSuper
+  @OnLifecycleEvent(Lifecycle.Event.ON_START)
+  protected void onStart() {
+    // no-op
+  }
+
+  @CallSuper
+  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+  protected void onResume() {
+    // no-op
+  }
+
+  @CallSuper
+  @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+  protected void onPause() {
+    // no-op
+  }
+
+  @CallSuper
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+  protected void onStop() {
+    // no-op
+  }
+
+  @CallSuper
+  @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+  protected void onDestroy() {
+    if (activity != null) {
+      activity.getLifecycle().removeObserver(this);
+      activity = null;
     }
+  }
 
-    /**
-     * @return 화면 방향 수직 유무
-     */
-    public abstract boolean isScreenOrientationPortrait();
+  @CallSuper
+  @Override
+  public void create() {
+    // no-op
+  }
 
-    /**
-     * @return 전체화면 유무
-     */
-    public abstract boolean isFullscreen();
+  @CallSuper
+  @Override
+  public void resize(int width, int height) {
+    // no-op
+  }
 
-    /**
-     * libgdx가 지원하지 않는 경우 호출
-     */
-    public abstract void onLibgdxNotSupported();
+  @CallSuper
+  @Override
+  public void render() {
+    // no-op
+  }
 
-    /**
-     * @return 필요 권한 목록
-     */
-    @CallSuper
-    public List<String> getRequirePermissions() {
-        return new ArrayList<>();
-    }
+  @CallSuper
+  @Override
+  public void pause() {
+    // no-op
+  }
 
-    /**
-     * 필요 권한 거부 시 호출
-     *
-     * @param deniedPermissions 거부된 권한
-     */
-    @CallSuper
-    public void onRequirePermissionDenied(List<String> deniedPermissions) {
-        // no-op
-    }
+  @CallSuper
+  @Override
+  public void resume() {
+    // no-op
+  }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    @CallSuper
-    public void attachActivity(@NonNull FragmentActivity activity) {
-        this.activity = Objects.requireNonNull(activity);
-        this.getLifecycle().addObserver(this);
+  @CallSuper
+  @Override
+  public void dispose() {
+    // no-op
+  }
 
-        if (isFullscreen()) {
-            WindowUtils.applyFullscreenMode(activity.getWindow());
-        } else {
-            WindowUtils.applyTranslucentTheme(activity.getWindow());
-        }
+  protected Context getContext() {
+    return activity;
+  }
 
-        this.activity.setRequestedOrientation(isScreenOrientationPortrait()
-                ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-    }
-
-    /**
-     * @return AR 뷰 위에 표시할 뷰 생성
-     */
-    public View onCreateSurfaceUIView() {
-        return null;
-    }
-
-    @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    protected void onCreate() {
-        // no-op
-    }
-
-    @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    protected void onStart() {
-        // no-op
-    }
-
-    @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    protected void onResume() {
-        // no-op
-    }
-
-    @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    protected void onPause() {
-        // no-op
-    }
-
-    @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    protected void onStop() {
-        // no-op
-    }
-
-    @CallSuper
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    protected void onDestroy() {
-        if (activity != null) {
-            activity.getLifecycle().removeObserver(this);
-            activity = null;
-        }
-    }
-
-    @CallSuper
-    @Override
-    public void create() {
-        // no-op
-    }
-
-    @CallSuper
-    @Override
-    public void resize(int width, int height) {
-        // no-op
-    }
-
-    @CallSuper
-    @Override
-    public void render() {
-        // no-op
-    }
-
-    @CallSuper
-    @Override
-    public void pause() {
-        // no-op
-    }
-
-    @CallSuper
-    @Override
-    public void resume() {
-        // no-op
-    }
-
-    @CallSuper
-    @Override
-    public void dispose() {
-        // no-op
-    }
-
-    protected Context getContext() {
-        return activity;
-    }
-
-    protected Context requireContext() {
-        return Objects.requireNonNull(activity);
-    }
+  protected Context requireContext() {
+    return Objects.requireNonNull(activity);
+  }
 }

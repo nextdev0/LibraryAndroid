@@ -19,63 +19,63 @@ import com.nextstory.util.Unsafe;
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class BaseActivity<B extends ViewDataBinding> extends AbstractBaseActivity {
-    private B binding = null;
+  private B binding = null;
 
-    @CallSuper
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (binding == null) {
-            Class<?> klass = Unsafe.getGenericClass(this, 0);
-            if (klass != null) {
-                binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
-            }
-        }
-        if (binding != null) {
-            super.setContentView(binding.getRoot());
-        }
+  @CallSuper
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (binding == null) {
+      Class<?> klass = Unsafe.getGenericClass(this, 0);
+      if (klass != null) {
+        binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
+      }
     }
+    if (binding != null) {
+      super.setContentView(binding.getRoot());
+    }
+  }
 
-    @CallSuper
-    @Override
-    protected void onDestroy() {
-        binding = null;
-        super.onDestroy();
-    }
+  @CallSuper
+  @Override
+  protected void onDestroy() {
+    binding = null;
+    super.onDestroy();
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-    }
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void setContentView(int layoutResID) {
+    super.setContentView(layoutResID);
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void setContentView(View view) {
-        super.setContentView(view);
-    }
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void setContentView(View view) {
+    super.setContentView(view);
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(view, params);
-    }
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void setContentView(View view, ViewGroup.LayoutParams params) {
+    super.setContentView(view, params);
+  }
 
-    @Deprecated
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final void addContentView(View view, ViewGroup.LayoutParams params) {
-        super.addContentView(view, params);
-    }
+  @Deprecated
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final void addContentView(View view, ViewGroup.LayoutParams params) {
+    super.addContentView(view, params);
+  }
 
-    /**
-     * @return 바인딩 인스턴스
-     */
-    @CallSuper
-    protected B getBinding() {
-        return binding;
-    }
+  /**
+   * @return 바인딩 인스턴스
+   */
+  @CallSuper
+  protected B getBinding() {
+    return binding;
+  }
 }

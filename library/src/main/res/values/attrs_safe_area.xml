@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="SafeArea">
-        <!-- 컨텐츠 여백 -->
+  <declare-styleable name="SafeArea">
+    <!-- 컨텐츠 여백 -->
 
-        <attr name="android:padding" format="dimension" />
-        <attr name="android:paddingHorizontal" format="dimension" />
-        <attr name="android:paddingVertical" format="dimension" />
-        <attr name="android:paddingLeft" format="dimension" />
-        <attr name="android:paddingStart" format="dimension" />
-        <attr name="android:paddingTop" format="dimension" />
-        <attr name="android:paddingRight" format="dimension" />
-        <attr name="android:paddingEnd" format="dimension" />
-        <attr name="android:paddingBottom" format="dimension" />
+    <attr name="android:padding" format="dimension" />
+    <attr name="android:paddingHorizontal" format="dimension" />
+    <attr name="android:paddingVertical" format="dimension" />
+    <attr name="android:paddingLeft" format="dimension" />
+    <attr name="android:paddingStart" format="dimension" />
+    <attr name="android:paddingTop" format="dimension" />
+    <attr name="android:paddingRight" format="dimension" />
+    <attr name="android:paddingEnd" format="dimension" />
+    <attr name="android:paddingBottom" format="dimension" />
 
-        <!-- 시스템 영역 여백 활성화 유무 -->
+    <!-- 시스템 영역 여백 활성화 유무 -->
 
-        <attr name="safe_leftInsetEnabled" format="boolean" />
-        <attr name="safe_topInsetEnabled" format="boolean" />
-        <attr name="safe_rightInsetEnabled" format="boolean" />
-        <attr name="safe_bottomInsetEnabled" format="boolean" />
+    <attr name="safe_leftInsetEnabled" format="boolean" />
+    <attr name="safe_topInsetEnabled" format="boolean" />
+    <attr name="safe_rightInsetEnabled" format="boolean" />
+    <attr name="safe_bottomInsetEnabled" format="boolean" />
 
-        <!-- 시스템 영역 추가 여백 -->
-        <!-- 시스템 영역이 없으면 추가 여백도 적용이 되지 않음 -->
+    <!-- 시스템 영역 추가 여백 -->
+    <!-- 시스템 영역이 없으면 추가 여백도 적용이 되지 않음 -->
 
-        <attr name="safe_leftInsetPadding" format="dimension" />
-        <attr name="safe_topInsetPadding" format="dimension" />
-        <attr name="safe_rightInsetPadding" format="dimension" />
-        <attr name="safe_bottomInsetPadding" format="dimension" />
-    </declare-styleable>
+    <attr name="safe_leftInsetPadding" format="dimension" />
+    <attr name="safe_topInsetPadding" format="dimension" />
+    <attr name="safe_rightInsetPadding" format="dimension" />
+    <attr name="safe_bottomInsetPadding" format="dimension" />
+  </declare-styleable>
 
 </resources>

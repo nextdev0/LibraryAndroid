@@ -14,7 +14,7 @@ import androidx.annotation.RestrictTo;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class DataBindingFlowLayoutViewItem extends FrameLayout {
-    public DataBindingFlowLayoutViewItem(@NonNull Context context) {
-        super(context);
-    }
+  public DataBindingFlowLayoutViewItem(@NonNull Context context) {
+    super(context);
+  }
 }

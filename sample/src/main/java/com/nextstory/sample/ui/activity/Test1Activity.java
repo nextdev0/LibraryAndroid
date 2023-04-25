@@ -15,16 +15,16 @@ import com.nextstory.sample.ui.fragment.Test1Fragment;
  * @since 1.0
  */
 public final class Test1Activity extends BaseActivity<ActivityTest1Binding> {
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        getWindowController()
-                .applyWindowType(WindowController.TYPE_OVERLAY_SYSTEM_BARS);
+    getWindowController()
+      .applyWindowType(WindowController.TYPE_OVERLAY_SYSTEM_BARS);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new Test1Fragment())
-                .commit();
-    }
+    getSupportFragmentManager()
+      .beginTransaction()
+      .replace(R.id.fragment_container, new Test1Fragment())
+      .commit();
+  }
 }

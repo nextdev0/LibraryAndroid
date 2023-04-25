@@ -9,11 +9,11 @@ import android.content.Context;
  * @since 1.0
  */
 public interface LibraryInitializer {
-    /**
-     * 초기화 시 호출
-     *
-     * @param context  앱 컨텍스트
-     * @param argument 초기화 인수
-     */
-    void onInitialized(Context context, String argument);
+  /**
+   * 초기화 시 호출
+   *
+   * @param context  앱 컨텍스트
+   * @param argument 초기화 인수
+   */
+  void onInitialized(Context context, String argument);
 }

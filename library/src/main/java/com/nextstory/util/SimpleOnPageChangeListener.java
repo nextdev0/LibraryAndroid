@@ -10,18 +10,18 @@ import androidx.viewpager.widget.ViewPager;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface SimpleOnPageChangeListener extends ViewPager.OnPageChangeListener {
-    @Override
-    default void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        // no-op
-    }
+  @Override
+  default void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    // no-op
+  }
 
-    @Override
-    default void onPageSelected(int position) {
-        // no-op
-    }
+  @Override
+  default void onPageSelected(int position) {
+    // no-op
+  }
 
-    @Override
-    default void onPageScrollStateChanged(int state) {
-        // no-op
-    }
+  @Override
+  default void onPageScrollStateChanged(int state) {
+    // no-op
+  }
 }

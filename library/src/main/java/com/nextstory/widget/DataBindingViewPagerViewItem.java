@@ -14,7 +14,7 @@ import androidx.annotation.RestrictTo;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class DataBindingViewPagerViewItem extends FrameLayout {
-    public DataBindingViewPagerViewItem(@NonNull Context context) {
-        super(context);
-    }
+  public DataBindingViewPagerViewItem(@NonNull Context context) {
+    super(context);
+  }
 }

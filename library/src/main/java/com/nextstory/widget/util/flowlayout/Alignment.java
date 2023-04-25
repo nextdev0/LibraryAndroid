@@ -9,7 +9,7 @@ import androidx.annotation.RestrictTo;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public enum Alignment {
-    LEFT,
-    RIGHT,
-    CENTER
+  LEFT,
+  RIGHT,
+  CENTER
 }

@@ -20,35 +20,35 @@ import androidx.annotation.NonNull;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class SimpleProgressDialog extends Dialog {
-    public SimpleProgressDialog(@NonNull Context context) {
-        super(context);
+  public SimpleProgressDialog(@NonNull Context context) {
+    super(context);
+  }
+
+  @Override
+  public void onBackPressed() {
+    // 동작 생략
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    // 배경 없애기
+    if (getWindow() != null) {
+      getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    @Override
-    public void onBackPressed() {
-        // 동작 생략
-    }
+    // 터치 및 닫기 불가능하도록 설정
+    setCancelable(false);
+    setCanceledOnTouchOutside(false);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        // 배경 없애기
-        if (getWindow() != null) {
-            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
+    // 프로그레스 표시
+    LinearLayout background = new LinearLayout(getContext());
+    background.setOrientation(LinearLayout.VERTICAL);
+    background.setGravity(Gravity.CENTER);
+    background.addView(new ProgressBar(getContext()));
 
-        // 터치 및 닫기 불가능하도록 설정
-        setCancelable(false);
-        setCanceledOnTouchOutside(false);
-
-        // 프로그레스 표시
-        LinearLayout background = new LinearLayout(getContext());
-        background.setOrientation(LinearLayout.VERTICAL);
-        background.setGravity(Gravity.CENTER);
-        background.addView(new ProgressBar(getContext()));
-
-        // 뷰 설정
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        setContentView(background, params);
-    }
+    // 뷰 설정
+    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    setContentView(background, params);
+  }
 }

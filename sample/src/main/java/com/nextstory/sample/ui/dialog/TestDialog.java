@@ -13,10 +13,10 @@ import com.nextstory.sample.databinding.DialogTestBinding;
  * @since 1.0
  */
 public final class TestDialog extends BaseDialogFragment<DialogTestBinding> {
-    @Override
-    public void onDialogCreated(BaseDialog<DialogTestBinding> dialog,
-                                @Nullable Bundle savedInstanceState) {
-        super.onDialogCreated(dialog, savedInstanceState);
-        getBinding().setDialog(this);
-    }
+  @Override
+  public void onDialogCreated(BaseDialog<DialogTestBinding> dialog,
+                              @Nullable Bundle savedInstanceState) {
+    super.onDialogCreated(dialog, savedInstanceState);
+    getBinding().setDialog(this);
+  }
 }

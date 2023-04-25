@@ -15,40 +15,38 @@ import androidx.annotation.Nullable;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface SimpleActivityLifecycleCallbacks extends Application.ActivityLifecycleCallbacks {
-    @Override
-    default void onActivityCreated(@NonNull Activity activity,
-                                   @Nullable Bundle savedInstanceState) {
-        // no-op
-    }
+  @Override
+  default void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+    // no-op
+  }
 
-    @Override
-    default void onActivityStarted(@NonNull Activity activity) {
-        // no-op
-    }
+  @Override
+  default void onActivityStarted(@NonNull Activity activity) {
+    // no-op
+  }
 
-    @Override
-    default void onActivityResumed(@NonNull Activity activity) {
-        // no-op
-    }
+  @Override
+  default void onActivityResumed(@NonNull Activity activity) {
+    // no-op
+  }
 
-    @Override
-    default void onActivityPaused(@NonNull Activity activity) {
-        // no-op
-    }
+  @Override
+  default void onActivityPaused(@NonNull Activity activity) {
+    // no-op
+  }
 
-    @Override
-    default void onActivityStopped(@NonNull Activity activity) {
-        // no-op
-    }
+  @Override
+  default void onActivityStopped(@NonNull Activity activity) {
+    // no-op
+  }
 
-    @Override
-    default void onActivitySaveInstanceState(@NonNull Activity activity,
-                                             @NonNull Bundle outState) {
-        // no-op
-    }
+  @Override
+  default void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+    // no-op
+  }
 
-    @Override
-    default void onActivityDestroyed(@NonNull Activity activity) {
-        // no-op
-    }
+  @Override
+  default void onActivityDestroyed(@NonNull Activity activity) {
+    // no-op
+  }
 }

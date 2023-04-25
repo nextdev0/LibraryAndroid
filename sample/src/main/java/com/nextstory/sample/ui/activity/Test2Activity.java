@@ -21,21 +21,21 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * @since 1.0
  */
 public final class Test2Activity extends BaseActivity<ActivityTest2Binding> {
-    public final ListLiveData<String> testList = new ListLiveData<>();
-    private final Disposables disposables = Disposables.onDestroy(this);
+  public final ListLiveData<String> testList = new ListLiveData<>();
+  private final Disposables disposables = Disposables.onDestroy(this);
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        getBinding().setActivity(this);
-        getBinding().setLifecycleOwner(this);
+    getBinding().setActivity(this);
+    getBinding().setLifecycleOwner(this);
 
-        Random random = new Random();
-        disposables.add(Observable.timer(500L, TimeUnit.MILLISECONDS)
-                .repeat()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(aLong -> testList.add("test_" + random.nextInt(0xffff))));
-    }
+    Random random = new Random();
+    disposables.add(Observable.timer(500L, TimeUnit.MILLISECONDS)
+      .repeat()
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeOn(Schedulers.io())
+      .subscribe(aLong -> testList.add("test_" + random.nextInt(0xffff))));
+  }
 }

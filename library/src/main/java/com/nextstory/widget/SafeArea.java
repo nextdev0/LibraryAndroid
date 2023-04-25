@@ -22,249 +22,249 @@ import com.nextstory.widget.util.SafeAreaHelper;
 @SuppressLint("WrongConstant")
 @SuppressWarnings("UnusedDeclaration")
 public final class SafeArea extends FrameLayout implements SafeAreaHelper.Listener {
-    private final Rect currentSystemInsets = new Rect();
-    private final Rect realPaddingRect = new Rect();
-    private final Rect insetPaddingRect = new Rect();
+  private final Rect currentSystemInsets = new Rect();
+  private final Rect realPaddingRect = new Rect();
+  private final Rect insetPaddingRect = new Rect();
 
-    private boolean isLeftInsetEnabled;
-    private boolean isTopInsetEnabled;
-    private boolean isRightInsetEnabled;
-    private boolean isBottomInsetEnabled;
+  private boolean isLeftInsetEnabled;
+  private boolean isTopInsetEnabled;
+  private boolean isRightInsetEnabled;
+  private boolean isBottomInsetEnabled;
 
-    public SafeArea(@NonNull Context context) {
-        this(context, null);
+  public SafeArea(@NonNull Context context) {
+    this(context, null);
+  }
+
+  public SafeArea(@NonNull Context context, @Nullable AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  public SafeArea(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+
+    TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SafeArea, 0, 0);
+
+    isLeftInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_leftInsetEnabled, true);
+    isTopInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_topInsetEnabled, true);
+    isRightInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_rightInsetEnabled, true);
+    isBottomInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_bottomInsetEnabled, true);
+
+    insetPaddingRect.set(
+      a.getDimensionPixelSize(R.styleable.SafeArea_safe_leftInsetPadding, 0),
+      a.getDimensionPixelSize(R.styleable.SafeArea_safe_topInsetPadding, 0),
+      a.getDimensionPixelSize(R.styleable.SafeArea_safe_rightInsetPadding, 0),
+      a.getDimensionPixelSize(R.styleable.SafeArea_safe_bottomInsetPadding, 0));
+
+    if (a.hasValue(R.styleable.SafeArea_android_padding)) {
+      setPadding(
+        a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0),
+        a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0),
+        a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0),
+        a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0));
+    } else {
+      int paddingLeft = a.getDimensionPixelSize(
+        R.styleable.SafeArea_android_paddingLeft,
+        (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
+          ? a.getDimensionPixelSize(R.styleable.SafeArea_android_paddingEnd, 0)
+          : a.getDimensionPixelSize(
+          R.styleable.SafeArea_android_paddingStart,
+          0));
+      int paddingTop = a.getDimensionPixelSize(
+        R.styleable.SafeArea_android_paddingTop,
+        0);
+      int paddingRight = a.getDimensionPixelSize(
+        R.styleable.SafeArea_android_paddingRight,
+        (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
+          ? a.getDimensionPixelSize(R.styleable.SafeArea_android_paddingStart, 0)
+          : a.getDimensionPixelSize(
+          R.styleable.SafeArea_android_paddingEnd,
+          0));
+      int paddingBottom = a.getDimensionPixelSize(
+        R.styleable.SafeArea_android_paddingBottom,
+        0);
+      if (a.hasValue(R.styleable.SafeArea_android_paddingHorizontal)) {
+        int paddingHorizontal = a.getDimensionPixelSize(
+          R.styleable.SafeArea_android_paddingHorizontal,
+          0);
+        paddingLeft = paddingHorizontal;
+        paddingRight = paddingHorizontal;
+      }
+      if (a.hasValue(R.styleable.SafeArea_android_paddingVertical)) {
+        int paddingVertical = a.getDimensionPixelSize(
+          R.styleable.SafeArea_android_paddingVertical,
+          0);
+        paddingTop = paddingVertical;
+        paddingBottom = paddingVertical;
+      }
+      setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
-    public SafeArea(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    a.recycle();
+  }
+
+  @Override
+  protected void onAttachedToWindow() {
+    SafeAreaHelper.addListener(this);
+    super.onAttachedToWindow();
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    SafeAreaHelper.removeListener(this);
+    super.onDetachedFromWindow();
+  }
+
+  @Override
+  public void setPadding(int left, int top, int right, int bottom) {
+    realPaddingRect.set(left, top, right, bottom);
+    requestLayout();
+  }
+
+  @Override
+  public void setPaddingRelative(int start, int top, int end, int bottom) {
+    realPaddingRect.set(
+      (getLayoutDirection() == LAYOUT_DIRECTION_RTL) ? end : start,
+      top,
+      (getLayoutDirection() == LAYOUT_DIRECTION_RTL) ? start : end,
+      bottom);
+    requestLayout();
+  }
+
+  @Override
+  public void requestLayout() {
+    if (currentSystemInsets != null && realPaddingRect != null) {
+      super.setPadding(
+        (isLeftInsetEnabled ? currentSystemInsets.left : 0)
+          + ((getLayoutDirection() == LAYOUT_DIRECTION_RTL)
+          ? realPaddingRect.right : realPaddingRect.left)
+          + ((!isLeftInsetEnabled || currentSystemInsets.left == 0)
+          ? 0 : insetPaddingRect.left),
+        (isTopInsetEnabled ? currentSystemInsets.top : 0)
+          + realPaddingRect.top
+          + ((!isTopInsetEnabled || currentSystemInsets.top == 0)
+          ? 0 : insetPaddingRect.top),
+        (isRightInsetEnabled ? currentSystemInsets.right : 0)
+          + ((getLayoutDirection() == LAYOUT_DIRECTION_RTL)
+          ? realPaddingRect.left : realPaddingRect.right)
+          + ((!isRightInsetEnabled || currentSystemInsets.right == 0)
+          ? 0 : insetPaddingRect.right),
+        (isBottomInsetEnabled ? currentSystemInsets.bottom : 0)
+          + realPaddingRect.bottom
+          + ((!isBottomInsetEnabled || currentSystemInsets.bottom == 0)
+          ? 0 : insetPaddingRect.bottom));
     }
+    super.requestLayout();
+  }
 
-    public SafeArea(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+  @Override
+  public int getPaddingTop() {
+    return realPaddingRect.top;
+  }
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SafeArea, 0, 0);
+  @Override
+  public int getPaddingBottom() {
+    return realPaddingRect.bottom;
+  }
 
-        isLeftInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_leftInsetEnabled, true);
-        isTopInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_topInsetEnabled, true);
-        isRightInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_rightInsetEnabled, true);
-        isBottomInsetEnabled = a.getBoolean(R.styleable.SafeArea_safe_bottomInsetEnabled, true);
+  @Override
+  public int getPaddingLeft() {
+    return realPaddingRect.left;
+  }
 
-        insetPaddingRect.set(
-                a.getDimensionPixelSize(R.styleable.SafeArea_safe_leftInsetPadding, 0),
-                a.getDimensionPixelSize(R.styleable.SafeArea_safe_topInsetPadding, 0),
-                a.getDimensionPixelSize(R.styleable.SafeArea_safe_rightInsetPadding, 0),
-                a.getDimensionPixelSize(R.styleable.SafeArea_safe_bottomInsetPadding, 0));
+  @Override
+  public int getPaddingStart() {
+    return (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
+      ? realPaddingRect.right : realPaddingRect.left;
+  }
 
-        if (a.hasValue(R.styleable.SafeArea_android_padding)) {
-            setPadding(
-                    a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0),
-                    a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0),
-                    a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0),
-                    a.getDimensionPixelSize(R.styleable.SafeArea_android_padding, 0));
-        } else {
-            int paddingLeft = a.getDimensionPixelSize(
-                    R.styleable.SafeArea_android_paddingLeft,
-                    (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                            ? a.getDimensionPixelSize(R.styleable.SafeArea_android_paddingEnd, 0)
-                            : a.getDimensionPixelSize(
-                            R.styleable.SafeArea_android_paddingStart,
-                            0));
-            int paddingTop = a.getDimensionPixelSize(
-                    R.styleable.SafeArea_android_paddingTop,
-                    0);
-            int paddingRight = a.getDimensionPixelSize(
-                    R.styleable.SafeArea_android_paddingRight,
-                    (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                            ? a.getDimensionPixelSize(R.styleable.SafeArea_android_paddingStart, 0)
-                            : a.getDimensionPixelSize(
-                            R.styleable.SafeArea_android_paddingEnd,
-                            0));
-            int paddingBottom = a.getDimensionPixelSize(
-                    R.styleable.SafeArea_android_paddingBottom,
-                    0);
-            if (a.hasValue(R.styleable.SafeArea_android_paddingHorizontal)) {
-                int paddingHorizontal = a.getDimensionPixelSize(
-                        R.styleable.SafeArea_android_paddingHorizontal,
-                        0);
-                paddingLeft = paddingHorizontal;
-                paddingRight = paddingHorizontal;
-            }
-            if (a.hasValue(R.styleable.SafeArea_android_paddingVertical)) {
-                int paddingVertical = a.getDimensionPixelSize(
-                        R.styleable.SafeArea_android_paddingVertical,
-                        0);
-                paddingTop = paddingVertical;
-                paddingBottom = paddingVertical;
-            }
-            setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-        }
+  @Override
+  public int getPaddingRight() {
+    return realPaddingRect.right;
+  }
 
-        a.recycle();
+  @Override
+  public int getPaddingEnd() {
+    return (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
+      ? realPaddingRect.left : realPaddingRect.right;
+  }
+
+  @Override
+  public void onSafeAreaChanged(Rect fitSystemInsets, Rect systemInsets) {
+    if (!currentSystemInsets.equals(fitSystemInsets)) {
+      currentSystemInsets.set(fitSystemInsets);
+      requestLayout();
     }
+  }
 
-    @Override
-    protected void onAttachedToWindow() {
-        SafeAreaHelper.addListener(this);
-        super.onAttachedToWindow();
-    }
+  public boolean isLeftInsetEnabled() {
+    return isLeftInsetEnabled;
+  }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        SafeAreaHelper.removeListener(this);
-        super.onDetachedFromWindow();
-    }
+  public void setLeftInsetEnabled(boolean leftInsetEnabled) {
+    isLeftInsetEnabled = leftInsetEnabled;
+    requestLayout();
+  }
 
-    @Override
-    public void setPadding(int left, int top, int right, int bottom) {
-        realPaddingRect.set(left, top, right, bottom);
-        requestLayout();
-    }
+  public boolean isTopInsetEnabled() {
+    return isTopInsetEnabled;
+  }
 
-    @Override
-    public void setPaddingRelative(int start, int top, int end, int bottom) {
-        realPaddingRect.set(
-                (getLayoutDirection() == LAYOUT_DIRECTION_RTL) ? end : start,
-                top,
-                (getLayoutDirection() == LAYOUT_DIRECTION_RTL) ? start : end,
-                bottom);
-        requestLayout();
-    }
+  public void setTopInsetEnabled(boolean topInsetEnabled) {
+    isTopInsetEnabled = topInsetEnabled;
+    requestLayout();
+  }
 
-    @Override
-    public void requestLayout() {
-        if (currentSystemInsets != null && realPaddingRect != null) {
-            super.setPadding(
-                    (isLeftInsetEnabled ? currentSystemInsets.left : 0)
-                            + ((getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                            ? realPaddingRect.right : realPaddingRect.left)
-                            + ((!isLeftInsetEnabled || currentSystemInsets.left == 0)
-                            ? 0 : insetPaddingRect.left),
-                    (isTopInsetEnabled ? currentSystemInsets.top : 0)
-                            + realPaddingRect.top
-                            + ((!isTopInsetEnabled || currentSystemInsets.top == 0)
-                            ? 0 : insetPaddingRect.top),
-                    (isRightInsetEnabled ? currentSystemInsets.right : 0)
-                            + ((getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                            ? realPaddingRect.left : realPaddingRect.right)
-                            + ((!isRightInsetEnabled || currentSystemInsets.right == 0)
-                            ? 0 : insetPaddingRect.right),
-                    (isBottomInsetEnabled ? currentSystemInsets.bottom : 0)
-                            + realPaddingRect.bottom
-                            + ((!isBottomInsetEnabled || currentSystemInsets.bottom == 0)
-                            ? 0 : insetPaddingRect.bottom));
-        }
-        super.requestLayout();
-    }
+  public boolean isRightInsetEnabled() {
+    return isRightInsetEnabled;
+  }
 
-    @Override
-    public int getPaddingTop() {
-        return realPaddingRect.top;
-    }
+  public void setRightInsetEnabled(boolean rightInsetEnabled) {
+    isRightInsetEnabled = rightInsetEnabled;
+    requestLayout();
+  }
 
-    @Override
-    public int getPaddingBottom() {
-        return realPaddingRect.bottom;
-    }
+  public boolean isBottomInsetEnabled() {
+    return isBottomInsetEnabled;
+  }
 
-    @Override
-    public int getPaddingLeft() {
-        return realPaddingRect.left;
-    }
+  public void setBottomInsetEnabled(boolean bottomInsetEnabled) {
+    isBottomInsetEnabled = bottomInsetEnabled;
+    requestLayout();
+  }
 
-    @Override
-    public int getPaddingStart() {
-        return (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                ? realPaddingRect.right : realPaddingRect.left;
-    }
+  public int getLeftInsetPadding() {
+    return insetPaddingRect.left;
+  }
 
-    @Override
-    public int getPaddingRight() {
-        return realPaddingRect.right;
-    }
+  public void setLeftInsetPadding(int padding) {
+    insetPaddingRect.left = padding;
+    requestLayout();
+  }
 
-    @Override
-    public int getPaddingEnd() {
-        return (getLayoutDirection() == LAYOUT_DIRECTION_RTL)
-                ? realPaddingRect.left : realPaddingRect.right;
-    }
+  public int getTopInsetPadding() {
+    return insetPaddingRect.top;
+  }
 
-    @Override
-    public void onSafeAreaChanged(Rect fitSystemInsets, Rect systemInsets) {
-        if (!currentSystemInsets.equals(fitSystemInsets)) {
-            currentSystemInsets.set(fitSystemInsets);
-            requestLayout();
-        }
-    }
+  public void setTopInsetPadding(int padding) {
+    insetPaddingRect.top = padding;
+    requestLayout();
+  }
 
-    public boolean isLeftInsetEnabled() {
-        return isLeftInsetEnabled;
-    }
+  public int getRightInsetPadding() {
+    return insetPaddingRect.right;
+  }
 
-    public void setLeftInsetEnabled(boolean leftInsetEnabled) {
-        isLeftInsetEnabled = leftInsetEnabled;
-        requestLayout();
-    }
+  public void setRightInsetPadding(int padding) {
+    insetPaddingRect.right = padding;
+    requestLayout();
+  }
 
-    public boolean isTopInsetEnabled() {
-        return isTopInsetEnabled;
-    }
+  public int getBottomInsetPadding() {
+    return insetPaddingRect.bottom;
+  }
 
-    public void setTopInsetEnabled(boolean topInsetEnabled) {
-        isTopInsetEnabled = topInsetEnabled;
-        requestLayout();
-    }
-
-    public boolean isRightInsetEnabled() {
-        return isRightInsetEnabled;
-    }
-
-    public void setRightInsetEnabled(boolean rightInsetEnabled) {
-        isRightInsetEnabled = rightInsetEnabled;
-        requestLayout();
-    }
-
-    public boolean isBottomInsetEnabled() {
-        return isBottomInsetEnabled;
-    }
-
-    public void setBottomInsetEnabled(boolean bottomInsetEnabled) {
-        isBottomInsetEnabled = bottomInsetEnabled;
-        requestLayout();
-    }
-
-    public int getLeftInsetPadding() {
-        return insetPaddingRect.left;
-    }
-
-    public void setLeftInsetPadding(int padding) {
-        insetPaddingRect.left = padding;
-        requestLayout();
-    }
-
-    public int getTopInsetPadding() {
-        return insetPaddingRect.top;
-    }
-
-    public void setTopInsetPadding(int padding) {
-        insetPaddingRect.top = padding;
-        requestLayout();
-    }
-
-    public int getRightInsetPadding() {
-        return insetPaddingRect.right;
-    }
-
-    public void setRightInsetPadding(int padding) {
-        insetPaddingRect.right = padding;
-        requestLayout();
-    }
-
-    public int getBottomInsetPadding() {
-        return insetPaddingRect.bottom;
-    }
-
-    public void setBottomInsetPadding(int padding) {
-        insetPaddingRect.bottom = padding;
-        requestLayout();
-    }
+  public void setBottomInsetPadding(int padding) {
+    insetPaddingRect.bottom = padding;
+    requestLayout();
+  }
 }

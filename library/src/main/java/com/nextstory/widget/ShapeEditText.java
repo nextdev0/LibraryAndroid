@@ -25,160 +25,160 @@ import com.nextstory.widget.util.ShapeDrawableHelper;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class ShapeEditText extends AppCompatEditText {
-    private final ForegroundDrawableHelper foregroundDrawableHelper =
-            new ForegroundDrawableHelper(this);
-    private final ShapeDrawableHelper shapeDrawableHelper;
+  private final ForegroundDrawableHelper foregroundDrawableHelper =
+    new ForegroundDrawableHelper(this);
+  private final ShapeDrawableHelper shapeDrawableHelper;
 
-    public ShapeEditText(@NonNull Context context) {
-        this(context, null);
+  public ShapeEditText(@NonNull Context context) {
+    this(context, null);
+  }
+
+  public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
+    this(context, attrs, androidx.appcompat.R.attr.editTextStyle);
+  }
+
+  public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+
+    foregroundDrawableHelper.resolveAttribute(context, attrs, defStyleAttr);
+    shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, super.getBackground());
+
+    super.setBackgroundDrawable(shapeDrawableHelper.getDrawable());
+    super.setClipToOutline(true);
+    super.setOutlineProvider(new ViewOutlineProvider() {
+      @Override
+      public void getOutline(View view, Outline outline) {
+        outline.setRoundRect(
+          shapeDrawableHelper.getDrawable().getBounds(),
+          shapeDrawableHelper.getCornerRadius());
+      }
+    });
+  }
+
+  @Override
+  protected void dispatchDraw(Canvas canvas) {
+    super.dispatchDraw(canvas);
+
+    if (foregroundDrawableHelper != null) {
+      foregroundDrawableHelper.draw(canvas);
     }
+  }
 
-    public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, androidx.appcompat.R.attr.editTextStyle);
+  @Override
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+
+    if (foregroundDrawableHelper != null) {
+      foregroundDrawableHelper.onSizeChanged(w, h, oldw, oldh);
     }
+  }
 
-    public ShapeEditText(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+  @Override
+  public void drawableHotspotChanged(float x, float y) {
+    super.drawableHotspotChanged(x, y);
 
-        foregroundDrawableHelper.resolveAttribute(context, attrs, defStyleAttr);
-        shapeDrawableHelper = new ShapeDrawableHelper(context, attrs, super.getBackground());
-
-        super.setBackgroundDrawable(shapeDrawableHelper.getDrawable());
-        super.setClipToOutline(true);
-        super.setOutlineProvider(new ViewOutlineProvider() {
-            @Override
-            public void getOutline(View view, Outline outline) {
-                outline.setRoundRect(
-                        shapeDrawableHelper.getDrawable().getBounds(),
-                        shapeDrawableHelper.getCornerRadius());
-            }
-        });
+    if (foregroundDrawableHelper != null) {
+      foregroundDrawableHelper.drawableHotspotChanged(x, y);
     }
+  }
 
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
+  @Override
+  protected void drawableStateChanged() {
+    super.drawableStateChanged();
 
-        if (foregroundDrawableHelper != null) {
-            foregroundDrawableHelper.draw(canvas);
-        }
+    if (foregroundDrawableHelper != null) {
+      foregroundDrawableHelper.drawableStateChanged();
     }
+  }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+  @Override
+  public boolean hasOverlappingRendering() {
+    return false;
+  }
 
-        if (foregroundDrawableHelper != null) {
-            foregroundDrawableHelper.onSizeChanged(w, h, oldw, oldh);
-        }
+  @Override
+  public void jumpDrawablesToCurrentState() {
+    super.jumpDrawablesToCurrentState();
+
+    if (foregroundDrawableHelper != null) {
+      foregroundDrawableHelper.jumpDrawablesToCurrentState();
     }
+  }
 
-    @Override
-    public void drawableHotspotChanged(float x, float y) {
-        super.drawableHotspotChanged(x, y);
-
-        if (foregroundDrawableHelper != null) {
-            foregroundDrawableHelper.drawableHotspotChanged(x, y);
-        }
+  @Override
+  protected boolean verifyDrawable(@NonNull Drawable who) {
+    if (foregroundDrawableHelper == null) {
+      return super.verifyDrawable(who);
     }
+    return super.verifyDrawable(who) || (who == foregroundDrawableHelper.getForeground());
+  }
 
-    @Override
-    protected void drawableStateChanged() {
-        super.drawableStateChanged();
-
-        if (foregroundDrawableHelper != null) {
-            foregroundDrawableHelper.drawableStateChanged();
-        }
+  @Override
+  public Drawable getBackground() {
+    if (shapeDrawableHelper != null) {
+      return shapeDrawableHelper.getBackground();
     }
+    return super.getBackground();
+  }
 
-    @Override
-    public boolean hasOverlappingRendering() {
-        return false;
+  @Override
+  public void setBackground(Drawable background) {
+    setBackgroundDrawable(background);
+  }
+
+  @Override
+  public void setBackgroundDrawable(@Nullable Drawable background) {
+    if (shapeDrawableHelper != null) {
+      shapeDrawableHelper.setBackground(background);
+      invalidate();
+      return;
     }
+    super.setBackgroundDrawable(background);
+  }
 
-    @Override
-    public void jumpDrawablesToCurrentState() {
-        super.jumpDrawablesToCurrentState();
+  @Override
+  public void setBackgroundResource(int resId) {
+    setBackgroundDrawable(ContextCompat.getDrawable(getContext(), resId));
+  }
 
-        if (foregroundDrawableHelper != null) {
-            foregroundDrawableHelper.jumpDrawablesToCurrentState();
-        }
-    }
+  @Override
+  public void setBackgroundColor(int color) {
+    setBackgroundDrawable(new ColorDrawable(color));
+  }
 
-    @Override
-    protected boolean verifyDrawable(@NonNull Drawable who) {
-        if (foregroundDrawableHelper == null) {
-            return super.verifyDrawable(who);
-        }
-        return super.verifyDrawable(who) || (who == foregroundDrawableHelper.getForeground());
-    }
+  public Drawable getShapeDrawable() {
+    return shapeDrawableHelper.getShapeDrawable();
+  }
 
-    @Override
-    public Drawable getBackground() {
-        if (shapeDrawableHelper != null) {
-            return shapeDrawableHelper.getBackground();
-        }
-        return super.getBackground();
-    }
+  public Drawable getForeground() {
+    return foregroundDrawableHelper.getForeground();
+  }
 
-    @Override
-    public void setBackground(Drawable background) {
-        setBackgroundDrawable(background);
-    }
+  public void setForeground(Drawable drawable) {
+    foregroundDrawableHelper.setForeground(drawable);
+  }
 
-    @Override
-    public void setBackgroundDrawable(@Nullable Drawable background) {
-        if (shapeDrawableHelper != null) {
-            shapeDrawableHelper.setBackground(background);
-            invalidate();
-            return;
-        }
-        super.setBackgroundDrawable(background);
-    }
+  public int getCornerRadius() {
+    return shapeDrawableHelper.getCornerRadius();
+  }
 
-    @Override
-    public void setBackgroundResource(int resId) {
-        setBackgroundDrawable(ContextCompat.getDrawable(getContext(), resId));
-    }
+  public void setCornerRadius(int value) {
+    shapeDrawableHelper.setCornerRadius(value);
+  }
 
-    @Override
-    public void setBackgroundColor(int color) {
-        setBackgroundDrawable(new ColorDrawable(color));
-    }
+  public int getStrokeWidth() {
+    return shapeDrawableHelper.getStrokeWidth();
+  }
 
-    public Drawable getShapeDrawable() {
-        return shapeDrawableHelper.getShapeDrawable();
-    }
+  public void setStrokeWidth(int value) {
+    shapeDrawableHelper.setStrokeWidth(value);
+  }
 
-    public Drawable getForeground() {
-        return foregroundDrawableHelper.getForeground();
-    }
+  public int getStrokeColor() {
+    return shapeDrawableHelper.getStrokeColor();
+  }
 
-    public void setForeground(Drawable drawable) {
-        foregroundDrawableHelper.setForeground(drawable);
-    }
-
-    public int getCornerRadius() {
-        return shapeDrawableHelper.getCornerRadius();
-    }
-
-    public void setCornerRadius(int value) {
-        shapeDrawableHelper.setCornerRadius(value);
-    }
-
-    public int getStrokeWidth() {
-        return shapeDrawableHelper.getStrokeWidth();
-    }
-
-    public void setStrokeWidth(int value) {
-        shapeDrawableHelper.setStrokeWidth(value);
-    }
-
-    public int getStrokeColor() {
-        return shapeDrawableHelper.getStrokeColor();
-    }
-
-    public void setStrokeColor(int value) {
-        shapeDrawableHelper.setStrokeColor(value);
-    }
+  public void setStrokeColor(int value) {
+    shapeDrawableHelper.setStrokeColor(value);
+  }
 }

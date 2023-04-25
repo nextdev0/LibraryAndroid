@@ -15,16 +15,16 @@ import com.nextstory.annotations.ActivityIntentExtra;
  */
 @ActivityIntentBuilder
 public final class IntentBuilderTestActivity extends AppCompatActivity {
-    @ActivityIntentExtra
-    String message;
-    @ActivityIntentExtra
-    String message2 = "empty";
+  @ActivityIntentExtra
+  String message;
+  @ActivityIntentExtra
+  String message2 = "empty";
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, message2, Toast.LENGTH_SHORT).show();
-    }
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    Toast.makeText(this, message2, Toast.LENGTH_SHORT).show();
+  }
 }

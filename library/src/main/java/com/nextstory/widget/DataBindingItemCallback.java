@@ -9,12 +9,12 @@ import android.view.View;
  * @since 1.1
  */
 public interface DataBindingItemCallback {
-    /**
-     * 콜백 시 호출
-     *
-     * @param view     참조 뷰
-     * @param item     항목
-     * @param position 항목의 인덱스
-     */
-    void onItemCallback(View view, Object item, int position);
+  /**
+   * 콜백 시 호출
+   *
+   * @param view     참조 뷰
+   * @param item     항목
+   * @param position 항목의 인덱스
+   */
+  void onItemCallback(View view, Object item, int position);
 }

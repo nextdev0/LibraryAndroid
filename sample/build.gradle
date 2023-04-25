@@ -1,49 +1,49 @@
 plugins {
-    id 'com.android.application'
+  id 'com.android.application'
 }
 
 android {
-    namespace 'com.nextstory.sample'
-    compileSdk rootProject.ext.targetSdk
-    defaultConfig {
-        applicationId 'com.nextstory.sample'
-        minSdk rootProject.ext.minSdk
-        targetSdk rootProject.ext.targetSdk
-        versionCode 1
-        versionName '1.0'
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+  namespace 'com.nextstory.sample'
+  compileSdk rootProject.ext.targetSdk
+  defaultConfig {
+    applicationId 'com.nextstory.sample'
+    minSdk rootProject.ext.minSdk
+    targetSdk rootProject.ext.targetSdk
+    versionCode 1
+    versionName '1.0'
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+  }
+  buildTypes {
+    debug {
+      debuggable true
+      zipAlignEnabled true
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        debug {
-            debuggable true
-            zipAlignEnabled true
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        release {
-            debuggable false
-            zipAlignEnabled true
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+    release {
+      debuggable false
+      zipAlignEnabled true
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
-    buildFeatures {
-        dataBinding true
-    }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+  }
+  buildFeatures {
+    dataBinding true
+  }
+  compileOptions {
+    coreLibraryDesugaringEnabled true
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+  testImplementation 'junit:junit:4.13.2'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
-    implementation project(':library')
-    implementation project(':libgdx')
-    annotationProcessor project(':annotations')
+  implementation project(':library')
+  implementation project(':libgdx')
+  annotationProcessor project(':annotations')
 }

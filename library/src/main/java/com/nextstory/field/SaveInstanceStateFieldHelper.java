@@ -30,97 +30,97 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class SaveInstanceStateFieldHelper
-        implements LibraryInitializer, SimpleActivityLifecycleCallbacks {
-    private final FragmentManager.FragmentLifecycleCallbacks fragmentLifecycleCallbacks
-            = new FragmentManager.FragmentLifecycleCallbacks() {
-        @Override
-        public void onFragmentViewCreated(@NonNull FragmentManager fragmentManager,
-                                          @NonNull Fragment fragment,
-                                          @NonNull View v,
-                                          @Nullable Bundle savedInstanceState) {
-            if (savedInstanceState != null) {
-                List<SaveInstanceStateField> fields = findFields(fragment);
-                for (SaveInstanceStateField field : fields) {
-                    field.onRestoreInstanceState(savedInstanceState);
-                }
-            }
-        }
-
-        @Override
-        public void onFragmentSaveInstanceState(@NonNull FragmentManager fragmentManager,
-                                                @NonNull Fragment fragment,
-                                                @NonNull Bundle outState) {
-            List<SaveInstanceStateField> fields = findFields(fragment);
-            for (SaveInstanceStateField field : fields) {
-                field.onSaveInstanceState(outState);
-            }
-        }
-    };
-
+  implements LibraryInitializer, SimpleActivityLifecycleCallbacks {
+  private final FragmentManager.FragmentLifecycleCallbacks fragmentLifecycleCallbacks
+    = new FragmentManager.FragmentLifecycleCallbacks() {
     @Override
-    public void onInitialized(Context context, String argument) {
-        Application application = (Application) context.getApplicationContext();
-        application.registerActivityLifecycleCallbacks(this);
-    }
-
-    @Override
-    public void onActivityCreated(@NonNull Activity activity,
-                                  @Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            List<SaveInstanceStateField> fields = findFields(activity);
-            for (SaveInstanceStateField field : fields) {
-                field.onRestoreInstanceState(savedInstanceState);
-            }
-        }
-        if (activity instanceof FragmentActivity) {
-            FragmentActivity fragmentActivity = (FragmentActivity) activity;
-            fragmentActivity.getSupportFragmentManager()
-                    .registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, true);
-        }
-    }
-
-    @Override
-    public void onActivityDestroyed(@NonNull Activity activity) {
-        if (activity instanceof FragmentActivity) {
-            FragmentActivity fragmentActivity = (FragmentActivity) activity;
-            fragmentActivity.getSupportFragmentManager()
-                    .unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks);
-        }
-    }
-
-    @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity,
-                                            @NonNull Bundle outState) {
-        List<SaveInstanceStateField> fields = findFields(activity);
+    public void onFragmentViewCreated(@NonNull FragmentManager fragmentManager,
+                                      @NonNull Fragment fragment,
+                                      @NonNull View v,
+                                      @Nullable Bundle savedInstanceState) {
+      if (savedInstanceState != null) {
+        List<SaveInstanceStateField> fields = findFields(fragment);
         for (SaveInstanceStateField field : fields) {
-            field.onSaveInstanceState(outState);
+          field.onRestoreInstanceState(savedInstanceState);
         }
+      }
     }
 
-    /**
-     * 필드 내 {@link SaveInstanceStateField} 구현 목록를 반환.
-     *
-     * @param instance 인스턴스
-     * @return 목록
-     */
-    private List<SaveInstanceStateField> findFields(Object instance) {
-        List<SaveInstanceStateField> result = new ArrayList<>();
-        Field[] fields = instance.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            boolean isAccessible = field.isAccessible();
-            try {
-                field.setAccessible(true);
-                Object object = field.get(instance);
-                if (object instanceof SaveInstanceStateField) {
-                    SaveInstanceStateField saveInstanceStateField = (SaveInstanceStateField) object;
-                    saveInstanceStateField.setKey(field.getName());
-                    result.add(saveInstanceStateField);
-                }
-            } catch (IllegalAccessException ignore) {
-                // no-op
-            }
-            field.setAccessible(isAccessible);
-        }
-        return result;
+    @Override
+    public void onFragmentSaveInstanceState(@NonNull FragmentManager fragmentManager,
+                                            @NonNull Fragment fragment,
+                                            @NonNull Bundle outState) {
+      List<SaveInstanceStateField> fields = findFields(fragment);
+      for (SaveInstanceStateField field : fields) {
+        field.onSaveInstanceState(outState);
+      }
     }
+  };
+
+  @Override
+  public void onInitialized(Context context, String argument) {
+    Application application = (Application) context.getApplicationContext();
+    application.registerActivityLifecycleCallbacks(this);
+  }
+
+  @Override
+  public void onActivityCreated(@NonNull Activity activity,
+                                @Nullable Bundle savedInstanceState) {
+    if (savedInstanceState != null) {
+      List<SaveInstanceStateField> fields = findFields(activity);
+      for (SaveInstanceStateField field : fields) {
+        field.onRestoreInstanceState(savedInstanceState);
+      }
+    }
+    if (activity instanceof FragmentActivity) {
+      FragmentActivity fragmentActivity = (FragmentActivity) activity;
+      fragmentActivity.getSupportFragmentManager()
+        .registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, true);
+    }
+  }
+
+  @Override
+  public void onActivityDestroyed(@NonNull Activity activity) {
+    if (activity instanceof FragmentActivity) {
+      FragmentActivity fragmentActivity = (FragmentActivity) activity;
+      fragmentActivity.getSupportFragmentManager()
+        .unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks);
+    }
+  }
+
+  @Override
+  public void onActivitySaveInstanceState(@NonNull Activity activity,
+                                          @NonNull Bundle outState) {
+    List<SaveInstanceStateField> fields = findFields(activity);
+    for (SaveInstanceStateField field : fields) {
+      field.onSaveInstanceState(outState);
+    }
+  }
+
+  /**
+   * 필드 내 {@link SaveInstanceStateField} 구현 목록를 반환.
+   *
+   * @param instance 인스턴스
+   * @return 목록
+   */
+  private List<SaveInstanceStateField> findFields(Object instance) {
+    List<SaveInstanceStateField> result = new ArrayList<>();
+    Field[] fields = instance.getClass().getDeclaredFields();
+    for (Field field : fields) {
+      boolean isAccessible = field.isAccessible();
+      try {
+        field.setAccessible(true);
+        Object object = field.get(instance);
+        if (object instanceof SaveInstanceStateField) {
+          SaveInstanceStateField saveInstanceStateField = (SaveInstanceStateField) object;
+          saveInstanceStateField.setKey(field.getName());
+          result.add(saveInstanceStateField);
+        }
+      } catch (IllegalAccessException ignore) {
+        // no-op
+      }
+      field.setAccessible(isAccessible);
+    }
+    return result;
+  }
 }

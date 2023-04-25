@@ -13,10 +13,10 @@ import com.nextstory.sample.databinding.DialogTest2Binding;
  * @since 1.0
  */
 public final class Test2Dialog extends BaseBottomSheetDialogFragment<DialogTest2Binding> {
-    @Override
-    public void onDialogCreated(BaseBottomSheetDialog<DialogTest2Binding> dialog,
-                                @Nullable Bundle savedInstanceState) {
-        super.onDialogCreated(dialog, savedInstanceState);
-        getBinding().setDialog(this);
-    }
+  @Override
+  public void onDialogCreated(BaseBottomSheetDialog<DialogTest2Binding> dialog,
+                              @Nullable Bundle savedInstanceState) {
+    super.onDialogCreated(dialog, savedInstanceState);
+    getBinding().setDialog(this);
+  }
 }

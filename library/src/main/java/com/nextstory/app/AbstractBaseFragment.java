@@ -18,82 +18,82 @@ import androidx.fragment.app.Fragment;
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractBaseFragment extends Fragment {
-    private final WindowController windowController = new WindowController(this);
-    private final OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
-        @Override
-        public void handleOnBackPressed() {
-            onBackPressed();
-            setEnabled(true);
-        }
-    };
-
-    private ResourcesController resourcesController;
-
+  private final WindowController windowController = new WindowController(this);
+  private final OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        resourcesController = new ResourcesController(requireContext());
-
-        requireActivity()
-                .getOnBackPressedDispatcher()
-                .addCallback(getViewLifecycleOwner(), backPressedCallback);
+    public void handleOnBackPressed() {
+      onBackPressed();
+      setEnabled(true);
     }
+  };
 
-    @Override
-    public void onDestroyView() {
-        resourcesController = null;
-        super.onDestroyView();
-    }
+  private ResourcesController resourcesController;
 
-    /**
-     * 뒤로가기 동작
-     */
-    public void onBackPressed() {
-        try {
-            if (isVisible()) {
-                backPressedCallback.setEnabled(false);
-                requireActivity().getOnBackPressedDispatcher().onBackPressed();
-            }
-        } catch (Exception e) {
-            backPressedCallback.setEnabled(false);
-            requireActivity().getOnBackPressedDispatcher().onBackPressed();
-        }
-    }
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
 
-    /**
-     * @return 윈도우 설정
-     * @since 2.0
-     */
-    @NonNull
-    public final WindowController getWindowController() {
-        return windowController;
-    }
+    resourcesController = new ResourcesController(requireContext());
 
-    /**
-     * @return 리소스 설정
-     * @since 2.0
-     */
-    @NonNull
-    public final ResourcesController getResourcesController() {
-        return resourcesController;
-    }
+    requireActivity()
+      .getOnBackPressedDispatcher()
+      .addCallback(getViewLifecycleOwner(), backPressedCallback);
+  }
 
-    /**
-     * 토스트 표시
-     *
-     * @param res 문자열 리소스
-     */
-    public void showToast(@StringRes int res) {
-        Toast.makeText(requireContext(), res, Toast.LENGTH_SHORT).show();
-    }
+  @Override
+  public void onDestroyView() {
+    resourcesController = null;
+    super.onDestroyView();
+  }
 
-    /**
-     * 토스트 표시
-     *
-     * @param message 문자열
-     */
-    public void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+  /**
+   * 뒤로가기 동작
+   */
+  public void onBackPressed() {
+    try {
+      if (isVisible()) {
+        backPressedCallback.setEnabled(false);
+        requireActivity().getOnBackPressedDispatcher().onBackPressed();
+      }
+    } catch (Exception e) {
+      backPressedCallback.setEnabled(false);
+      requireActivity().getOnBackPressedDispatcher().onBackPressed();
     }
+  }
+
+  /**
+   * @return 윈도우 설정
+   * @since 2.0
+   */
+  @NonNull
+  public final WindowController getWindowController() {
+    return windowController;
+  }
+
+  /**
+   * @return 리소스 설정
+   * @since 2.0
+   */
+  @NonNull
+  public final ResourcesController getResourcesController() {
+    return resourcesController;
+  }
+
+  /**
+   * 토스트 표시
+   *
+   * @param res 문자열 리소스
+   */
+  public void showToast(@StringRes int res) {
+    Toast.makeText(requireContext(), res, Toast.LENGTH_SHORT).show();
+  }
+
+  /**
+   * 토스트 표시
+   *
+   * @param message 문자열
+   */
+  public void showToast(String message) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+  }
 }

@@ -38,523 +38,523 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
-    protected List<PartialView> mPartialViews;
-    private int mNumStars;
-    private int mPadding = 20;
-    private int mStarWidth;
-    private int mStarHeight;
-    private float mMinimumStars = 0;
-    private float mRating = -1;
-    private float mStepSize = 1f;
-    private float mPreviousRating = 0;
+  protected List<PartialView> mPartialViews;
+  private int mNumStars;
+  private int mPadding = 20;
+  private int mStarWidth;
+  private int mStarHeight;
+  private float mMinimumStars = 0;
+  private float mRating = -1;
+  private float mStepSize = 1f;
+  private float mPreviousRating = 0;
 
-    private boolean mIsIndicator = false;
-    private boolean mIsScrollable = true;
-    private boolean mIsClickable = true;
-    private boolean mClearRatingEnabled = true;
+  private boolean mIsIndicator = false;
+  private boolean mIsScrollable = true;
+  private boolean mIsClickable = true;
+  private boolean mClearRatingEnabled = true;
 
-    private float mStartX;
-    private float mStartY;
+  private float mStartX;
+  private float mStartY;
 
-    private Drawable mEmptyDrawable;
-    private Drawable mFilledDrawable;
+  private Drawable mEmptyDrawable;
+  private Drawable mFilledDrawable;
 
-    private OnRatingChangeListener mOnRatingChangeListener;
+  private OnRatingChangeListener mOnRatingChangeListener;
 
-    public BaseRatingBar(Context context) {
-        this(context, null);
+  public BaseRatingBar(Context context) {
+    this(context, null);
+  }
+
+  /* Call by xml layout */
+  public BaseRatingBar(Context context, @Nullable AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  /**
+   * @param context      context
+   * @param attrs        attributes from XML => app:mainText="mainText"
+   * @param defStyleAttr attributes from default style (Application theme or activity theme)
+   */
+  public BaseRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+
+    TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseRatingBar);
+    final float rating = typedArray.getFloat(R.styleable.BaseRatingBar_srb_rating, 0);
+
+    initParamsValue(typedArray, context);
+    verifyParamsValue();
+    initRatingView();
+    setRating(rating);
+  }
+
+  /**
+   * 레이팅 값 지정
+   *
+   * @param v     뷰
+   * @param value 레이팅값
+   * @author troy
+   * @see BaseRatingBar
+   */
+  @BindingAdapter("srb_rating")
+  public static void setRating(@NonNull BaseRatingBar v, float value) {
+    v.setRating(value);
+  }
+
+  /**
+   * 레이팅값 반환
+   *
+   * @param v 뷰
+   * @author troy
+   * @see BaseRatingBar
+   */
+  @InverseBindingAdapter(attribute = "srb_rating", event = "srb_ratingAttrChanged")
+  public static float getRating(@NonNull BaseRatingBar v) {
+    return v.getRating();
+  }
+
+  /**
+   * 레이팅값 변경 리스너 설정
+   *
+   * @param v                 뷰
+   * @param ratingAttrChanged inverse 어댑터, 값 변경 반환용으로 사용
+   * @author troy
+   * @see BaseRatingBar
+   */
+  @BindingAdapter("srb_ratingAttrChanged")
+  public static void setOnRatingChangeListener(@NonNull BaseRatingBar v,
+                                               InverseBindingListener ratingAttrChanged) {
+    if (ratingAttrChanged != null) {
+      v.setOnRatingChangeListener((ratingBar, rating, fromUser) ->
+        ratingAttrChanged.onChange());
+    }
+  }
+
+  private void initParamsValue(TypedArray typedArray, Context context) {
+    mNumStars = typedArray.getInt(
+      R.styleable.BaseRatingBar_srb_numStars,
+      mNumStars);
+    mStepSize = typedArray.getFloat(
+      R.styleable.BaseRatingBar_srb_stepSize,
+      mStepSize);
+    mMinimumStars = typedArray.getFloat(
+      R.styleable.BaseRatingBar_srb_minimumStars,
+      mMinimumStars);
+    mPadding = typedArray.getDimensionPixelSize(
+      R.styleable.BaseRatingBar_srb_starPadding,
+      mPadding);
+    mStarWidth = typedArray.getDimensionPixelSize(
+      R.styleable.BaseRatingBar_srb_starWidth,
+      0);
+    mStarHeight = typedArray.getDimensionPixelSize(
+      R.styleable.BaseRatingBar_srb_starHeight,
+      0);
+    mEmptyDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmpty)
+      ? ContextCompat.getDrawable(
+      context,
+      typedArray.getResourceId(
+        R.styleable.BaseRatingBar_srb_drawableEmpty,
+        View.NO_ID))
+      : null;
+    mFilledDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilled)
+      ? ContextCompat.getDrawable(
+      context,
+      typedArray.getResourceId(
+        R.styleable.BaseRatingBar_srb_drawableFilled,
+        View.NO_ID))
+      : null;
+    mIsIndicator = typedArray.getBoolean(
+      R.styleable.BaseRatingBar_srb_isIndicator,
+      mIsIndicator);
+    mIsScrollable = typedArray.getBoolean(
+      R.styleable.BaseRatingBar_srb_scrollable,
+      mIsScrollable);
+    mIsClickable = typedArray.getBoolean(
+      R.styleable.BaseRatingBar_srb_clickable,
+      mIsClickable);
+    mClearRatingEnabled = typedArray.getBoolean(
+      R.styleable.BaseRatingBar_srb_clearRatingEnabled,
+      mClearRatingEnabled);
+    typedArray.recycle();
+  }
+
+  private void verifyParamsValue() {
+    if (mNumStars <= 0) {
+      mNumStars = 5;
     }
 
-    /* Call by xml layout */
-    public BaseRatingBar(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+    if (mPadding < 0) {
+      mPadding = 0;
     }
 
-    /**
-     * @param context      context
-     * @param attrs        attributes from XML => app:mainText="mainText"
-     * @param defStyleAttr attributes from default style (Application theme or activity theme)
-     */
-    public BaseRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseRatingBar);
-        final float rating = typedArray.getFloat(R.styleable.BaseRatingBar_srb_rating, 0);
-
-        initParamsValue(typedArray, context);
-        verifyParamsValue();
-        initRatingView();
-        setRating(rating);
+    if (mEmptyDrawable == null) {
+      mEmptyDrawable = ContextCompat.getDrawable(getContext(), R.drawable.empty);
     }
 
-    /**
-     * 레이팅 값 지정
-     *
-     * @param v     뷰
-     * @param value 레이팅값
-     * @author troy
-     * @see BaseRatingBar
-     */
-    @BindingAdapter("srb_rating")
-    public static void setRating(@NonNull BaseRatingBar v, float value) {
-        v.setRating(value);
+    if (mFilledDrawable == null) {
+      mFilledDrawable = ContextCompat.getDrawable(getContext(), R.drawable.filled);
     }
 
-    /**
-     * 레이팅값 반환
-     *
-     * @param v 뷰
-     * @author troy
-     * @see BaseRatingBar
-     */
-    @InverseBindingAdapter(attribute = "srb_rating", event = "srb_ratingAttrChanged")
-    public static float getRating(@NonNull BaseRatingBar v) {
-        return v.getRating();
+    if (mStepSize > 1.0f) {
+      mStepSize = 1.0f;
+    } else if (mStepSize < 0.1f) {
+      mStepSize = 0.1f;
     }
 
-    /**
-     * 레이팅값 변경 리스너 설정
-     *
-     * @param v                 뷰
-     * @param ratingAttrChanged inverse 어댑터, 값 변경 반환용으로 사용
-     * @author troy
-     * @see BaseRatingBar
-     */
-    @BindingAdapter("srb_ratingAttrChanged")
-    public static void setOnRatingChangeListener(@NonNull BaseRatingBar v,
-                                                 InverseBindingListener ratingAttrChanged) {
-        if (ratingAttrChanged != null) {
-            v.setOnRatingChangeListener((ratingBar, rating, fromUser) ->
-                    ratingAttrChanged.onChange());
-        }
+    mMinimumStars = RatingBarUtils.getValidMinimumStars(mMinimumStars, mNumStars, mStepSize);
+  }
+
+  private void initRatingView() {
+    mPartialViews = new ArrayList<>();
+
+    for (int i = 1; i <= mNumStars; i++) {
+      PartialView partialView = getPartialView(
+        i,
+        mStarWidth,
+        mStarHeight,
+        mPadding,
+        mFilledDrawable,
+        mEmptyDrawable);
+      addView(partialView);
+
+      mPartialViews.add(partialView);
+    }
+  }
+
+  private PartialView getPartialView(int partialViewId,
+                                     int starWidth,
+                                     int starHeight,
+                                     int padding,
+                                     Drawable filledDrawable,
+                                     Drawable emptyDrawable) {
+    PartialView partialView = new PartialView(
+      getContext(),
+      partialViewId,
+      starWidth,
+      starHeight,
+      padding);
+    partialView.setFilledDrawable(filledDrawable);
+    partialView.setEmptyDrawable(emptyDrawable);
+    return partialView;
+  }
+
+  /**
+   * Retain this method to let other RatingBar can custom their decrease animation.
+   */
+  protected void emptyRatingBar() {
+    fillRatingBar(0);
+  }
+
+  /**
+   * Use {maxIntOfRating} because if the rating is 3.5
+   * the view which id is 3 also need to be filled.
+   */
+  protected void fillRatingBar(final float rating) {
+    for (PartialView partialView : mPartialViews) {
+      int ratingViewId = (int) partialView.getTag();
+      double maxIntOfRating = Math.ceil(rating);
+
+      if (ratingViewId > maxIntOfRating) {
+        partialView.setEmpty();
+        continue;
+      }
+
+      if (ratingViewId == maxIntOfRating) {
+        partialView.setPartialFilled(rating);
+      } else {
+        partialView.setFilled();
+      }
+    }
+  }
+
+  @Override
+  public int getNumStars() {
+    return mNumStars;
+  }
+
+  @Override
+  public void setNumStars(int numStars) {
+    if (numStars <= 0) {
+      return;
     }
 
-    private void initParamsValue(TypedArray typedArray, Context context) {
-        mNumStars = typedArray.getInt(
-                R.styleable.BaseRatingBar_srb_numStars,
-                mNumStars);
-        mStepSize = typedArray.getFloat(
-                R.styleable.BaseRatingBar_srb_stepSize,
-                mStepSize);
-        mMinimumStars = typedArray.getFloat(
-                R.styleable.BaseRatingBar_srb_minimumStars,
-                mMinimumStars);
-        mPadding = typedArray.getDimensionPixelSize(
-                R.styleable.BaseRatingBar_srb_starPadding,
-                mPadding);
-        mStarWidth = typedArray.getDimensionPixelSize(
-                R.styleable.BaseRatingBar_srb_starWidth,
-                0);
-        mStarHeight = typedArray.getDimensionPixelSize(
-                R.styleable.BaseRatingBar_srb_starHeight,
-                0);
-        mEmptyDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmpty)
-                ? ContextCompat.getDrawable(
-                context,
-                typedArray.getResourceId(
-                        R.styleable.BaseRatingBar_srb_drawableEmpty,
-                        View.NO_ID))
-                : null;
-        mFilledDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilled)
-                ? ContextCompat.getDrawable(
-                context,
-                typedArray.getResourceId(
-                        R.styleable.BaseRatingBar_srb_drawableFilled,
-                        View.NO_ID))
-                : null;
-        mIsIndicator = typedArray.getBoolean(
-                R.styleable.BaseRatingBar_srb_isIndicator,
-                mIsIndicator);
-        mIsScrollable = typedArray.getBoolean(
-                R.styleable.BaseRatingBar_srb_scrollable,
-                mIsScrollable);
-        mIsClickable = typedArray.getBoolean(
-                R.styleable.BaseRatingBar_srb_clickable,
-                mIsClickable);
-        mClearRatingEnabled = typedArray.getBoolean(
-                R.styleable.BaseRatingBar_srb_clearRatingEnabled,
-                mClearRatingEnabled);
-        typedArray.recycle();
+    mPartialViews.clear();
+    removeAllViews();
+
+    mNumStars = numStars;
+    initRatingView();
+  }
+
+  private void setRating(float rating, boolean fromUser) {
+    if (rating > mNumStars) {
+      rating = mNumStars;
     }
 
-    private void verifyParamsValue() {
-        if (mNumStars <= 0) {
-            mNumStars = 5;
-        }
-
-        if (mPadding < 0) {
-            mPadding = 0;
-        }
-
-        if (mEmptyDrawable == null) {
-            mEmptyDrawable = ContextCompat.getDrawable(getContext(), R.drawable.empty);
-        }
-
-        if (mFilledDrawable == null) {
-            mFilledDrawable = ContextCompat.getDrawable(getContext(), R.drawable.filled);
-        }
-
-        if (mStepSize > 1.0f) {
-            mStepSize = 1.0f;
-        } else if (mStepSize < 0.1f) {
-            mStepSize = 0.1f;
-        }
-
-        mMinimumStars = RatingBarUtils.getValidMinimumStars(mMinimumStars, mNumStars, mStepSize);
+    if (rating < mMinimumStars) {
+      rating = mMinimumStars;
     }
 
-    private void initRatingView() {
-        mPartialViews = new ArrayList<>();
-
-        for (int i = 1; i <= mNumStars; i++) {
-            PartialView partialView = getPartialView(
-                    i,
-                    mStarWidth,
-                    mStarHeight,
-                    mPadding,
-                    mFilledDrawable,
-                    mEmptyDrawable);
-            addView(partialView);
-
-            mPartialViews.add(partialView);
-        }
+    if (mRating == rating) {
+      return;
     }
 
-    private PartialView getPartialView(int partialViewId,
-                                       int starWidth,
-                                       int starHeight,
-                                       int padding,
-                                       Drawable filledDrawable,
-                                       Drawable emptyDrawable) {
-        PartialView partialView = new PartialView(
-                getContext(),
-                partialViewId,
-                starWidth,
-                starHeight,
-                padding);
-        partialView.setFilledDrawable(filledDrawable);
-        partialView.setEmptyDrawable(emptyDrawable);
-        return partialView;
+    // Respect Step size.
+    // So if the defined step size is 0.5, and we're attributing it a 4.7 rating,
+    // it should actually be set to `4.5` rating.
+    mRating = Double.valueOf(Math.floor(rating / mStepSize)).floatValue() * mStepSize;
+
+    if (mOnRatingChangeListener != null) {
+      mOnRatingChangeListener.onRatingChange(this, mRating, fromUser);
     }
 
-    /**
-     * Retain this method to let other RatingBar can custom their decrease animation.
-     */
-    protected void emptyRatingBar() {
-        fillRatingBar(0);
+    fillRatingBar(mRating);
+  }
+
+  @Override
+  public float getRating() {
+    return mRating;
+  }
+
+  @Override
+  public void setRating(float rating) {
+    setRating(rating, false);
+  }
+
+  @Override
+  public int getStarWidth() {
+    return mStarWidth;
+  }
+
+  @Override
+  public void setStarWidth(@IntRange(from = 0) int starWidth) {
+    mStarWidth = starWidth;
+    for (PartialView partialView : mPartialViews) {
+      partialView.setStarWidth(starWidth);
+    }
+  }
+
+  @Override
+  public int getStarHeight() {
+    return mStarHeight;
+  }
+
+  @Override
+  public void setStarHeight(@IntRange(from = 0) int starHeight) {
+    mStarHeight = starHeight;
+    for (PartialView partialView : mPartialViews) {
+      partialView.setStarHeight(starHeight);
+    }
+  }
+
+  @Override
+  public int getStarPadding() {
+    return mPadding;
+  }
+
+  @Override
+  public void setStarPadding(int ratingPadding) {
+    if (ratingPadding < 0) {
+      return;
     }
 
-    /**
-     * Use {maxIntOfRating} because if the rating is 3.5
-     * the view which id is 3 also need to be filled.
-     */
-    protected void fillRatingBar(final float rating) {
-        for (PartialView partialView : mPartialViews) {
-            int ratingViewId = (int) partialView.getTag();
-            double maxIntOfRating = Math.ceil(rating);
+    mPadding = ratingPadding;
 
-            if (ratingViewId > maxIntOfRating) {
-                partialView.setEmpty();
-                continue;
-            }
+    for (PartialView partialView : mPartialViews) {
+      partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
+    }
+  }
 
-            if (ratingViewId == maxIntOfRating) {
-                partialView.setPartialFilled(rating);
-            } else {
-                partialView.setFilled();
-            }
-        }
+  @Override
+  public void setEmptyDrawableRes(@DrawableRes int res) {
+    Drawable drawable = ContextCompat.getDrawable(getContext(), res);
+    if (drawable != null) {
+      setEmptyDrawable(drawable);
+    }
+  }
+
+  @Override
+  public void setFilledDrawableRes(@DrawableRes int res) {
+    Drawable drawable = ContextCompat.getDrawable(getContext(), res);
+
+    if (drawable != null) {
+      setFilledDrawable(drawable);
+    }
+  }
+
+  @Override
+  public void setEmptyDrawable(@NonNull Drawable drawable) {
+    mEmptyDrawable = drawable;
+    for (PartialView partialView : mPartialViews) {
+      partialView.setEmptyDrawable(drawable);
+    }
+  }
+
+  @Override
+  public void setFilledDrawable(@NonNull Drawable drawable) {
+    mFilledDrawable = drawable;
+    for (PartialView partialView : mPartialViews) {
+      partialView.setFilledDrawable(drawable);
+    }
+  }
+
+  @Override
+  public void setMinimumStars(@FloatRange(from = 0.0) float minimumStars) {
+    mMinimumStars = RatingBarUtils.getValidMinimumStars(minimumStars, mNumStars, mStepSize);
+  }
+
+  @Override
+  public boolean isIndicator() {
+    return mIsIndicator;
+  }
+
+  @Override
+  public void setIsIndicator(boolean indicator) {
+    mIsIndicator = indicator;
+  }
+
+  @Override
+  public boolean isScrollable() {
+    return mIsScrollable;
+  }
+
+  @Override
+  public void setScrollable(boolean scrollable) {
+    mIsScrollable = scrollable;
+  }
+
+  @Override
+  public boolean isClickable() {
+    return mIsClickable;
+  }
+
+  @Override
+  public void setClickable(boolean clickable) {
+    this.mIsClickable = clickable;
+  }
+
+  @Override
+  public boolean isClearRatingEnabled() {
+    return mClearRatingEnabled;
+  }
+
+  @Override
+  public void setClearRatingEnabled(boolean enabled) {
+    this.mClearRatingEnabled = enabled;
+  }
+
+  @Override
+  public float getStepSize() {
+    return mStepSize;
+  }
+
+  @Override
+  public void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize) {
+    this.mStepSize = stepSize;
+  }
+
+  @Override
+  public boolean onInterceptTouchEvent(MotionEvent ev) {
+    return true;
+  }
+
+  @SuppressLint("ClickableViewAccessibility")
+  @Override
+  public boolean onTouchEvent(MotionEvent event) {
+    if (isIndicator()) {
+      return false;
     }
 
-    @Override
-    public int getNumStars() {
-        return mNumStars;
-    }
-
-    @Override
-    public void setNumStars(int numStars) {
-        if (numStars <= 0) {
-            return;
-        }
-
-        mPartialViews.clear();
-        removeAllViews();
-
-        mNumStars = numStars;
-        initRatingView();
-    }
-
-    private void setRating(float rating, boolean fromUser) {
-        if (rating > mNumStars) {
-            rating = mNumStars;
-        }
-
-        if (rating < mMinimumStars) {
-            rating = mMinimumStars;
-        }
-
-        if (mRating == rating) {
-            return;
-        }
-
-        // Respect Step size.
-        // So if the defined step size is 0.5, and we're attributing it a 4.7 rating,
-        // it should actually be set to `4.5` rating.
-        mRating = Double.valueOf(Math.floor(rating / mStepSize)).floatValue() * mStepSize;
-
-        if (mOnRatingChangeListener != null) {
-            mOnRatingChangeListener.onRatingChange(this, mRating, fromUser);
-        }
-
-        fillRatingBar(mRating);
-    }
-
-    @Override
-    public float getRating() {
-        return mRating;
-    }
-
-    @Override
-    public void setRating(float rating) {
-        setRating(rating, false);
-    }
-
-    @Override
-    public int getStarWidth() {
-        return mStarWidth;
-    }
-
-    @Override
-    public void setStarWidth(@IntRange(from = 0) int starWidth) {
-        mStarWidth = starWidth;
-        for (PartialView partialView : mPartialViews) {
-            partialView.setStarWidth(starWidth);
-        }
-    }
-
-    @Override
-    public int getStarHeight() {
-        return mStarHeight;
-    }
-
-    @Override
-    public void setStarHeight(@IntRange(from = 0) int starHeight) {
-        mStarHeight = starHeight;
-        for (PartialView partialView : mPartialViews) {
-            partialView.setStarHeight(starHeight);
-        }
-    }
-
-    @Override
-    public int getStarPadding() {
-        return mPadding;
-    }
-
-    @Override
-    public void setStarPadding(int ratingPadding) {
-        if (ratingPadding < 0) {
-            return;
-        }
-
-        mPadding = ratingPadding;
-
-        for (PartialView partialView : mPartialViews) {
-            partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
-        }
-    }
-
-    @Override
-    public void setEmptyDrawableRes(@DrawableRes int res) {
-        Drawable drawable = ContextCompat.getDrawable(getContext(), res);
-        if (drawable != null) {
-            setEmptyDrawable(drawable);
-        }
-    }
-
-    @Override
-    public void setFilledDrawableRes(@DrawableRes int res) {
-        Drawable drawable = ContextCompat.getDrawable(getContext(), res);
-
-        if (drawable != null) {
-            setFilledDrawable(drawable);
-        }
-    }
-
-    @Override
-    public void setEmptyDrawable(@NonNull Drawable drawable) {
-        mEmptyDrawable = drawable;
-        for (PartialView partialView : mPartialViews) {
-            partialView.setEmptyDrawable(drawable);
-        }
-    }
-
-    @Override
-    public void setFilledDrawable(@NonNull Drawable drawable) {
-        mFilledDrawable = drawable;
-        for (PartialView partialView : mPartialViews) {
-            partialView.setFilledDrawable(drawable);
-        }
-    }
-
-    @Override
-    public void setMinimumStars(@FloatRange(from = 0.0) float minimumStars) {
-        mMinimumStars = RatingBarUtils.getValidMinimumStars(minimumStars, mNumStars, mStepSize);
-    }
-
-    @Override
-    public boolean isIndicator() {
-        return mIsIndicator;
-    }
-
-    @Override
-    public void setIsIndicator(boolean indicator) {
-        mIsIndicator = indicator;
-    }
-
-    @Override
-    public boolean isScrollable() {
-        return mIsScrollable;
-    }
-
-    @Override
-    public void setScrollable(boolean scrollable) {
-        mIsScrollable = scrollable;
-    }
-
-    @Override
-    public boolean isClickable() {
-        return mIsClickable;
-    }
-
-    @Override
-    public void setClickable(boolean clickable) {
-        this.mIsClickable = clickable;
-    }
-
-    @Override
-    public boolean isClearRatingEnabled() {
-        return mClearRatingEnabled;
-    }
-
-    @Override
-    public void setClearRatingEnabled(boolean enabled) {
-        this.mClearRatingEnabled = enabled;
-    }
-
-    @Override
-    public float getStepSize() {
-        return mStepSize;
-    }
-
-    @Override
-    public void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize) {
-        this.mStepSize = stepSize;
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (isIndicator()) {
-            return false;
-        }
-
-        float eventX = event.getX();
-        float eventY = event.getY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mStartX = eventX;
-                mStartY = eventY;
-                mPreviousRating = mRating;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (!isScrollable()) {
-                    return false;
-                }
-
-                handleMoveEvent(eventX);
-                break;
-            case MotionEvent.ACTION_UP:
-                if (!RatingBarUtils.isClickEvent(mStartX, mStartY, event) || !isClickable()) {
-                    return false;
-                }
-
-                handleClickEvent(eventX);
+    float eventX = event.getX();
+    float eventY = event.getY();
+    switch (event.getAction()) {
+      case MotionEvent.ACTION_DOWN:
+        mStartX = eventX;
+        mStartY = eventY;
+        mPreviousRating = mRating;
+        break;
+      case MotionEvent.ACTION_MOVE:
+        if (!isScrollable()) {
+          return false;
         }
 
-        getParent().requestDisallowInterceptTouchEvent(true);
-        return true;
-    }
-
-    private void handleMoveEvent(float eventX) {
-        for (PartialView partialView : mPartialViews) {
-            if (eventX < partialView.getWidth() / 10f + (mMinimumStars * partialView.getWidth())) {
-                setRating(mMinimumStars, true);
-                return;
-            }
-
-            if (!isPositionInRatingView(eventX, partialView)) {
-                continue;
-            }
-
-            float rating = RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
-
-            if (mRating != rating) {
-                setRating(rating, true);
-            }
+        handleMoveEvent(eventX);
+        break;
+      case MotionEvent.ACTION_UP:
+        if (!RatingBarUtils.isClickEvent(mStartX, mStartY, event) || !isClickable()) {
+          return false;
         }
+
+        handleClickEvent(eventX);
     }
 
-    private void handleClickEvent(float eventX) {
-        for (PartialView partialView : mPartialViews) {
-            if (!isPositionInRatingView(eventX, partialView)) {
-                continue;
-            }
+    getParent().requestDisallowInterceptTouchEvent(true);
+    return true;
+  }
 
-            float rating = mStepSize == 1
-                    ? (int) partialView.getTag()
-                    : RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
+  private void handleMoveEvent(float eventX) {
+    for (PartialView partialView : mPartialViews) {
+      if (eventX < partialView.getWidth() / 10f + (mMinimumStars * partialView.getWidth())) {
+        setRating(mMinimumStars, true);
+        return;
+      }
 
-            if (mPreviousRating == rating && isClearRatingEnabled()) {
-                setRating(mMinimumStars, true);
-            } else {
-                setRating(rating, true);
-            }
-            break;
-        }
+      if (!isPositionInRatingView(eventX, partialView)) {
+        continue;
+      }
+
+      float rating = RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
+
+      if (mRating != rating) {
+        setRating(rating, true);
+      }
     }
+  }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean isPositionInRatingView(float eventX, View ratingView) {
-        return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
+  private void handleClickEvent(float eventX) {
+    for (PartialView partialView : mPartialViews) {
+      if (!isPositionInRatingView(eventX, partialView)) {
+        continue;
+      }
+
+      float rating = mStepSize == 1
+        ? (int) partialView.getTag()
+        : RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
+
+      if (mPreviousRating == rating && isClearRatingEnabled()) {
+        setRating(mMinimumStars, true);
+      } else {
+        setRating(rating, true);
+      }
+      break;
     }
+  }
 
-    public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
-        mOnRatingChangeListener = onRatingChangeListener;
-    }
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+  private boolean isPositionInRatingView(float eventX, View ratingView) {
+    return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
+  }
 
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-        SimpleRatingBarSavedState ss = new SimpleRatingBarSavedState(superState);
+  public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
+    mOnRatingChangeListener = onRatingChangeListener;
+  }
 
-        ss.setRating(mRating);
-        return ss;
-    }
+  @Override
+  protected Parcelable onSaveInstanceState() {
+    Parcelable superState = super.onSaveInstanceState();
+    SimpleRatingBarSavedState ss = new SimpleRatingBarSavedState(superState);
 
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        SimpleRatingBarSavedState ss = (SimpleRatingBarSavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
+    ss.setRating(mRating);
+    return ss;
+  }
 
-        setRating(ss.getRating());
-    }
+  @Override
+  protected void onRestoreInstanceState(Parcelable state) {
+    SimpleRatingBarSavedState ss = (SimpleRatingBarSavedState) state;
+    super.onRestoreInstanceState(ss.getSuperState());
 
-    public interface OnRatingChangeListener {
-        void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser);
-    }
+    setRating(ss.getRating());
+  }
+
+  public interface OnRatingChangeListener {
+    void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser);
+  }
 }

@@ -19,53 +19,53 @@ import androidx.annotation.RestrictTo;
 @SuppressWarnings("UnusedDeclaration")
 public interface SimpleRatingBar {
 
-    int getNumStars();
+  int getNumStars();
 
-    void setNumStars(int numStars);
+  void setNumStars(int numStars);
 
-    float getRating();
+  float getRating();
 
-    void setRating(float rating);
+  void setRating(float rating);
 
-    int getStarWidth();
+  int getStarWidth();
 
-    void setStarWidth(@IntRange(from = 0) int starWidth);
+  void setStarWidth(@IntRange(from = 0) int starWidth);
 
-    int getStarHeight();
+  int getStarHeight();
 
-    void setStarHeight(@IntRange(from = 0) int starHeight);
+  void setStarHeight(@IntRange(from = 0) int starHeight);
 
-    int getStarPadding();
+  int getStarPadding();
 
-    void setStarPadding(int ratingPadding);
+  void setStarPadding(int ratingPadding);
 
-    void setEmptyDrawable(@NonNull Drawable drawable);
+  void setEmptyDrawable(@NonNull Drawable drawable);
 
-    void setEmptyDrawableRes(@DrawableRes int res);
+  void setEmptyDrawableRes(@DrawableRes int res);
 
-    void setFilledDrawable(@NonNull Drawable drawable);
+  void setFilledDrawable(@NonNull Drawable drawable);
 
-    void setFilledDrawableRes(@DrawableRes int res);
+  void setFilledDrawableRes(@DrawableRes int res);
 
-    void setMinimumStars(@FloatRange(from = 0.0) float minimumStars);
+  void setMinimumStars(@FloatRange(from = 0.0) float minimumStars);
 
-    boolean isIndicator();
+  boolean isIndicator();
 
-    void setIsIndicator(boolean indicator);
+  void setIsIndicator(boolean indicator);
 
-    boolean isScrollable();
+  boolean isScrollable();
 
-    void setScrollable(boolean scrollable);
+  void setScrollable(boolean scrollable);
 
-    boolean isClickable();
+  boolean isClickable();
 
-    void setClickable(boolean clickable);
+  void setClickable(boolean clickable);
 
-    boolean isClearRatingEnabled();
+  boolean isClearRatingEnabled();
 
-    void setClearRatingEnabled(boolean enabled);
+  void setClearRatingEnabled(boolean enabled);
 
-    float getStepSize();
+  float getStepSize();
 
-    void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize);
+  void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize);
 }

@@ -17,54 +17,54 @@ import java.util.Objects;
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})
 public class SafeMutableLiveData<T> extends MutableLiveData<T> implements SaveInstanceStateField {
-    private String key = "";
+  private String key = "";
 
-    public SafeMutableLiveData() {
-        super();
-    }
+  public SafeMutableLiveData() {
+    super();
+  }
 
-    /**
-     * @param defaultValue 초기값
-     * @deprecated {@link NonNullLiveData}로 대신 사용할 것
-     */
-    @Deprecated
-    public SafeMutableLiveData(T defaultValue) {
-        super();
-        setValue(defaultValue);
-    }
+  /**
+   * @param defaultValue 초기값
+   * @deprecated {@link NonNullLiveData}로 대신 사용할 것
+   */
+  @Deprecated
+  public SafeMutableLiveData(T defaultValue) {
+    super();
+    setValue(defaultValue);
+  }
 
-    @Override
-    public String getKey() {
-        return key;
-    }
+  @Override
+  public String getKey() {
+    return key;
+  }
 
-    @Override
-    public void setKey(String key) {
-        this.key = key;
-    }
+  @Override
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-    @Override
-    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        Object object = savedInstanceState.get(getKey());
-        if (object != null) {
-            super.setValue((T) object);
-        }
+  @Override
+  public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    Object object = savedInstanceState.get(getKey());
+    if (object != null) {
+      super.setValue((T) object);
     }
+  }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        T value = super.getValue();
-        if (value != null) {
-            if (value instanceof Parcelable) {
-                outState.putParcelable(getKey(), (Parcelable) value);
-            } else {
-                outState.putSerializable(getKey(), (Serializable) value);
-            }
-        }
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    T value = super.getValue();
+    if (value != null) {
+      if (value instanceof Parcelable) {
+        outState.putParcelable(getKey(), (Parcelable) value);
+      } else {
+        outState.putSerializable(getKey(), (Serializable) value);
+      }
     }
+  }
 
-    @NonNull
-    public T requireValue() {
-        return Objects.requireNonNull(getValue());
-    }
+  @NonNull
+  public T requireValue() {
+    return Objects.requireNonNull(getValue());
+  }
 }

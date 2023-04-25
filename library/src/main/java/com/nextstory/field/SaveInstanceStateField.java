@@ -13,29 +13,29 @@ import androidx.annotation.NonNull;
  */
 @SuppressWarnings("UnusedDeclaration")
 public interface SaveInstanceStateField {
-    /**
-     * @return 상태값 저장을 위한 키값
-     */
-    String getKey();
+  /**
+   * @return 상태값 저장을 위한 키값
+   */
+  String getKey();
 
-    /**
-     * 키값 지정
-     *
-     * @param key 키
-     */
-    void setKey(String key);
+  /**
+   * 키값 지정
+   *
+   * @param key 키
+   */
+  void setKey(String key);
 
-    /**
-     * 상태 복구시 호출
-     *
-     * @param savedInstanceState 번들
-     */
-    void onRestoreInstanceState(@NonNull Bundle savedInstanceState);
+  /**
+   * 상태 복구시 호출
+   *
+   * @param savedInstanceState 번들
+   */
+  void onRestoreInstanceState(@NonNull Bundle savedInstanceState);
 
-    /**
-     * 상태 저장시 호출
-     *
-     * @param outState 번들
-     */
-    void onSaveInstanceState(@NonNull Bundle outState);
+  /**
+   * 상태 저장시 호출
+   *
+   * @param outState 번들
+   */
+  void onSaveInstanceState(@NonNull Bundle outState);
 }

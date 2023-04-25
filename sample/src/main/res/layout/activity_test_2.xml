@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+  <data>
 
-        <variable
-            name="activity"
-            type="com.nextstory.sample.ui.activity.Test2Activity" />
+    <variable
+      name="activity"
+      type="com.nextstory.sample.ui.activity.Test2Activity" />
 
-    </data>
+  </data>
 
-    <com.nextstory.widget.DataBindingGridLayout
-        android:layout_width="match_parent"
+  <com.nextstory.widget.DataBindingGridLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:spanCount="2">
+
+    <com.nextstory.widget.StatusBarView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:spanCount="2" />
+
+    <com.nextstory.widget.DataBindingGridLayoutItem
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:items="@{activity.testList}"
+      app:layout="@layout/adapter_test_2" />
+
+    <com.nextstory.widget.DataBindingFlowLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      app:spanCount="2">
+
+      <TextView
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:spanCount="2">
+        android:padding="4dp"
+        android:text="test"
+        tools:ignore="HardcodedText" />
 
-        <com.nextstory.widget.StatusBarView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:spanCount="2" />
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:text="test"
+        tools:ignore="HardcodedText" />
 
-        <com.nextstory.widget.DataBindingGridLayoutItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:items="@{activity.testList}"
-            app:layout="@layout/adapter_test_2" />
+      <com.nextstory.widget.DataBindingFlowLayoutItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:items="@{activity.testList}"
+        app:layout="@layout/adapter_test_2" />
 
-        <com.nextstory.widget.DataBindingFlowLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:spanCount="2">
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:text="test"
+        tools:ignore="HardcodedText" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="4dp"
-                android:text="test"
-                tools:ignore="HardcodedText" />
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:text="test"
+        tools:ignore="HardcodedText" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="4dp"
-                android:text="test"
-                tools:ignore="HardcodedText" />
+    </com.nextstory.widget.DataBindingFlowLayout>
 
-            <com.nextstory.widget.DataBindingFlowLayoutItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:items="@{activity.testList}"
-                app:layout="@layout/adapter_test_2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="4dp"
-                android:text="test"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="4dp"
-                android:text="test"
-                tools:ignore="HardcodedText" />
-
-        </com.nextstory.widget.DataBindingFlowLayout>
-
-    </com.nextstory.widget.DataBindingGridLayout>
+  </com.nextstory.widget.DataBindingGridLayout>
 
 </layout>

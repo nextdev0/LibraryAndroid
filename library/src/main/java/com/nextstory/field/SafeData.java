@@ -16,55 +16,55 @@ import java.util.Objects;
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})
 public final class SafeData<T> implements SaveInstanceStateField {
-    private String key = "";
-    private T value;
+  private String key = "";
+  private T value;
 
-    public SafeData() {
-        value = null;
-    }
+  public SafeData() {
+    value = null;
+  }
 
-    public SafeData(T defaultValue) {
-        value = defaultValue;
-    }
+  public SafeData(T defaultValue) {
+    value = defaultValue;
+  }
 
-    public T getValue() {
-        return value;
-    }
+  public T getValue() {
+    return value;
+  }
 
-    public void setValue(T value) {
-        this.value = value;
-    }
+  public void setValue(T value) {
+    this.value = value;
+  }
 
-    public T requireValue() {
-        return Objects.requireNonNull(value);
-    }
+  public T requireValue() {
+    return Objects.requireNonNull(value);
+  }
 
-    @Override
-    public String getKey() {
-        return key;
-    }
+  @Override
+  public String getKey() {
+    return key;
+  }
 
-    @Override
-    public void setKey(String key) {
-        this.key = key;
-    }
+  @Override
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-    @Override
-    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        Object object = savedInstanceState.get(getKey());
-        if (object != null) {
-            value = (T) object;
-        }
+  @Override
+  public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    Object object = savedInstanceState.get(getKey());
+    if (object != null) {
+      value = (T) object;
     }
+  }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        if (value != null) {
-            if (value instanceof Parcelable) {
-                outState.putParcelable(getKey(), (Parcelable) value);
-            } else {
-                outState.putSerializable(getKey(), (Serializable) value);
-            }
-        }
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    if (value != null) {
+      if (value instanceof Parcelable) {
+        outState.putParcelable(getKey(), (Parcelable) value);
+      } else {
+        outState.putSerializable(getKey(), (Serializable) value);
+      }
     }
+  }
 }

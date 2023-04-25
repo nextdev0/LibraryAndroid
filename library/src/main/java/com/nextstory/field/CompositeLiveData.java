@@ -29,51 +29,51 @@ import java.util.Objects;
  */
 @SuppressWarnings({"UnusedDeclaration", "unchecked"})
 public final class CompositeLiveData<T> extends MediatorLiveData<T> {
-    private final Map<LiveData<?>, CompositeLiveDataFunction<T, T, Object>> functions
-            = new LinkedHashMap<>();
-    private final T initializeValue;
+  private final Map<LiveData<?>, CompositeLiveDataFunction<T, T, Object>> functions
+    = new LinkedHashMap<>();
+  private final T initializeValue;
 
-    public CompositeLiveData(T initializeValue) {
-        this.initializeValue = initializeValue;
-    }
+  public CompositeLiveData(T initializeValue) {
+    this.initializeValue = initializeValue;
+  }
 
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final <S> void addSource(@NonNull LiveData<S> source,
-                                    @NonNull Observer<? super S> onChanged) {
-        throw new IllegalStateException("not supported.");
-    }
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final <S> void addSource(@NonNull LiveData<S> source,
+                                  @NonNull Observer<? super S> onChanged) {
+    throw new IllegalStateException("not supported.");
+  }
 
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
-    @Override
-    public final <S> void removeSource(@NonNull LiveData<S> toRemote) {
-        throw new IllegalStateException("not supported.");
-    }
+  @RestrictTo(RestrictTo.Scope.LIBRARY)
+  @Override
+  public final <S> void removeSource(@NonNull LiveData<S> toRemote) {
+    throw new IllegalStateException("not supported.");
+  }
 
-    public <A> CompositeLiveData<T> add(@NonNull LiveData<A> liveData,
-                                        @NonNull CompositeLiveDataFunction<T, T, A> function) {
-        Objects.requireNonNull(liveData);
-        Objects.requireNonNull(function);
-        functions.put(liveData, (CompositeLiveDataFunction<T, T, Object>) function);
-        super.addSource(liveData, a -> onFilterDataChanged());
-        return this;
-    }
+  public <A> CompositeLiveData<T> add(@NonNull LiveData<A> liveData,
+                                      @NonNull CompositeLiveDataFunction<T, T, A> function) {
+    Objects.requireNonNull(liveData);
+    Objects.requireNonNull(function);
+    functions.put(liveData, (CompositeLiveDataFunction<T, T, Object>) function);
+    super.addSource(liveData, a -> onFilterDataChanged());
+    return this;
+  }
 
-    public <A> CompositeLiveData<T> remove(@NonNull LiveData<A> liveData) {
-        Objects.requireNonNull(liveData);
-        functions.remove(liveData);
-        super.removeSource(liveData);
-        return this;
-    }
+  public <A> CompositeLiveData<T> remove(@NonNull LiveData<A> liveData) {
+    Objects.requireNonNull(liveData);
+    functions.remove(liveData);
+    super.removeSource(liveData);
+    return this;
+  }
 
-    private void onFilterDataChanged() {
-        T currentValue = initializeValue;
-        for (LiveData<?> liveData : functions.keySet()) {
-            Object value = liveData.getValue();
-            CompositeLiveDataFunction<T, T, Object> function = functions.get(liveData);
-            currentValue = Objects.requireNonNull(function)
-                    .apply(currentValue, value);
-        }
-        setValue(currentValue);
+  private void onFilterDataChanged() {
+    T currentValue = initializeValue;
+    for (LiveData<?> liveData : functions.keySet()) {
+      Object value = liveData.getValue();
+      CompositeLiveDataFunction<T, T, Object> function = functions.get(liveData);
+      currentValue = Objects.requireNonNull(function)
+        .apply(currentValue, value);
     }
+    setValue(currentValue);
+  }
 }

@@ -19,31 +19,31 @@ import java.util.Objects;
  * @since 2.0
  */
 public final class Binding<T extends ViewDataBinding> {
-    private final int res;
-    private T binding;
+  private final int res;
+  private T binding;
 
-    public Binding(@LayoutRes int res) {
-        this.res = res;
-    }
+  public Binding(@LayoutRes int res) {
+    this.res = res;
+  }
 
-    public void setContentView(Activity activity) {
-        binding = DataBindingUtil.setContentView(activity, res);
-    }
+  public void setContentView(Activity activity) {
+    binding = DataBindingUtil.setContentView(activity, res);
+  }
 
-    public void inflate(Fragment fragment) {
-        inflate(fragment.getLayoutInflater());
-    }
+  public void inflate(Fragment fragment) {
+    inflate(fragment.getLayoutInflater());
+  }
 
-    public void inflate(Activity activity) {
-        inflate(activity.getLayoutInflater());
-    }
+  public void inflate(Activity activity) {
+    inflate(activity.getLayoutInflater());
+  }
 
-    public void inflate(LayoutInflater layoutInflater) {
-        binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
-    }
+  public void inflate(LayoutInflater layoutInflater) {
+    binding = DataBindingUtil.inflate(layoutInflater, res, null, false);
+  }
 
-    @NonNull
-    public T get() {
-        return Objects.requireNonNull(binding);
-    }
+  @NonNull
+  public T get() {
+    return Objects.requireNonNull(binding);
+  }
 }

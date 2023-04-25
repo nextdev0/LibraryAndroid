@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="DataBindingItem">
-        <attr name="itemBindingName" format="string" />
-        <attr name="positionBindingName" format="string" />
-        <attr name="callbackBindingName" format="string" />
-        <attr name="layout" />
-        <attr name="items" format="reference" />
-        <attr name="onItemCallback" format="reference" />
-        <attr name="onBottomScrollReached" format="reference" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingItem">
+    <attr name="itemBindingName" format="string" />
+    <attr name="positionBindingName" format="string" />
+    <attr name="callbackBindingName" format="string" />
+    <attr name="layout" />
+    <attr name="items" format="reference" />
+    <attr name="onItemCallback" format="reference" />
+    <attr name="onBottomScrollReached" format="reference" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingGridLayout">
-        <attr name="android:orientation" />
-        <attr name="spanCount" />
-        <attr name="reverseLayout" />
-        <attr name="onBottomScrollReached" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingGridLayout">
+    <attr name="android:orientation" />
+    <attr name="spanCount" />
+    <attr name="reverseLayout" />
+    <attr name="onBottomScrollReached" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingGridLayoutItem">
-        <attr name="itemBindingName" />
-        <attr name="positionBindingName" />
-        <attr name="callbackBindingName" />
-        <attr name="layout" />
-        <attr name="items" />
-        <attr name="onItemCallback" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingGridLayoutItem">
+    <attr name="itemBindingName" />
+    <attr name="positionBindingName" />
+    <attr name="callbackBindingName" />
+    <attr name="layout" />
+    <attr name="items" />
+    <attr name="onItemCallback" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingGridLayout_Layout">
-        <attr name="spanCount" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingGridLayout_Layout">
+    <attr name="spanCount" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingViewPager">
-        <attr name="infiniteScrollEnabled" format="boolean" />
-        <attr name="currentPagePosition" format="integer" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingViewPager">
+    <attr name="infiniteScrollEnabled" format="boolean" />
+    <attr name="currentPagePosition" format="integer" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingViewPagerItem">
-        <attr name="itemBindingName" />
-        <attr name="positionBindingName" />
-        <attr name="callbackBindingName" />
-        <attr name="items" />
-        <attr name="layout" />
-        <attr name="onItemCallback" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingViewPagerItem">
+    <attr name="itemBindingName" />
+    <attr name="positionBindingName" />
+    <attr name="callbackBindingName" />
+    <attr name="items" />
+    <attr name="layout" />
+    <attr name="onItemCallback" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingFlowLayout">
-        <attr name="android:gravity" />
-        <attr name="maxItemsPerLine" format="integer" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingFlowLayout">
+    <attr name="android:gravity" />
+    <attr name="maxItemsPerLine" format="integer" />
+  </declare-styleable>
 
-    <declare-styleable name="DataBindingFlowLayoutItem">
-        <attr name="itemBindingName" />
-        <attr name="positionBindingName" />
-        <attr name="callbackBindingName" />
-        <attr name="layout" />
-        <attr name="items" />
-        <attr name="onItemCallback" />
-    </declare-styleable>
+  <declare-styleable name="DataBindingFlowLayoutItem">
+    <attr name="itemBindingName" />
+    <attr name="positionBindingName" />
+    <attr name="callbackBindingName" />
+    <attr name="layout" />
+    <attr name="items" />
+    <attr name="onItemCallback" />
+  </declare-styleable>
 
 </resources>

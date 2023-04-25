@@ -22,32 +22,32 @@ import com.nextstory.libgdx.Libgdx;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class LibgdxFragment extends AndroidFragmentApplication {
-    private Libgdx libgdx = null;
+  private Libgdx libgdx = null;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        FrameLayout libGdxContainer = new FrameLayout(requireContext());
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater,
+                           @Nullable ViewGroup container,
+                           @Nullable Bundle savedInstanceState) {
+    FrameLayout libGdxContainer = new FrameLayout(requireContext());
 
-        View libgdxView = initializeForView(libgdx, new AndroidApplicationConfiguration());
-        libGdxContainer.addView(libgdxView, new FrameLayout.LayoutParams(-1, -1));
+    View libgdxView = initializeForView(libgdx, new AndroidApplicationConfiguration());
+    libGdxContainer.addView(libgdxView, new FrameLayout.LayoutParams(-1, -1));
 
-        View view = libgdx.onCreateSurfaceUIView();
-        if (view != null) {
-            libGdxContainer.addView(view, new FrameLayout.LayoutParams(-1, -1));
-        }
-
-        return libGdxContainer;
+    View view = libgdx.onCreateSurfaceUIView();
+    if (view != null) {
+      libGdxContainer.addView(view, new FrameLayout.LayoutParams(-1, -1));
     }
 
-    @Override
-    public void onDestroyView() {
-        libgdx = null;
-        super.onDestroyView();
-    }
+    return libGdxContainer;
+  }
 
-    public void setLibgdx(Libgdx libgdx) {
-        this.libgdx = libgdx;
-    }
+  @Override
+  public void onDestroyView() {
+    libgdx = null;
+    super.onDestroyView();
+  }
+
+  public void setLibgdx(Libgdx libgdx) {
+    this.libgdx = libgdx;
+  }
 }

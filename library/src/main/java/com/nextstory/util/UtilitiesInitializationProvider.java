@@ -24,74 +24,74 @@ import java.util.Set;
  */
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class UtilitiesInitializationProvider extends ContentProvider {
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean onCreate() {
-        Context context = getContext();
+  @SuppressWarnings("unchecked")
+  @Override
+  public boolean onCreate() {
+    Context context = getContext();
 
-        ComponentName provider = new ComponentName(
-                context.getPackageName(),
-                UtilitiesInitializationProvider.class.getName());
-        try {
-            ProviderInfo providerInfo = context.getPackageManager()
-                    .getProviderInfo(provider, PackageManager.GET_META_DATA);
-            Bundle metadata = providerInfo.metaData;
-            if (metadata != null) {
-                Set<String> keys = metadata.keySet();
-                for (String key : keys) {
-                    try {
-                        String value = metadata.getString(key, null);
-                        Class<?> clazz = Class.forName(key);
-                        if (LibraryInitializer.class.isAssignableFrom(clazz)) {
-                            Class<? extends LibraryInitializer> component =
-                                    (Class<? extends LibraryInitializer>) clazz;
-                            LibraryInitializer newInstance = component.newInstance();
-                            newInstance.onInitialized(context, value);
-                        }
-                    } catch (Throwable ignore) {
-                    }
-                }
+    ComponentName provider = new ComponentName(
+      context.getPackageName(),
+      UtilitiesInitializationProvider.class.getName());
+    try {
+      ProviderInfo providerInfo = context.getPackageManager()
+        .getProviderInfo(provider, PackageManager.GET_META_DATA);
+      Bundle metadata = providerInfo.metaData;
+      if (metadata != null) {
+        Set<String> keys = metadata.keySet();
+        for (String key : keys) {
+          try {
+            String value = metadata.getString(key, null);
+            Class<?> clazz = Class.forName(key);
+            if (LibraryInitializer.class.isAssignableFrom(clazz)) {
+              Class<? extends LibraryInitializer> component =
+                (Class<? extends LibraryInitializer>) clazz;
+              LibraryInitializer newInstance = component.newInstance();
+              newInstance.onInitialized(context, value);
             }
-        } catch (Throwable ignore) {
+          } catch (Throwable ignore) {
+          }
         }
-
-        return true;
+      }
+    } catch (Throwable ignore) {
     }
 
-    @Nullable
-    @Override
-    public Cursor query(@NonNull Uri uri,
-                        @Nullable String[] projection,
-                        @Nullable String selection,
-                        @Nullable String[] selectionArgs,
-                        @Nullable String sortOrder) {
-        throw new IllegalStateException("not supported");
-    }
+    return true;
+  }
 
-    @Nullable
-    @Override
-    public String getType(@NonNull Uri uri) {
-        throw new IllegalStateException("not supported");
-    }
-
-    @Nullable
-    @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        throw new IllegalStateException("not supported");
-    }
-
-    @Override
-    public int delete(@NonNull Uri uri,
+  @Nullable
+  @Override
+  public Cursor query(@NonNull Uri uri,
+                      @Nullable String[] projection,
                       @Nullable String selection,
-                      @Nullable String[] selectionArgs) {
-        throw new IllegalStateException("not supported");
-    }
+                      @Nullable String[] selectionArgs,
+                      @Nullable String sortOrder) {
+    throw new IllegalStateException("not supported");
+  }
 
-    @Override
-    public int update(@NonNull Uri uri,
-                      @Nullable ContentValues values,
-                      @Nullable String selection,
-                      @Nullable String[] selectionArgs) {
-        throw new IllegalStateException("not supported");
-    }
+  @Nullable
+  @Override
+  public String getType(@NonNull Uri uri) {
+    throw new IllegalStateException("not supported");
+  }
+
+  @Nullable
+  @Override
+  public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+    throw new IllegalStateException("not supported");
+  }
+
+  @Override
+  public int delete(@NonNull Uri uri,
+                    @Nullable String selection,
+                    @Nullable String[] selectionArgs) {
+    throw new IllegalStateException("not supported");
+  }
+
+  @Override
+  public int update(@NonNull Uri uri,
+                    @Nullable ContentValues values,
+                    @Nullable String selection,
+                    @Nullable String[] selectionArgs) {
+    throw new IllegalStateException("not supported");
+  }
 }

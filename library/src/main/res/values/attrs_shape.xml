@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="ShapeView">
-        <attr name="shape_cornerRadius" format="dimension" />
-        <attr name="shape_strokeWidth" format="dimension" />
-        <attr name="shape_strokeColor" format="color" />
-    </declare-styleable>
+  <declare-styleable name="ShapeView">
+    <attr name="shape_cornerRadius" format="dimension" />
+    <attr name="shape_strokeWidth" format="dimension" />
+    <attr name="shape_strokeColor" format="color" />
+  </declare-styleable>
 
-    <declare-styleable name="ShapeEditText">
-        <attr name="android:foreground" />
-        <attr name="foreground" />
-        <attr name="shape_cornerRadius" />
-        <attr name="shape_strokeWidth" />
-        <attr name="shape_strokeColor" />
-    </declare-styleable>
+  <declare-styleable name="ShapeEditText">
+    <attr name="android:foreground" />
+    <attr name="foreground" />
+    <attr name="shape_cornerRadius" />
+    <attr name="shape_strokeWidth" />
+    <attr name="shape_strokeColor" />
+  </declare-styleable>
 
-    <declare-styleable name="ShapeTextView">
-        <attr name="android:foreground" />
-        <attr name="foreground" />
-        <attr name="shape_cornerRadius" />
-        <attr name="shape_strokeWidth" />
-        <attr name="shape_strokeColor" />
-    </declare-styleable>
+  <declare-styleable name="ShapeTextView">
+    <attr name="android:foreground" />
+    <attr name="foreground" />
+    <attr name="shape_cornerRadius" />
+    <attr name="shape_strokeWidth" />
+    <attr name="shape_strokeColor" />
+  </declare-styleable>
 
-    <declare-styleable name="ShapeImageView">
-        <attr name="android:foreground" />
-        <attr name="foreground" />
-        <attr name="shape_cornerRadius" />
-        <attr name="shape_strokeWidth" />
-        <attr name="shape_strokeColor" />
-    </declare-styleable>
+  <declare-styleable name="ShapeImageView">
+    <attr name="android:foreground" />
+    <attr name="foreground" />
+    <attr name="shape_cornerRadius" />
+    <attr name="shape_strokeWidth" />
+    <attr name="shape_strokeColor" />
+  </declare-styleable>
 
 </resources>

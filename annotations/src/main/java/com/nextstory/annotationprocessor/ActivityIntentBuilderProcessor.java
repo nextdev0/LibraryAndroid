@@ -34,217 +34,217 @@ import javax.lang.model.element.TypeElement;
  * @author 1.0
  */
 public final class ActivityIntentBuilderProcessor extends AbstractProcessor {
-    @Override
-    public Set<String> getSupportedAnnotationTypes() {
-        return new HashSet<String>() {
-            {
-                add(ActivityIntentBuilder.class.getCanonicalName());
-                add(ActivityIntentExtra.class.getCanonicalName());
-            }
-        };
+  @Override
+  public Set<String> getSupportedAnnotationTypes() {
+    return new HashSet<String>() {
+      {
+        add(ActivityIntentBuilder.class.getCanonicalName());
+        add(ActivityIntentExtra.class.getCanonicalName());
+      }
+    };
+  }
+
+  @Override
+  public SourceVersion getSupportedSourceVersion() {
+    return SourceVersion.latestSupported();
+  }
+
+  @Override
+  public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+    Set<ElementHelper> intentBuilderSet = new LinkedHashSet<>();
+    Map<ElementHelper, List<Element>> intentExtraMap = new LinkedHashMap<>();
+
+    for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentBuilder.class)) {
+      ElementHelper elementHelper = ElementHelper.fromElement(e);
+      intentBuilderSet.add(elementHelper);
     }
 
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        Set<ElementHelper> intentBuilderSet = new LinkedHashSet<>();
-        Map<ElementHelper, List<Element>> intentExtraMap = new LinkedHashMap<>();
-
-        for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentBuilder.class)) {
-            ElementHelper elementHelper = ElementHelper.fromElement(e);
-            intentBuilderSet.add(elementHelper);
+    for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentExtra.class)) {
+      String parentName = e.getEnclosingElement().toString();
+      for (ElementHelper elementHelper : intentBuilderSet) {
+        if (elementHelper.getFullName().equals(parentName)) {
+          if (!intentExtraMap.containsKey(elementHelper)) {
+            intentExtraMap.put(elementHelper, new ArrayList<>());
+          }
+          List<Element> elements = intentExtraMap.get(elementHelper);
+          elements.add(e);
         }
+      }
+    }
 
-        for (Element e : roundEnvironment.getElementsAnnotatedWith(ActivityIntentExtra.class)) {
-            String parentName = e.getEnclosingElement().toString();
-            for (ElementHelper elementHelper : intentBuilderSet) {
-                if (elementHelper.getFullName().equals(parentName)) {
-                    if (!intentExtraMap.containsKey(elementHelper)) {
-                        intentExtraMap.put(elementHelper, new ArrayList<>());
-                    }
-                    List<Element> elements = intentExtraMap.get(elementHelper);
-                    elements.add(e);
-                }
-            }
+    try {
+      generateIntents(intentBuilderSet, intentExtraMap);
+      JavaFile.builder("com.nextstory.util", TypeSpec.classBuilder(
+            "ActivityIntentBuilderInitializer")
+          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+          .addSuperinterface(LibraryInitializer.class)
+          .addSuperinterface(ClassNames.ActivityLifecycleCallbacks)
+          .addMethod(createInitializerMethodSpec())
+          .addMethod(createOnActivityCreatedMethodSpec(intentBuilderSet))
+          .addMethod(createEtcCallbacksMethodSpec("onActivityStarted", false))
+          .addMethod(createEtcCallbacksMethodSpec("onActivityResumed", false))
+          .addMethod(createEtcCallbacksMethodSpec("onActivityPaused", false))
+          .addMethod(createEtcCallbacksMethodSpec("onActivityStopped", false))
+          .addMethod(createEtcCallbacksMethodSpec("onActivitySaveInstanceState", true))
+          .addMethod(createEtcCallbacksMethodSpec("onActivityDestroyed", false))
+          .build())
+        .build()
+        .writeTo(processingEnv.getFiler());
+    } catch (IOException ignore) {
+    }
+
+    return true;
+  }
+
+  private String getIntentBuilderName(ElementHelper elementHelper) {
+    return elementHelper.getSimpleName() + "IntentBuilder";
+  }
+
+  /**
+   * intent 클래스 생성
+   *
+   * @param intentExtraMap -
+   */
+  private void generateIntents(Set<ElementHelper> intentBuilderSet,
+                               Map<ElementHelper, List<Element>> intentExtraMap) {
+    for (ElementHelper elementHelper : intentBuilderSet) {
+      try {
+        String packageName = elementHelper.getPackageName();
+        String name = getIntentBuilderName(elementHelper);
+        ClassName className = ClassName.bestGuess(packageName + "." + name);
+        ClassName activityClassName = ClassName.bestGuess(elementHelper.getFullName());
+        TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
+          .addJavadoc("@see $T", activityClassName)
+          .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+          .addField(ClassNames.Intent, "intent", Modifier.PRIVATE, Modifier.FINAL)
+          .addMethod(MethodSpec.constructorBuilder()
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(ClassNames.Context, "context")
+            .addStatement("this.intent = new Intent(context, $T.class)",
+              activityClassName)
+            .build())
+          .addMethod(createIntentInjectMethodSpec(
+            activityClassName, elementHelper, intentExtraMap));
+        if (intentExtraMap.containsKey(elementHelper)) {
+          for (Element element : intentExtraMap.get(elementHelper)) {
+            MethodSpec methodSpec =
+              createIntentMethodSpec(className, element);
+            typeSpecBuilder.addMethod(methodSpec);
+          }
         }
+        typeSpecBuilder.addMethod(MethodSpec.methodBuilder("create")
+          .returns(ClassNames.Intent)
+          .addModifiers(Modifier.PUBLIC)
+          .addStatement("return this.intent")
+          .build());
+        typeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
+          .returns(ClassNames.Intent)
+          .addModifiers(Modifier.PUBLIC)
+          .addStatement("return this.intent")
+          .build());
+        JavaFile.builder(packageName, typeSpecBuilder.build())
+          .build()
+          .writeTo(processingEnv.getFiler());
+      } catch (IOException ignore) {
+      }
+    }
+  }
 
-        try {
-            generateIntents(intentBuilderSet, intentExtraMap);
-            JavaFile.builder("com.nextstory.util", TypeSpec.classBuilder(
-                    "ActivityIntentBuilderInitializer")
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    .addSuperinterface(LibraryInitializer.class)
-                    .addSuperinterface(ClassNames.ActivityLifecycleCallbacks)
-                    .addMethod(createInitializerMethodSpec())
-                    .addMethod(createOnActivityCreatedMethodSpec(intentBuilderSet))
-                    .addMethod(createEtcCallbacksMethodSpec("onActivityStarted", false))
-                    .addMethod(createEtcCallbacksMethodSpec("onActivityResumed", false))
-                    .addMethod(createEtcCallbacksMethodSpec("onActivityPaused", false))
-                    .addMethod(createEtcCallbacksMethodSpec("onActivityStopped", false))
-                    .addMethod(createEtcCallbacksMethodSpec("onActivitySaveInstanceState", true))
-                    .addMethod(createEtcCallbacksMethodSpec("onActivityDestroyed", false))
-                    .build())
-                    .build()
-                    .writeTo(processingEnv.getFiler());
-        } catch (IOException ignore) {
-        }
+  private MethodSpec createIntentInjectMethodSpec(
+    ClassName activityClassName,
+    ElementHelper intentBuilder,
+    Map<ElementHelper, List<Element>> intentExtraMap
+  ) {
+    MethodSpec.Builder builder = MethodSpec.methodBuilder("inject")
+      .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+      .addParameter(activityClassName, "activity");
+    if (intentExtraMap.containsKey(intentBuilder)) {
+      builder.addStatement("$T intent = activity.getIntent()", ClassNames.Intent);
+      for (Element element : intentExtraMap.get(intentBuilder)) {
+        builder.beginControlFlow("if (intent.hasExtra(\"extra_$N\"))", element.toString())
+          .addStatement("activity.$N = " +
+              "($T) intent.getSerializableExtra(\"extra_$N\")",
+            element.toString(),
+            TypeName.get(element.asType()),
+            element.toString())
+          .endControlFlow();
+      }
+    } else {
+      builder.addComment("no has extra");
+    }
+    return builder.build();
+  }
 
-        return true;
+  private MethodSpec createIntentMethodSpec(ClassName className, Element fieldElement) {
+    String fieldName = fieldElement.toString();
+    String firstUpperFieldName = fieldName.substring(0, 1).toUpperCase()
+      + fieldName.substring(1);
+    MethodSpec.Builder builder = MethodSpec.methodBuilder("set" + firstUpperFieldName)
+      .returns(className)
+      .addModifiers(Modifier.PUBLIC)
+      .addParameter(TypeName.get(fieldElement.asType()), fieldName)
+      .addStatement("intent.putExtra(\"extra_$N\", $N)", fieldName, fieldName)
+      .addStatement("return this");
+    return builder.build();
+  }
+
+  /**
+   * 초기화 메서드 생성
+   *
+   * @return MethodSpec
+   */
+  private MethodSpec createInitializerMethodSpec() {
+    return MethodSpec.methodBuilder("onInitialized")
+      .addAnnotation(Override.class)
+      .addModifiers(Modifier.PUBLIC)
+      .addParameter(ClassNames.Context, "context")
+      .addParameter(String.class, "argument")
+      .addStatement("$T application = ($T) context",
+        ClassNames.Application, ClassNames.Application)
+      .addStatement("application.registerActivityLifecycleCallbacks(this)")
+      .build();
+  }
+
+  /**
+   * 액티비티 intent 주입 메서드 생성
+   *
+   * @return MethodSpec
+   */
+  private MethodSpec createOnActivityCreatedMethodSpec(Set<ElementHelper> intentBuilderSet) {
+    MethodSpec.Builder builder = MethodSpec.methodBuilder("onActivityCreated")
+      .addAnnotation(Override.class)
+      .addModifiers(Modifier.PUBLIC)
+      .addParameter(ClassNames.Activity, "activity")
+      .addParameter(ClassNames.Bundle, "savedInstanceState");
+
+    for (ElementHelper elementHelper : intentBuilderSet) {
+      String builderName = getIntentBuilderName(elementHelper);
+      ClassName className = ClassName.bestGuess(elementHelper.getFullName());
+      ClassName builderClassName =
+        ClassName.bestGuess(elementHelper.getPackageName() + "." + builderName);
+      builder.beginControlFlow("if (activity instanceof $T)", className)
+        .addStatement("$T.inject(($T) activity)", builderClassName, className)
+        .endControlFlow();
     }
 
-    private String getIntentBuilderName(ElementHelper elementHelper) {
-        return elementHelper.getSimpleName() + "IntentBuilder";
+    return builder.build();
+  }
+
+  /**
+   * 미사용 액티비티 콜백 메서드 생성
+   *
+   * @return MethodSpec
+   */
+  private MethodSpec createEtcCallbacksMethodSpec(String name, boolean hasBundle) {
+    MethodSpec.Builder builder = MethodSpec.methodBuilder(name)
+      .addAnnotation(Override.class)
+      .addModifiers(Modifier.PUBLIC)
+      .addParameter(ClassNames.Activity, "activity");
+    if (hasBundle) {
+      builder.addParameter(ClassNames.Bundle, "savedInstanceState");
     }
-
-    /**
-     * intent 클래스 생성
-     *
-     * @param intentExtraMap -
-     */
-    private void generateIntents(Set<ElementHelper> intentBuilderSet,
-                                 Map<ElementHelper, List<Element>> intentExtraMap) {
-        for (ElementHelper elementHelper : intentBuilderSet) {
-            try {
-                String packageName = elementHelper.getPackageName();
-                String name = getIntentBuilderName(elementHelper);
-                ClassName className = ClassName.bestGuess(packageName + "." + name);
-                ClassName activityClassName = ClassName.bestGuess(elementHelper.getFullName());
-                TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(name)
-                        .addJavadoc("@see $T", activityClassName)
-                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                        .addField(ClassNames.Intent, "intent", Modifier.PRIVATE, Modifier.FINAL)
-                        .addMethod(MethodSpec.constructorBuilder()
-                                .addModifiers(Modifier.PUBLIC)
-                                .addParameter(ClassNames.Context, "context")
-                                .addStatement("this.intent = new Intent(context, $T.class)",
-                                        activityClassName)
-                                .build())
-                        .addMethod(createIntentInjectMethodSpec(
-                                activityClassName, elementHelper, intentExtraMap));
-                if (intentExtraMap.containsKey(elementHelper)) {
-                    for (Element element : intentExtraMap.get(elementHelper)) {
-                        MethodSpec methodSpec =
-                                createIntentMethodSpec(className, element);
-                        typeSpecBuilder.addMethod(methodSpec);
-                    }
-                }
-                typeSpecBuilder.addMethod(MethodSpec.methodBuilder("create")
-                        .returns(ClassNames.Intent)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return this.intent")
-                        .build());
-                typeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
-                        .returns(ClassNames.Intent)
-                        .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return this.intent")
-                        .build());
-                JavaFile.builder(packageName, typeSpecBuilder.build())
-                        .build()
-                        .writeTo(processingEnv.getFiler());
-            } catch (IOException ignore) {
-            }
-        }
-    }
-
-    private MethodSpec createIntentInjectMethodSpec(
-            ClassName activityClassName,
-            ElementHelper intentBuilder,
-            Map<ElementHelper, List<Element>> intentExtraMap
-    ) {
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("inject")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(activityClassName, "activity");
-        if (intentExtraMap.containsKey(intentBuilder)) {
-            builder.addStatement("$T intent = activity.getIntent()", ClassNames.Intent);
-            for (Element element : intentExtraMap.get(intentBuilder)) {
-                builder.beginControlFlow("if (intent.hasExtra(\"extra_$N\"))", element.toString())
-                        .addStatement("activity.$N = " +
-                                        "($T) intent.getSerializableExtra(\"extra_$N\")",
-                                element.toString(),
-                                TypeName.get(element.asType()),
-                                element.toString())
-                        .endControlFlow();
-            }
-        } else {
-            builder.addComment("no has extra");
-        }
-        return builder.build();
-    }
-
-    private MethodSpec createIntentMethodSpec(ClassName className, Element fieldElement) {
-        String fieldName = fieldElement.toString();
-        String firstUpperFieldName = fieldName.substring(0, 1).toUpperCase()
-                + fieldName.substring(1);
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("set" + firstUpperFieldName)
-                .returns(className)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(TypeName.get(fieldElement.asType()), fieldName)
-                .addStatement("intent.putExtra(\"extra_$N\", $N)", fieldName, fieldName)
-                .addStatement("return this");
-        return builder.build();
-    }
-
-    /**
-     * 초기화 메서드 생성
-     *
-     * @return MethodSpec
-     */
-    private MethodSpec createInitializerMethodSpec() {
-        return MethodSpec.methodBuilder("onInitialized")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(ClassNames.Context, "context")
-                .addParameter(String.class, "argument")
-                .addStatement("$T application = ($T) context",
-                        ClassNames.Application, ClassNames.Application)
-                .addStatement("application.registerActivityLifecycleCallbacks(this)")
-                .build();
-    }
-
-    /**
-     * 액티비티 intent 주입 메서드 생성
-     *
-     * @return MethodSpec
-     */
-    private MethodSpec createOnActivityCreatedMethodSpec(Set<ElementHelper> intentBuilderSet) {
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("onActivityCreated")
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(ClassNames.Activity, "activity")
-                .addParameter(ClassNames.Bundle, "savedInstanceState");
-
-        for (ElementHelper elementHelper : intentBuilderSet) {
-            String builderName = getIntentBuilderName(elementHelper);
-            ClassName className = ClassName.bestGuess(elementHelper.getFullName());
-            ClassName builderClassName =
-                    ClassName.bestGuess(elementHelper.getPackageName() + "." + builderName);
-            builder.beginControlFlow("if (activity instanceof $T)", className)
-                    .addStatement("$T.inject(($T) activity)", builderClassName, className)
-                    .endControlFlow();
-        }
-
-        return builder.build();
-    }
-
-    /**
-     * 미사용 액티비티 콜백 메서드 생성
-     *
-     * @return MethodSpec
-     */
-    private MethodSpec createEtcCallbacksMethodSpec(String name, boolean hasBundle) {
-        MethodSpec.Builder builder = MethodSpec.methodBuilder(name)
-                .addAnnotation(Override.class)
-                .addModifiers(Modifier.PUBLIC)
-                .addParameter(ClassNames.Activity, "activity");
-        if (hasBundle) {
-            builder.addParameter(ClassNames.Bundle, "savedInstanceState");
-        }
-        return builder
-                .addComment("no-op")
-                .build();
-    }
+    return builder
+      .addComment("no-op")
+      .build();
+  }
 }

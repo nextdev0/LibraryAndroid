@@ -29,101 +29,101 @@ import java.util.Objects;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class BaseBottomSheetDialogFragment<B extends ViewDataBinding> extends DialogFragment {
-    private BaseBottomSheetDialog<B> dialog = null;
-    private WeakReference<Bundle> savedInstanceState = null;
-    private ResourcesController resourcesController;
+  private BaseBottomSheetDialog<B> dialog = null;
+  private WeakReference<Bundle> savedInstanceState = null;
+  private ResourcesController resourcesController;
 
-    @Override
-    public int getTheme() {
-        return R.style.Theme_Dialog_Base_BottomDialog;
+  @Override
+  public int getTheme() {
+    return R.style.Theme_Dialog_Base_BottomDialog;
+  }
+
+  @CallSuper
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    this.savedInstanceState = new WeakReference<>(savedInstanceState);
+    dialog = new BaseBottomSheetDialog<B>(requireContext(), getTheme()) {
+    };
+    return dialog;
+  }
+
+  @CallSuper
+  @Override
+  public void onStart() {
+    if (dialog.binding == null) {
+      Class<?> klass = Unsafe.getGenericClass(this, 0);
+      if (klass != null) {
+        dialog.binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
+      }
     }
+    super.onStart();
+    onDialogCreated(dialog, savedInstanceState == null ? null : savedInstanceState.get());
+  }
 
-    @CallSuper
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        this.savedInstanceState = new WeakReference<>(savedInstanceState);
-        dialog = new BaseBottomSheetDialog<B>(requireContext(), getTheme()) {
-        };
-        return dialog;
+  @CallSuper
+  public void onDialogCreated(BaseBottomSheetDialog<B> dialog,
+                              @Nullable Bundle savedInstanceState) {
+    resourcesController = new ResourcesController(requireContext());
+
+    if (savedInstanceState != null) {
+      dialog.onCreate(null);
     }
+  }
 
-    @CallSuper
-    @Override
-    public void onStart() {
-        if (dialog.binding == null) {
-            Class<?> klass = Unsafe.getGenericClass(this, 0);
-            if (klass != null) {
-                dialog.binding = Unsafe.invoke(klass, "inflate", getLayoutInflater());
-            }
-        }
-        super.onStart();
-        onDialogCreated(dialog, savedInstanceState == null ? null : savedInstanceState.get());
+  public final void show(@NonNull FragmentActivity activity) {
+    show(activity.getSupportFragmentManager());
+  }
+
+  public final void show(@NonNull FragmentManager fragmentManager) {
+    super.show(fragmentManager, getClass().getSimpleName());
+  }
+
+  public final void show(@NonNull Fragment fragment) {
+    show(fragment.getParentFragmentManager());
+  }
+
+  public final void show(@NonNull FragmentTransaction fragmentTransaction) {
+    super.show(fragmentTransaction, getClass().getSimpleName());
+  }
+
+  public void cancel() {
+    if (dialog != null) {
+      dialog.cancel();
     }
+  }
 
-    @CallSuper
-    public void onDialogCreated(BaseBottomSheetDialog<B> dialog,
-                                @Nullable Bundle savedInstanceState) {
-        resourcesController = new ResourcesController(requireContext());
+  /**
+   * 토스트 표시
+   *
+   * @param res 문자열 리소스
+   */
+  public void showToast(@StringRes int res) {
+    Toast.makeText(requireContext(), res, Toast.LENGTH_SHORT).show();
+  }
 
-        if (savedInstanceState != null) {
-            dialog.onCreate(null);
-        }
-    }
+  /**
+   * 토스트 표시
+   *
+   * @param message 문자열
+   */
+  public void showToast(String message) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+  }
 
-    public final void show(@NonNull FragmentActivity activity) {
-        show(activity.getSupportFragmentManager());
-    }
+  /**
+   * @return 뷰 바인딩 인스턴스
+   */
+  protected B getBinding() {
+    return dialog.getBinding();
+  }
 
-    public final void show(@NonNull FragmentManager fragmentManager) {
-        super.show(fragmentManager, getClass().getSimpleName());
-    }
-
-    public final void show(@NonNull Fragment fragment) {
-        show(fragment.getParentFragmentManager());
-    }
-
-    public final void show(@NonNull FragmentTransaction fragmentTransaction) {
-        super.show(fragmentTransaction, getClass().getSimpleName());
-    }
-
-    public void cancel() {
-        if (dialog != null) {
-            dialog.cancel();
-        }
-    }
-
-    /**
-     * 토스트 표시
-     *
-     * @param res 문자열 리소스
-     */
-    public void showToast(@StringRes int res) {
-        Toast.makeText(requireContext(), res, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 토스트 표시
-     *
-     * @param message 문자열
-     */
-    public void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * @return 뷰 바인딩 인스턴스
-     */
-    protected B getBinding() {
-        return dialog.getBinding();
-    }
-
-    /**
-     * @return 리소스 설정
-     * @since 2.0
-     */
-    @NonNull
-    public final ResourcesController getResourcesController() {
-        return Objects.requireNonNull(resourcesController);
-    }
+  /**
+   * @return 리소스 설정
+   * @since 2.0
+   */
+  @NonNull
+  public final ResourcesController getResourcesController() {
+    return Objects.requireNonNull(resourcesController);
+  }
 }

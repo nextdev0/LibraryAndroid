@@ -11,22 +11,22 @@ import com.nextstory.util.AutoSharedPreferenceUtils;
  * @since 1.0
  */
 public final class SampleApplication extends BaseApplication {
-    @Override
-    public void onCreate() {
-        super.onCreate();
+  @Override
+  public void onCreate() {
+    super.onCreate();
 
-        AutoSharedPreferenceUtils.registerConverter(new AutoSharedPreferenceUtils.Converter() {
-            final Gson gson = new Gson();
+    AutoSharedPreferenceUtils.registerConverter(new AutoSharedPreferenceUtils.Converter() {
+      final Gson gson = new Gson();
 
-            @Override
-            public String serialize(Object object) {
-                return gson.toJson(object);
-            }
+      @Override
+      public String serialize(Object object) {
+        return gson.toJson(object);
+      }
 
-            @Override
-            public <T> T deserialize(String source, Class<T> klass) {
-                return gson.fromJson(source, klass);
-            }
-        });
-    }
+      @Override
+      public <T> T deserialize(String source, Class<T> klass) {
+        return gson.fromJson(source, klass);
+      }
+    });
+  }
 }

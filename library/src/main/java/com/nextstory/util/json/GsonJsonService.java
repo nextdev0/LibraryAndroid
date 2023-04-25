@@ -23,65 +23,65 @@ import java.util.function.Function;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class GsonJsonService implements JsonService {
-    private final Gson gson;
+  private final Gson gson;
 
-    public GsonJsonService() {
-        Map<Class<?>, Function<String, Number>> numberFunctions = new LinkedHashMap<>();
-        numberFunctions.put(byte.class, Byte::parseByte);
-        numberFunctions.put(Byte.class, Byte::parseByte);
-        numberFunctions.put(int.class, Integer::parseInt);
-        numberFunctions.put(Integer.class, Integer::parseInt);
-        numberFunctions.put(short.class, Short::parseShort);
-        numberFunctions.put(Short.class, Short::parseShort);
-        numberFunctions.put(long.class, Long::parseLong);
-        numberFunctions.put(Long.class, Long::parseLong);
-        numberFunctions.put(float.class, Float::parseFloat);
-        numberFunctions.put(Float.class, Float::parseFloat);
-        numberFunctions.put(double.class, Double::parseDouble);
-        numberFunctions.put(Double.class, Double::parseDouble);
-        gson = new GsonBuilder()
-                .registerTypeAdapterFactory(new TypeAdapterFactory() {
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-                        Class<?> rawType = type.getRawType();
-                        if (numberFunctions.containsKey(rawType)) {
-                            return (TypeAdapter<T>) new TypeAdapter<Number>() {
-                                @Override
-                                public void write(JsonWriter out, Number value) throws IOException {
-                                    out.value(value);
-                                }
+  public GsonJsonService() {
+    Map<Class<?>, Function<String, Number>> numberFunctions = new LinkedHashMap<>();
+    numberFunctions.put(byte.class, Byte::parseByte);
+    numberFunctions.put(Byte.class, Byte::parseByte);
+    numberFunctions.put(int.class, Integer::parseInt);
+    numberFunctions.put(Integer.class, Integer::parseInt);
+    numberFunctions.put(short.class, Short::parseShort);
+    numberFunctions.put(Short.class, Short::parseShort);
+    numberFunctions.put(long.class, Long::parseLong);
+    numberFunctions.put(Long.class, Long::parseLong);
+    numberFunctions.put(float.class, Float::parseFloat);
+    numberFunctions.put(Float.class, Float::parseFloat);
+    numberFunctions.put(double.class, Double::parseDouble);
+    numberFunctions.put(Double.class, Double::parseDouble);
+    gson = new GsonBuilder()
+      .registerTypeAdapterFactory(new TypeAdapterFactory() {
+        @SuppressWarnings("unchecked")
+        @Override
+        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+          Class<?> rawType = type.getRawType();
+          if (numberFunctions.containsKey(rawType)) {
+            return (TypeAdapter<T>) new TypeAdapter<Number>() {
+              @Override
+              public void write(JsonWriter out, Number value) throws IOException {
+                out.value(value);
+              }
 
-                                @Override
-                                public Number read(JsonReader in) {
-                                    try {
-                                        String value = in.nextString();
-                                        return Objects.requireNonNull(numberFunctions.get(rawType))
-                                                .apply(value);
-                                    } catch (Throwable ignore) {
-                                        return 0;
-                                    }
-                                }
-                            };
-                        }
-                        return null;
-                    }
-                })
-                .create();
-    }
+              @Override
+              public Number read(JsonReader in) {
+                try {
+                  String value = in.nextString();
+                  return Objects.requireNonNull(numberFunctions.get(rawType))
+                    .apply(value);
+                } catch (Throwable ignore) {
+                  return 0;
+                }
+              }
+            };
+          }
+          return null;
+        }
+      })
+      .create();
+  }
 
-    @Override
-    public String serialize(Object source) {
-        return gson.toJson(source);
-    }
+  @Override
+  public String serialize(Object source) {
+    return gson.toJson(source);
+  }
 
-    @Override
-    public <T> T deserialize(String jsonSource, Class<T> typeClass) {
-        return gson.fromJson(jsonSource, typeClass);
-    }
+  @Override
+  public <T> T deserialize(String jsonSource, Class<T> typeClass) {
+    return gson.fromJson(jsonSource, typeClass);
+  }
 
-    @Override
-    public <T> T deserialize(String jsonSource, Type type) {
-        return gson.fromJson(jsonSource, type);
-    }
+  @Override
+  public <T> T deserialize(String jsonSource, Type type) {
+    return gson.fromJson(jsonSource, type);
+  }
 }
