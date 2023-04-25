@@ -32,7 +32,7 @@ allprojects {
 
         // 추가
         maven { url 'https://jitpack.io' }
-        maven { url "https://oss.jfrog.org/libs-snapshot" }
+        maven { url 'https://oss.jfrog.org/libs-snapshot' }
         maven { url 'http://ec2-3-34-185-2.ap-northeast-2.compute.amazonaws.com:8889/troy/LibraryAndroid/-/raw/main/repository' }        
     }
 }
@@ -46,9 +46,9 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:2.1.0'
-    implementation 'com.nextstory:libgdx:2.1.0'
-    annotationProcessor 'com.nextstory:annotations:2.1.0'
+    implementation 'com.nextstory:library:2.2.0'
+    implementation 'com.nextstory:libgdx:2.2.0'
+    annotationProcessor 'com.nextstory:annotations:2.2.0'
 }
 ```
 
