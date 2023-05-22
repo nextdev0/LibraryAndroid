@@ -39,14 +39,14 @@ public final class CompositeLiveData<T> extends MediatorLiveData<T> {
 
   @RestrictTo(RestrictTo.Scope.LIBRARY)
   @Override
-  public final <S> void addSource(@NonNull LiveData<S> source,
+  public <S> void addSource(@NonNull LiveData<S> source,
                                   @NonNull Observer<? super S> onChanged) {
     throw new IllegalStateException("not supported.");
   }
 
   @RestrictTo(RestrictTo.Scope.LIBRARY)
   @Override
-  public final <S> void removeSource(@NonNull LiveData<S> toRemote) {
+  public <S> void removeSource(@NonNull LiveData<S> toRemote) {
     throw new IllegalStateException("not supported.");
   }
 

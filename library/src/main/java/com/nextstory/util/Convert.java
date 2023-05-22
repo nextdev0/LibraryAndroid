@@ -53,7 +53,7 @@ public final class Convert {
    * @return byte 값, 예외시 {@code 0} 반환
    */
   public static byte toByte(@Nullable String s) {
-    return toByte(s, (byte) 0);
+    return toByte(s, 0);
   }
 
   /**
@@ -67,14 +67,8 @@ public final class Convert {
     if (defaultValue < Byte.MIN_VALUE || defaultValue > Byte.MAX_VALUE) {
       throw new IllegalArgumentException("defaultValue 8-bit integer constant");
     }
-    if (s == null || s.trim().isEmpty()) {
-      return (byte) defaultValue;
-    }
-    try {
-      return Byte.parseByte(s.trim());
-    } catch (NumberFormatException e) {
-      return (byte) defaultValue;
-    }
+    double decimalValue = toDouble(s, defaultValue);
+    return (byte) decimalValue;
   }
 
   /**
@@ -85,7 +79,7 @@ public final class Convert {
    * @since 1.5
    */
   public static byte toHexByte(String s) {
-    return toHexByte(s, (byte) 0);
+    return toHexByte(s, 0);
   }
 
   /**
@@ -131,11 +125,8 @@ public final class Convert {
     if (s == null || s.trim().isEmpty()) {
       return defaultValue;
     }
-    try {
-      return Integer.parseInt(s.trim());
-    } catch (NumberFormatException e) {
-      return defaultValue;
-    }
+    double decimalValue = toDouble(s, defaultValue);
+    return (int) decimalValue;
   }
 
   /**
@@ -189,11 +180,8 @@ public final class Convert {
     if (s == null || s.trim().isEmpty()) {
       return defaultValue;
     }
-    try {
-      return Long.parseLong(s.trim());
-    } catch (NumberFormatException e) {
-      return defaultValue;
-    }
+    double decimalValue = toDouble(s, defaultValue);
+    return (long) decimalValue;
   }
 
   /**

@@ -1,10 +1,9 @@
 package com.nextstory.util;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.OnLifecycleEvent;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -73,26 +72,20 @@ public interface Disposables extends Disposable, DisposableContainer {
       private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
       {
-        lifecycleOwner.getLifecycle().addObserver(new LifecycleObserver() {
-          @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-          void onPause() {
-            if (event == Lifecycle.Event.ON_PAUSE) {
-              clear();
-            }
+        lifecycleOwner.getLifecycle().addObserver(new DefaultLifecycleObserver() {
+          @Override
+          public void onPause(@NonNull LifecycleOwner owner) {
+            clear();
           }
 
-          @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-          void onStop() {
-            if (event == Lifecycle.Event.ON_STOP) {
-              clear();
-            }
+          @Override
+          public void onStop(@NonNull LifecycleOwner owner) {
+            clear();
           }
 
-          @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-          void onDestroy() {
-            if (event == Lifecycle.Event.ON_DESTROY) {
-              clear();
-            }
+          @Override
+          public void onDestroy(@NonNull LifecycleOwner owner) {
+            clear();
             lifecycleOwner.getLifecycle().removeObserver(this);
           }
         });

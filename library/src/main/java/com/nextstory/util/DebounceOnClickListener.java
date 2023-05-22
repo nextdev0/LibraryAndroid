@@ -28,7 +28,8 @@ public abstract class DebounceOnClickListener implements View.OnClickListener {
   private static final Map<View, AtomicBoolean> bouncings = new WeakHashMap<>();
 
   /**
-   * 기능 활성화 메타 데이터, 기본적으로 활성화
+   * 기능 활성화 메타 데이터
+   * (기본값 : 활성화)
    *
    * @since 1.6
    */

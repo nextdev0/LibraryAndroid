@@ -27,12 +27,10 @@ public final class UtilitiesInitializationProvider extends ContentProvider {
   @SuppressWarnings("unchecked")
   @Override
   public boolean onCreate() {
-    Context context = getContext();
-
-    ComponentName provider = new ComponentName(
-      context.getPackageName(),
-      UtilitiesInitializationProvider.class.getName());
     try {
+      Context context = getContext();
+      ComponentName provider = new ComponentName(
+        context.getPackageName(), UtilitiesInitializationProvider.class.getName());
       ProviderInfo providerInfo = context.getPackageManager()
         .getProviderInfo(provider, PackageManager.GET_META_DATA);
       Bundle metadata = providerInfo.metaData;
