@@ -46,9 +46,9 @@ dependencies {
     // ...
 
     // 추가
-    implementation 'com.nextstory:library:2.2.0'
-    implementation 'com.nextstory:libgdx:2.2.0'
-    annotationProcessor 'com.nextstory:annotations:2.2.0'
+    implementation 'com.nextstory:library:2.2.1'
+    implementation 'com.nextstory:libgdx:2.2.1'
+    annotationProcessor 'com.nextstory:annotations:2.2.1'
 }
 ```
 

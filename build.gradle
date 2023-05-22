@@ -7,7 +7,7 @@ buildscript {
     compileSdk = 33
 
     groupId = 'com.nextstory'
-    libraryVersion = '2.2.0'
+    libraryVersion = '2.2.1'
     libraryArtifactId = 'library'
     libgdxArtifactId = 'libgdx'
     annotationsArtifactId = 'annotations'
