@@ -5,7 +5,7 @@ plugins {
 
 android {
   namespace 'com.nextstory.libgdx'
-  compileSdk rootProject.ext.targetSdk
+  compileSdk rootProject.ext.compileSdk
   defaultConfig {
     minSdk rootProject.ext.minSdk
     targetSdk rootProject.ext.targetSdk
@@ -38,7 +38,7 @@ dependencies {
   api 'androidx.appcompat:appcompat:1.6.1'
 
   // noinspection GradleDependency
-  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.8'
+  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
   testImplementation 'junit:junit:4.13.2'
   androidTestImplementation 'androidx.test.ext:junit:1.1.5'

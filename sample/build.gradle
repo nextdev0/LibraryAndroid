@@ -4,7 +4,7 @@ plugins {
 
 android {
   namespace 'com.nextstory.sample'
-  compileSdk rootProject.ext.targetSdk
+  compileSdk rootProject.ext.compileSdk
   defaultConfig {
     applicationId 'com.nextstory.sample'
     minSdk rootProject.ext.minSdk
