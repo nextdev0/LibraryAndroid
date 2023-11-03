@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-  <item name="translucent_status_bar" type="id" />
-
+  <item name="tag_statusbar_icon_databinding" type="id" />
+  <item name="tag_navbar_icon_databinding" type="id" />
 </resources>

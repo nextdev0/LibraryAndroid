@@ -1,49 +1,83 @@
 plugins {
   id 'com.android.application'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
 }
 
 android {
   namespace 'com.nextstory.sample'
-  compileSdk rootProject.ext.compileSdk
+  compileSdk rootProject.compileSdk
+
+  signingConfigs {
+    config {
+      keyAlias 'app_key'
+      keyPassword '123456'
+      storeFile file('../app_key.jks')
+      storePassword '123456'
+    }
+  }
+
   defaultConfig {
     applicationId 'com.nextstory.sample'
-    minSdk rootProject.ext.minSdk
-    targetSdk rootProject.ext.targetSdk
+    minSdk rootProject.minSdk
+    targetSdk rootProject.targetSdk
     versionCode 1
     versionName '1.0'
+    signingConfig signingConfigs.config
     testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
   }
+
   buildTypes {
     debug {
       debuggable true
-      zipAlignEnabled true
       minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+      shrinkResources false
+      signingConfig signingConfigs.config
     }
     release {
       debuggable false
-      zipAlignEnabled true
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+      minifyEnabled true
+      shrinkResources true
+      signingConfig signingConfigs.config
+      proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
     }
   }
+
   buildFeatures {
     dataBinding true
   }
+
+  packagingOptions {
+    jniLibs {
+      useLegacyPackaging true
+    }
+  }
+
   compileOptions {
     coreLibraryDesugaringEnabled true
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
+  }
+
+  lint {
+    disable 'Instantiatable'
+  }
 }
 
 dependencies {
+  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
   testImplementation 'junit:junit:4.13.2'
   androidTestImplementation 'androidx.test.ext:junit:1.1.5'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
+  implementation platform("org.jetbrains.kotlin:kotlin-bom:$kotlinVersion")
   implementation project(':library')
-  implementation project(':libgdx')
-  annotationProcessor project(':annotations')
+
+  implementation 'androidx.core:core-ktx:1.12.0'
+  implementation 'androidx.appcompat:appcompat:1.6.1'
 }

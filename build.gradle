@@ -1,38 +1,40 @@
-ext {
-}
 buildscript {
   ext {
-    minSdk = 21
-    targetSdk = 33
-    compileSdk = 33
+    minSdk = 23
+    targetSdk = 34
+    compileSdk = 34
+
+    kotlinVersion = '1.9.22'
+
+    proguardFiles = []
+    fileTree(dir: 'proguards', includes: ['*.pro']).each { proguardFile ->
+      proguardFiles.add(proguardFile)
+    }
 
     groupId = 'com.nextstory'
-    libraryVersion = '2.2.1'
-    libraryArtifactId = 'library'
-    libgdxArtifactId = 'libgdx'
-    annotationsArtifactId = 'annotations'
+    libraryVersion = '3.0.0'
   }
+
   repositories {
     google()
     mavenCentral()
     gradlePluginPortal()
   }
+
   dependencies {
-    classpath 'com.android.tools.build:gradle:8.0.1'
-    classpath 'com.google.gms:google-services:4.3.15'
-    classpath 'com.vanniktech:gradle-maven-publish-plugin:0.25.2'
-    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21'
+    classpath 'com.android.tools.build:gradle:8.2.0'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
   }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
   delete rootProject.buildDir
 }
 
-task publish(type: Task) {
+tasks.register('publish', Task) {
   rootProject.subprojects.forEach { project ->
     if (project.tasks.hasProperty('publish')) {
-      dependsOn project.tasks.getByName('publish')
+      dependsOn project.tasks.named('publish')
     }
   }
 }

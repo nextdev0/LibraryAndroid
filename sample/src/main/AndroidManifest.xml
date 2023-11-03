@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  package="com.nextstory.sample">
-
-  <uses-feature
-    android:name="android.hardware.camera"
-    android:required="false" />
-  <uses-permission android:name="android.permission.CAMERA" />
+  xmlns:tools="http://schemas.android.com/tools">
 
   <application
-    android:name=".SampleApplication"
     android:allowBackup="true"
-    android:fullBackupContent="false"
+    android:enableOnBackInvokedCallback="false"
+    android:hardwareAccelerated="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
+    android:largeHeap="true"
+    android:resizeableActivity="false"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
-    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.Bridge"
-    tools:ignore="AllowBackup">
+    android:theme="@style/Theme.Sample"
+    tools:targetApi="34">
 
     <activity
-      android:name=".ui.activity.MainActivity"
-      android:configChanges="keyboard|keyboardHidden"
+      android:name=".MainActivity"
+      android:configChanges="orientation|uiMode|locale|keyboard|keyboardHidden"
       android:exported="true"
       android:screenOrientation="unspecified"
       android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
@@ -30,27 +26,6 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-
-    <activity
-      android:name=".ui.activity.Test1Activity"
-      android:configChanges="keyboard|keyboardHidden"
-      android:exported="false"
-      android:screenOrientation="unspecified"
-      android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-
-    <activity
-      android:name=".ui.activity.Test2Activity"
-      android:configChanges="keyboard|keyboardHidden"
-      android:exported="false"
-      android:screenOrientation="unspecified"
-      android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-
-    <activity
-      android:name=".ui.activity.IntentBuilderTestActivity"
-      android:configChanges="keyboard|keyboardHidden"
-      android:exported="true"
-      android:screenOrientation="unspecified"
-      android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
 
   </application>
 

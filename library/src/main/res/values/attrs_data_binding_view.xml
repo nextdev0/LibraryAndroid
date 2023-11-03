@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="DataBindingViewItem">
+    <attr name="dbv_layout" format="reference" />
+    <attr name="dbv_items" format="reference" />
+    <attr name="dbv_onItemCallback" format="reference" />
+  </declare-styleable>
+
+  <declare-styleable name="DataBindingGridLayout">
+    <attr name="dbv_orientation" format="enum">
+      <enum name="horizontal" value="0" />
+      <enum name="vertical" value="1" />
+    </attr>
+    <attr name="dbv_spanCount" format="integer" />
+    <attr name="dbv_reverseLayout" format="boolean" />
+  </declare-styleable>
+
+  <declare-styleable name="DataBindingGridLayout_Layout">
+    <attr name="dbv_layout_span" format="integer" />
+  </declare-styleable>
+
+  <declare-styleable name="DataBindingViewPager">
+    <attr name="dbv_useInfiniteScroll" format="boolean" />
+    <attr name="dbv_position" format="integer" />
+  </declare-styleable>
+
+</resources>

@@ -1,96 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:ignore="HardcodedText">
 
   <data>
 
     <variable
       name="activity"
-      type="com.nextstory.sample.ui.activity.MainActivity" />
+      type="com.nextstory.sample.MainActivity" />
 
   </data>
 
-  <com.nextstory.widget.SafeArea
+  <com.nextstory.widget.WindowConfig
+    android:id="@+id/layout_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
 
-      <LinearLayout
+      <com.nextstory.widget.ShapeFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="24dp"
+        android:background="@color/white"
+        android:elevation="24dp"
+        android:padding="24dp"
+        app:shape_cornerRadius="24dp">
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test1()}"
-          android:text="여러 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      </com.nextstory.widget.ShapeFrameLayout>
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test2()}"
-          android:text="DataBindingFlowLayout 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      <com.nextstory.widget.ShapeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@color/white"
+        android:elevation="24dp"
+        android:padding="24dp"
+        android:text="test"
+        app:shape_cornerRadius="8dp"
+        app:shape_strokeColor="@color/black"
+        app:shape_strokeWidth="1dp" />
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test3()}"
-          android:text="IntentBuilder 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/test"
+        app:debounceOnClick="@{v -> activity.writeStorageTestLauncher.launch()}" />
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test4(v)}"
-          android:text="RxPermission 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="normal"
+        app:debounceOnClick='@{v -> activity.windowConfig("normal")}' />
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test5(v)}"
-          android:text="Blur 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="extended"
+        app:debounceOnClick='@{v -> activity.windowConfig("extended")}' />
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test6(v)}"
-          android:text="libgdx 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="fullscreen"
+        app:debounceOnClick='@{v -> activity.windowConfig("fullscreen")}' />
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test7(v)}"
-          android:text="imagepicker single 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+      <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{v -> activity.imagePickerLauncher.launch()}"
+        android:text="image picker" />
 
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:onClick="@{v -> activity.test8(v)}"
-          android:text="imagepicker multiple 테스트"
-          android:textAllCaps="false"
-          tools:ignore="HardcodedText" />
+    </LinearLayout>
 
-      </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-  </com.nextstory.widget.SafeArea>
+  </com.nextstory.widget.WindowConfig>
 
 </layout>

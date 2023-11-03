@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="SystemInsets">
+    <attr name="android:padding" />
+    <attr name="android:paddingHorizontal" />
+    <attr name="android:paddingVertical" />
+    <attr name="android:paddingLeft" />
+    <attr name="android:paddingStart" />
+    <attr name="android:paddingTop" />
+    <attr name="android:paddingRight" />
+    <attr name="android:paddingEnd" />
+    <attr name="android:paddingBottom" />
+
+    <!-- 상단바 여백 표시 -->
+    <attr name="sis_statusBar" format="enum">
+      <enum name="enabled" value="0" />
+      <enum name="disable" value="1" />
+    </attr>
+
+    <!-- 내비게이션바, 제스처바 여백 표시 -->
+    <attr name="sis_navigationBar" format="enum">
+      <enum name="navigationOnly" value="0" />
+      <enum name="enabled" value="1" />
+      <enum name="disable" value="2" />
+    </attr>
+  </declare-styleable>
+
+</resources>
