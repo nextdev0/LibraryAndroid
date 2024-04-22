@@ -18,10 +18,7 @@ dependencyResolutionManagement {
     // ...
 
     // 추가
-    maven {
-      url 'http://ec2-3-34-185-2.ap-northeast-2.compute.amazonaws.com:8889/troy/LibraryAndroid/-/raw/main/repository'
-      allowInsecureProtocol true
-    }
+    maven { url 'https://github.com/nextdev0/LibraryAndroid/raw/main/repository' }
   }
 }
 ```
